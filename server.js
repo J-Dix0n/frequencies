@@ -1,14 +1,16 @@
-let express = require('express');
-let app = express();
+const express = require('express');
+const session = require('express-session')
+const bodyParser = require('body-parser')
 const ListenerController = require("./Controllers/ListenerController")
-var bodyParser = require('body-parser')
-
+let app = express();
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-
 app.use(bodyParser.json());
+
+app.use(session({secret: "RANDOMSTRING", resave: true, saveUninitialized: true}))
+//#######################
 
 app.get('/', async function (req, res) {
     res.render('pages/index');
