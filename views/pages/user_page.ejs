@@ -5,7 +5,14 @@
     </head>
     <body>
         <main>
-            <p><%= user.first_name %> <%= user.last_name %></p>
+            <% if (type === "listener") { %>
+                <p>Listener</p>
+                <p><%= user.first_name %> <%= user.last_name %></p>
+            <% } else if (type === "promoter") { %>
+                <p>Promoter</p>
+                <p><%= user.company_name %></p>
+                <p><%= user.first_name %> <%= user.last_name %></p>
+            <% } %>
         </main>
     </body>
 </html>

@@ -2,6 +2,7 @@ const express = require('express');
 const session = require('express-session')
 const bodyParser = require('body-parser')
 const ListenerController = require("./Controllers/ListenerController")
+const PromoterController = require("./Controllers/PromoterController")
 let app = express();
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({
@@ -14,6 +15,16 @@ app.use(session({secret: "RANDOMSTRING", resave: true, saveUninitialized: true})
 
 app.get('/', async function (req, res) {
     res.render('pages/index');
+})
+
+app.get('/sign_up_p', async function (req, res) {
+    res.render('pages/sign_up_p');
+})
+
+app.post('/sign_up_p/success', async function (req, res) {
+    const promoter = new PromoterController()
+    await promoter.sign_up(req.body.first_name, req.body.last_name, req.body.email, req.body.password, req.body.company_name, req.body.location)
+    res.redirect('/log_in')
 })
 
 app.post('/sign_up/success', async function (req, res) {
@@ -32,18 +43,28 @@ app.post('/user', async function (req, res) {
         const result = await listener.log_in(req.body.email, req.body.password)
         if (result.length !== 0) {
             req.session.user = result[0]
+            req.session.type = "listener"
             res.redirect(`/user/${result[0].id}`)
         } else {
             res.redirect('/log_in');
         }
     } else if (req.body.user_type === "promoter") {
-
+        const promoter = new PromoterController()
+        const result = await promoter.log_in(req.body.email, req.body.password)
+        if (result.length !== 0) {
+            req.session.user = result[0]
+            req.session.type = "promoter"
+            res.redirect(`/user/${result[0].id}`)
+        } else {
+            res.redirect('/log_in');
+        }
     };
 })
 
 app.get('/user/:id', async function (req, res) {
     const user = req.session.user;
-    res.render('pages/user_page', {user: user});
+    const type = req.session.type;
+    res.render('pages/user_page', {user: user, type: type});
 });
 
 app.listen(3000);

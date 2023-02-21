@@ -5,15 +5,11 @@ class ListenerController {
 
     }
 
-    async getUsers() {
-        try {
-            const client = await pool.connect();
-            const result = await client.query('SELECT * FROM Users');
-            client.end();
-            return result.rows;
-        } catch (err) {
-        
-        }
+    async list_users() {
+        const client = await pool.connect();
+        const result = await client.query('SELECT * FROM listeners;')
+        console.log(result.rows)
+        return result;
     }
 
     async sign_up(first_name, last_name, email, password) {
