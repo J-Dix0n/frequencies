@@ -5,8 +5,16 @@
     </head>
     <body>
         <main>
-            <a href="/sign_up/listener">Listener Sign up</a>
+            <p>Sign up</p>
+            <form action="/sign_up/success" method="POST">
+                <input type="text" name="first_name" placeholder="First Name">
+                <input type="text" name="last_name" placeholder="Last Name">
+                <input type="text" name="email" placeholder="Email">
+                <input type="password" name="password" placeholder="Password">
+                <input type="submit" value="Submit">
+            </form>
             <a href="/sign_up/promotor">Promotor Sign up</a>
+            <a href="/log_in">Log in</a>
         </main>
     </body>
 </html>
