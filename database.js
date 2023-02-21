@@ -7,17 +7,3 @@ const pool = new Pool({
 });
 
 module.exports = pool;
-
-async function getAll() {
-try {
-    const client = await pool.connect();
-    const result = await client.query('SELECT * FROM Users');
-    client.end();
-    console.log(result.rows)
-    return result.rows;
-    } catch (err) {
-
-    }
-}
-
-getAll()
