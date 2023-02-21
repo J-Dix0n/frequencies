@@ -31,6 +31,7 @@ app.post('/user', async function (req, res) {
         const listener = new ListenerController()
         const result = await listener.log_in(req.body.email, req.body.password)
         if (result.length !== 0) {
+            req.session.user = result[0]
             res.redirect(`/user/${result[0].id}`)
         } else {
             res.redirect('/log_in');
@@ -41,7 +42,8 @@ app.post('/user', async function (req, res) {
 })
 
 app.get('/user/:id', async function (req, res) {
-    res.render('/pages/user_page')
+    const user = req.session.user;
+    res.render('pages/user_page', {user: user});
 });
 
 app.listen(3000);
