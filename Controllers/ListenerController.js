@@ -1,6 +1,6 @@
 const pool = require("../database")
 
-class UserController {
+class ListenerController {
     constructor() {
 
     }
@@ -17,4 +17,4 @@ class UserController {
     }
 }
 
-module.exports = UserController;
+module.exports = ListenerController;
