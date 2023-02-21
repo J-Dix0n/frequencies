@@ -11,4 +11,13 @@ app.get('/', async function (req, res) {
     })
 })
 
+app.get('/sign_up', async function (req, res) {
+    res.render('pages/sign_up')
+})
+
+app.post('/log_in', async function (req, res) {
+    let user = new UserController()
+    console.log(params[username])
+})
+
 app.listen(3000);
