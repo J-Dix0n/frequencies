@@ -5,7 +5,7 @@ class ListenerController {
 
     }
 
-    async getAll() {
+    async getUsers() {
         try {
             const client = await pool.connect();
             const result = await client.query('SELECT * FROM Users');
