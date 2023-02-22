@@ -1,3 +1,9 @@
+<% if (type === "listener") { %>
+  <%- include('../partials/listener_navbar') %>
+<% } else if (type === "promoter") { %>
+  <%- include('../partials/promoter_navbar') %>
+<% } %>
+
 <ul>
   <% for (let i = 0; i < events.length; i++) { %>
     <li>

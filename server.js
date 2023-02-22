@@ -106,7 +106,8 @@ app.get('/user/promoter/:id', async function (req, res) {
 });
 
 app.get('/post_event', async function (req, res) {
-    res.render('pages/post_event');
+    const user = req.session.user;
+    res.render('pages/post_event', {user: user});
   });
 
 app.post('/post_event', async function(req, res) {
@@ -142,9 +143,11 @@ res.redirect('/events_list');
 });
   
 app.get('/events_list', async function (req, res) {
+    const user = req.session.user;
+    const type = req.session.type;
     const events = new EventsController();
     const list_events = await events.getEvents();
-    res.render('pages/events_list', { events : list_events });
+    res.render('pages/events_list', { events : list_events , user: user , type: type});
 });
 
 
