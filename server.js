@@ -45,7 +45,7 @@ app.post('/user', async function (req, res) {
         if (result.length !== 0) {
             req.session.user = result[0]
             req.session.type = "listener"
-            res.redirect(`/user/${result[0].id}`)
+            res.redirect(`/user/listener/${result[0].id}`)
         } else {
             res.redirect('/log_in');
         }
@@ -55,17 +55,23 @@ app.post('/user', async function (req, res) {
         if (result.length !== 0) {
             req.session.user = result[0]
             req.session.type = "promoter"
-            res.redirect(`/user/${result[0].id}`)
+            res.redirect(`/user/promoter/${result[0].id}`)
         } else {
             res.redirect('/log_in');
         }
     };
 })
 
-app.get('/user/:id', async function (req, res) {
+app.get('/user/listener/:id', async function (req, res) {
     const user = req.session.user;
     const type = req.session.type;
-    res.render('pages/user_page', {user: user, type: type});
+    res.render('pages/user_page_listener', {user: user, type: type});
+});
+
+app.get('/user/promoter/:id', async function (req, res) {
+    const user = req.session.user;
+    const type = req.session.type;
+    res.render('pages/user_page_promoter', {user: user, type: type});
 });
 
 app.get('/post_event', async function (req, res) {
