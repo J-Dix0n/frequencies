@@ -80,21 +80,40 @@ app.get('/post_event', async function (req, res) {
 
   app.post('/post_event', async function(req, res) {
     const promoterId = req.session.user;
-    
-    const event = {
-        name: req.body.name,
-        location: req.body.location,
-        genre: req.body.genre,
-        artist_list: req.body.artist_list,
-        attendees: [],
-        promoter_id: promoterId.id,
-        price: req.body.price
-      };
-      const eventsController = new EventsController();
-      await eventsController.createEvent(event);
-      res.redirect('/events_list');
-    });
 
+    // // Parse the artist list input string into an array of objects
+    // const artistList = req.body.artist_list.split(',').map(item => {
+    //   const [artist, genre] = item.trim().split(' ');
+    //   return {artist, genre};
+    // });
+    artists = req.body.artist_list.split(", ")
+    output_list = []
+    
+    let outputArr = [];
+
+    for (let i = 0; i < artists.length; i++) {
+        let artistObj = {
+            artist: artists[i],
+            genre: req.body.genre
+    };
+    outputArr.push(artistObj);
+    }
+  
+    const event = {
+      name: req.body.name,
+      location: req.body.location,
+      genre: req.body.genre,
+      artist_list: outputArr,
+      attendees: [],
+      promoter_id: promoterId.id,
+      price: req.body.price,
+      date: req.body.date
+    };
+  
+    const eventsController = new EventsController();
+    await eventsController.createEvent(event);
+    res.redirect('/events_list');
+  });
   
 app.get('/events_list', async function (req, res) {
     const events = new EventsController();
