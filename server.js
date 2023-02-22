@@ -81,11 +81,6 @@ app.get('/post_event', async function (req, res) {
   app.post('/post_event', async function(req, res) {
     const promoterId = req.session.user;
 
-    // // Parse the artist list input string into an array of objects
-    // const artistList = req.body.artist_list.split(',').map(item => {
-    //   const [artist, genre] = item.trim().split(' ');
-    //   return {artist, genre};
-    // });
     artists = req.body.artist_list.split(", ")
     output_list = []
     
