@@ -76,24 +76,21 @@ app.post('/user/listener/profile/success', async function (req, res) {
         "favourite_artist": `${req.body.artist}`
     };
     if (preferences.genre !== "" || preferences.artist !== "") {
-        await listener.update_preferences(`${preferences}`, req.session.user.email)
+        await listener.update_preferences(preferences, req.session.user.email)
     }
-    // if (req.body.age !== "") { 
-    //     await listener.update_age(req.body.age, req.session.user.email)
-    // }
-    // if (req.body.location !== "") { 
-    //     await listener.update_location(req.body.location, req.session.user.email)
-    // }
-    // if (req.body.bio !== "") { 
-    //     await listener.update_bio(req.body.bio, req.session.user.email)
-    // }
-    await req.session.user === listener.list_specific_user(req.session.user.id);
+    if (req.body.age !== "") { 
+        await listener.update_age(req.body.age, req.session.user.email)
+    }
+    if (req.body.location !== "") { 
+        await listener.update_location(req.body.location, req.session.user.email)
+    }
+    if (req.body.bio !== "") { 
+        await listener.update_bio(req.body.bio, req.session.user.email)
+    }
     res.redirect('/user/listener/:id/profile')
 })
 
 app.get('/user/listener/:id/messages/:other', async function (req, res) {
-    console.log(req.params.id)
-    console.log(req.params.other)
     const user = req.session.user;
     const type = req.session.type;
     const message = new MessageController()

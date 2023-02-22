@@ -7,11 +7,6 @@
         <main>
             <p>Listener</p>
             <p><%= user.first_name %> <%= user.last_name %></p>
-            <% user.preferences.forEach(function (object) { %>
-             <p><%= object.genre %></p>
-             <p><%= object.favourite_artist %></p>
-          <% }); %>
-
         </main>
 
         <form action="/user/listener/profile/success" method="POST">

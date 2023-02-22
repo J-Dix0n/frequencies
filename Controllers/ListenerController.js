@@ -14,7 +14,7 @@ class ListenerController {
 
     async list_specific_user(id) {
         const client = await pool.connect();
-        const result = await client.query('SELECT * FROM listeners WHERE id = $1;')
+        const result = await client.query('SELECT * FROM listeners WHERE id = $1;', [id])
         return result.rows;
     }
 
@@ -37,8 +37,6 @@ class ListenerController {
 
     async update_preferences(preferences, email) {
         const client = await pool.connect();
-        console.log("herrreeeeeeeeeeeeeee")
-        console.log(preferences)
         try {
             await client.query("UPDATE listeners SET preferences = '[]' || $1 ::jsonb WHERE email = $2", [preferences, email])  
         }
