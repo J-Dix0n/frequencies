@@ -105,6 +105,15 @@ app.get('/user/promoter/:id', async function (req, res) {
     res.render('pages/user_page_promoter', {user: promoter, events: promoterEvents});
 });
 
+app.post('/user/promoter/event/:id', async function (req, res) {
+    const eventClass = new EventsController();
+    const deleteEventId = req.params.id
+
+    await eventClass.deleteEvent(deleteEventId)
+
+    res.redirect('/user/promoter/:id')
+  });
+
 app.get('/post_event', async function (req, res) {
     const user = req.session.user;
     res.render('pages/post_event', {user: user});
