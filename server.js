@@ -142,9 +142,10 @@ res.redirect('/events_list');
 });
   
 app.get('/events_list', async function (req, res) {
+    const user = req.session.user;
     const events = new EventsController();
     const list_events = await events.getEvents();
-    res.render('pages/events_list', { events : list_events });
+    res.render('pages/events_list', { events : list_events , user: user });
 });
 
 

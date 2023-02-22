@@ -5,6 +5,7 @@
     </head>
     <body>
         <main>
+            <%- include('../partials/listener_navbar') %>
             <p>Messages</p>
             <% info.forEach(function (object) { %>
                 <a href="/user/listener/<%= user.id %>/messages/<%= object.id %>"</a>><%= object.name %></a>
