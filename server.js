@@ -44,7 +44,7 @@ app.post('/user', async function (req, res) {
         if (result.length !== 0) {
             req.session.user = result[0]
             req.session.type = "listener"
-            res.redirect(`/user/${result[0].id}`)
+            res.redirect(`/user/${result[0].id}/profile`)
         } else {
             res.redirect('/log_in');
         }
@@ -54,17 +54,26 @@ app.post('/user', async function (req, res) {
         if (result.length !== 0) {
             req.session.user = result[0]
             req.session.type = "promoter"
-            res.redirect(`/user/${result[0].id}`)
+            res.redirect(`/user/${result[0].id}/profile`)
         } else {
             res.redirect('/log_in');
         }
     };
 })
 
-app.get('/user/:id', async function (req, res) {
+app.get('/user/:id/profile', async function (req, res) {
     const user = req.session.user;
     const type = req.session.type;
     res.render('pages/user_page', {user: user, type: type});
 });
+
+app.post('/user/profile/success', async function (req, res) {
+    const listener = new ListenerController()
+    await listener.update_preferences(`${req.body.genre}, ${req.body.fave_artist}`, req.session.user.email)
+    await listener.update_age(req.body.age, req.session.user.email)
+    await listener.update_location(req.body.location, req.session.user.email)
+    await listener.update_bio(req.body.bio, req.session.user.email)
+    res.redirect('/user/:id/profile')
+})
 
 app.listen(3000);

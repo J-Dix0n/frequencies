@@ -28,6 +28,47 @@ class ListenerController {
             console.log(err)
         }
     }
+
+    async update_preferences(preferences, email) {
+        const client = await pool.connect();
+        try {
+            await client.query('UPDATE listeners SET preferences $1 WHERE email = $2', [preferences, email])  
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
+
+    async update_age(age, email) {
+        const client = await pool.connect();
+        try {
+            await client.query('UPDATE listeners SET age $1 WHERE email = $2', [age, email])  
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
+
+    async update_location(location, email) {
+        const client = await pool.connect();
+        try {
+            await client.query('UPDATE listeners SET location $1 WHERE email = $2', [location, email])  
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
+
+    async update_bio(bio, email) {
+        const client = await pool.connect();
+        try {
+            await client.query('UPDATE listeners SET bio $1 WHERE email = $2', [bio, email])  
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
+
 }
 
 module.exports = ListenerController;
