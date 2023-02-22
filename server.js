@@ -69,14 +69,18 @@ app.get('/user/listener/:id', async function (req, res) {
     res.render('pages/user_page_listener', {user: user, type: type});
 });
 
+app.post('/user/listener/:id/messages/:other/send', async function (req, res) {
+    const message = new MessageController()
+    await message.send_message(req.params.id, req.params.other, req.body.message)
+    res.redirect(`/user/listener/${req.params.id}/messages/${req.params.other}`)
+});
+
 app.get('/user/listener/:id/messages/:other', async function (req, res) {
-    console.log(req.params.id)
-    console.log(req.params.other)
     const user = req.session.user;
     const type = req.session.type;
     const message = new MessageController()
-    console.log(await message.get_messages(1, 2));
-    res.render('pages/listener_conversation', {user: user, type: type});
+    const conversation = await message.get_messages(req.params.id, req.params.other)
+    res.render('pages/listener_conversation', {user: user, type: type, conversation: conversation, participants: [req.params.id, req.params.other]});
 });
 
 app.get('/user/listener/:id/messages', async function (req, res) {
