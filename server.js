@@ -90,12 +90,18 @@ app.post('/user/listener/profile/success', async function (req, res) {
     res.redirect('/user/listener/:id/profile')
 })
 
+app.post('/user/listener/:id/messages/:other/send', async function (req, res) {
+    const message = new MessageController()
+    await message.send_message(req.params.id, req.params.other, req.body.message)
+    res.redirect(`/user/listener/${req.params.id}/messages/${req.params.other}`)
+});
+
 app.get('/user/listener/:id/messages/:other', async function (req, res) {
     const user = req.session.user;
     const type = req.session.type;
     const message = new MessageController()
-    console.log(await message.get_messages(1, 2));
-    res.render('pages/listener_conversation', {user: user, type: type});
+    const conversation = await message.get_messages(req.params.id, req.params.other)
+    res.render('pages/listener_conversation', {user: user, type: type, conversation: conversation, participants: [req.params.id, req.params.other]});
 });
 
 app.get('/user/listener/:id/messages', async function (req, res) {
@@ -112,51 +118,66 @@ app.get('/user/listener/:id/messages', async function (req, res) {
 });
 
 app.get('/user/promoter/:id', async function (req, res) {
-    const user = req.session.user;
-    const type = req.session.type;
-    res.render('pages/user_page_promoter', {user: user, type: type});
+    const eventClass = new EventsController();
+    const promoter = req.session.user;
+    const promoterId = promoter.id;
+    const promoterEvents = await eventClass.fetchEventsByPromoter(promoterId);
+
+    res.render('pages/user_page_promoter', {user: promoter, events: promoterEvents});
 });
 
+app.post('/user/promoter/event/:id', async function (req, res) {
+    const eventClass = new EventsController();
+    const deleteEventId = req.params.id
+
+    await eventClass.deleteEvent(deleteEventId)
+
+    res.redirect('/user/promoter/:id')
+  });
+
 app.get('/post_event', async function (req, res) {
-    res.render('pages/post_event');
+    const user = req.session.user;
+    res.render('pages/post_event', {user: user});
   });
 
-  app.post('/post_event', async function(req, res) {
-    const promoterId = req.session.user;
+app.post('/post_event', async function(req, res) {
+const promoterId = req.session.user;
 
-    artists = req.body.artist_list.split(", ")
-    output_list = []
-    
-    let outputArr = [];
+artists = req.body.artist_list.split(", ")
+output_list = []
 
-    for (let i = 0; i < artists.length; i++) {
-        let artistObj = {
-            artist: artists[i],
-            genre: req.body.genre
-    };
-    outputArr.push(artistObj);
-    }
-  
-    const event = {
-      name: req.body.name,
-      location: req.body.location,
-      genre: req.body.genre,
-      artist_list: outputArr,
-      attendees: [],
-      promoter_id: promoterId.id,
-      price: req.body.price,
-      date: req.body.date
-    };
-  
-    const eventsController = new EventsController();
-    await eventsController.createEvent(event);
-    res.redirect('/events_list');
-  });
+let outputArr = [];
+
+for (let i = 0; i < artists.length; i++) {
+    let artistObj = {
+        artist: artists[i],
+        genre: req.body.genre
+};
+outputArr.push(artistObj);
+}
+
+const event = {
+    name: req.body.name,
+    location: req.body.location,
+    genre: req.body.genre,
+    artist_list: outputArr,
+    attendees: [],
+    promoter_id: promoterId.id,
+    price: req.body.price,
+    date: req.body.date
+};
+
+const eventsController = new EventsController();
+await eventsController.createEvent(event);
+res.redirect('/events_list');
+});
   
 app.get('/events_list', async function (req, res) {
+    const user = req.session.user;
+    const type = req.session.type;
     const events = new EventsController();
     const list_events = await events.getEvents();
-    res.render('pages/events_list', { events : list_events });
+    res.render('pages/events_list', { events : list_events , user: user , type: type});
 });
 
 

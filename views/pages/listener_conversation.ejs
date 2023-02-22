@@ -5,7 +5,18 @@
     </head>
     <body>
         <main>
-            
+            <form action="/user/listener/<%= participants[0] %>/messages/<%= participants[1] %>/send" method="POST">
+                <input type="text" name="message" placeholder="Send a message!">
+                <input type="submit" value="Submit">
+            </form>
+            <p>Conversation</p>
+            <% conversation.forEach(function (object) { %>
+                <% if (object.sentuser_id === user.id) { %>
+                    <p class="user_message"><%= object.message %></p>
+                <% } else { %>
+                    <p class="other_message"><%= object.message %></p>
+                <% } %>
+            <% }) %>
         </main>
     </body>
 </html>
