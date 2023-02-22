@@ -49,6 +49,19 @@ class EventsController {
       }
     }
     
+    async fetchEventsByPromoter(id) {
+      try {
+        const client = await pool.connect();
+        const query = 'SELECT * FROM events WHERE promoter_id = $1'
+        const values = [id];
+        const result = await client.query(query, values);
+        client.end();
+        return result.rows;
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    
 };
 
 module.exports = EventsController;
