@@ -7,14 +7,18 @@
 <% if (events.length > 0) { %>
   <ul>
     <% events.forEach(event => { %>
-      <li>
-        <h3><%= event.name %></h3>
-        <p><%= event.date.toLocaleDateString() %></p>
-        <p>Location: <%= event.location %></p>
-        <p>Price: £<%= event.price %></p>
-        <p>Genre: <%= event.genre %></p>
-      </li>
-    <% }); %>
+        <li>
+          <h3><%= event.name %></h3>
+          <p><%= event.date.toLocaleDateString() %></p>
+          <p>Location: <%= event.location %></p>
+          <p>Price: £<%= event.price %></p>
+          <p>Genre: <%= event.genre %></p>
+          <p>Genre: <%= event.id %></p>
+          <form method="POST" action="/user/promoter/event/<%=event.id%>">
+            <button type="submit">Delete</button>
+          </form>
+        </li>
+      <% }); %>
   </ul>
 <% } else { %>
   <p>No upcoming events.</p>
