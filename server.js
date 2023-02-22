@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 const ListenerController = require("./Controllers/ListenerController")
 const PromoterController = require("./Controllers/PromoterController")
 const EventsController = require("./Controllers/EventsController")
+const MessageController = require("./Controllers/MessageController")
 let app = express();
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({
@@ -66,6 +67,29 @@ app.get('/user/listener/:id', async function (req, res) {
     const user = req.session.user;
     const type = req.session.type;
     res.render('pages/user_page_listener', {user: user, type: type});
+});
+
+app.get('/user/listener/:id/messages/:other', async function (req, res) {
+    console.log(req.params.id)
+    console.log(req.params.other)
+    const user = req.session.user;
+    const type = req.session.type;
+    const message = new MessageController()
+    console.log(await message.get_messages(1, 2));
+    res.render('pages/listener_conversation', {user: user, type: type});
+});
+
+app.get('/user/listener/:id/messages', async function (req, res) {
+    const user = req.session.user;
+    const type = req.session.type;
+    const info = [];
+    const message = new MessageController()
+    const listener = new ListenerController()
+    const message_users = await message.get_messaged_id(user.id);
+    for(let i = 0; i < (message_users).length; i++) {
+        info.push({'id': message_users[i], 'name': await listener.get_name(message_users[i])})
+    }
+    res.render('pages/listener_messages', {user: user, type: type, info: info});
 });
 
 app.get('/user/promoter/:id', async function (req, res) {

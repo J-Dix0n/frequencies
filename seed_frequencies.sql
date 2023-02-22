@@ -1,3 +1,5 @@
+TRUNCATE TABLE listeners, promoters, events, messages RESTART IDENTITY;
+
 CREATE TABLE listeners (
     id SERIAL PRIMARY KEY,
     first_name TEXT,
@@ -48,6 +50,14 @@ CREATE TABLE events (
 ALTER TABLE events ALTER COLUMN artist_list SET DEFAULT '[]';
 ALTER TABLE events ALTER COLUMN attendees SET DEFAULT '[]';
 
+CREATE TABLE messages (
+    id SERIAL PRIMARY KEY,
+    SentUser_id int,
+    ReceiveUser_id int,
+    Message text,
+    Date timestamp
+);
+
 INSERT INTO listeners ("first_name", "last_name", "email", "password", "preferences", "age", "location", "events", "friends", "following", "bio") VALUES
 ('John', 'Marrs', 'jMarrs@gmail.com', 'jmpassword', '[{ "genre" : "Indie"}]', 30, 'London', '[{"event_id" : "1", "status": "1"}]', '[{"listener_id" : "2", "status": "2"}]','[{"promoter_id" : "1"}]','Hi, I''m John'),
 ('Stephen', 'King', 'sKing@gmail.com', 'skpassword', '[{ "genre" : "Rock"}]', 56, 'Glasgow', '[{"event_id" : "2", "status": "2"}]', '[{"listener_id" : "1", "status": "2"}]', '[{"promoter_id" : "2"}]','Hi, I''m Stephen'),
@@ -70,8 +80,4 @@ INSERT INTO events ("name", "location", "genre", "artist_list", "attendees", "pr
 ('Fatboy Slim', 'Manchester','Electronic','[{"artist" : "Fatboy Slim", "genre" : "Electronic"}]', '[{"listener_id" : "6"}]', 4, 45.10, '11/03/2023'),
 ('Paramore', 'London', 'Alternative', '[{"artist" : "Paramore", "genre" : "Alternative"}]', '[]', 1, 50.00, '04/23/2023');
 
-
-
-
-
-
+INSERT INTO messages (sentuser_id, receiveuser_id, message) VALUES (1, 2, 'hi'), (2, 1, 'how are you?'), (1, 2, 'not bad thanks'), (3, 1, 'hi!'), (2, 3, 'I hate that guy');
