@@ -19,7 +19,7 @@ class EventsController {
     async createEvent(event) {
         try {
           const client = await pool.connect();
-          const query = `INSERT INTO events (name, location, genre, artist_list, attendees, promoter_id, price) VALUES ($1, $2, $3, $4, $5, $6, $7)`;
+          const query = `INSERT INTO events ("name", "location", "genre", "artist_list", "attendees", "promoter_id", "price", "date") VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`;
           const values = [
             event.name,
             event.location,
@@ -27,7 +27,8 @@ class EventsController {
             JSON.stringify(event.artist_list),
             JSON.stringify(event.attendees),
             event.promoter_id,
-            event.price
+            event.price,
+            event.date
           ];
           await client.query(query, values);
           client.end();
@@ -36,7 +37,18 @@ class EventsController {
         }
     }
 
+    async deleteEvent(id) {
+      try {
+        const client = await pool.connect();
+        const query = `DELETE FROM events WHERE id = $1`;
+        const values = [id];
+        await client.query(query, values);
+        client.end();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    
 };
-
 
 module.exports = EventsController;
