@@ -1,13 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
+<h1>Welcome <%= user.company_name %></h1>
+<p>Email: <%= user.email %></p>
 
-    </head>
-    <body>
-        <main>
-            <p>Promoter</p>
-            <p><%= user.company_name %></p>
-            <p><%= user.first_name %> <%= user.last_name %></p>
-        </main>
-    </body>
-</html>
+<h2>Upcoming Events:</h2>
+<% if (events.length > 0) { %>
+  <ul>
+    <% events.forEach(event => { %>
+      <li>
+        <h3><%= event.name %></h3>
+        <p><%= event.date.toLocaleDateString() %></p>
+        <p>Location: <%= event.location %></p>
+        <p>Price: £<%= event.price %></p>
+        <p>Genre: <%= event.genre %></p>
+      </li>
+    <% }); %>
+  </ul>
+<% } else { %>
+  <p>No upcoming events.</p>
+<% } %>

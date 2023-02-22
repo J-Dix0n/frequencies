@@ -97,46 +97,49 @@ app.get('/user/listener/:id/messages', async function (req, res) {
 });
 
 app.get('/user/promoter/:id', async function (req, res) {
-    const user = req.session.user;
-    const type = req.session.type;
-    res.render('pages/user_page_promoter', {user: user, type: type});
+    const eventClass = new EventsController();
+    const promoter = req.session.user;
+    const promoterId = promoter.id;
+    const promoterEvents = await eventClass.fetchEventsByPromoter(promoterId);
+
+    res.render('pages/user_page_promoter', {user: promoter, events: promoterEvents});
 });
 
 app.get('/post_event', async function (req, res) {
     res.render('pages/post_event');
   });
 
-  app.post('/post_event', async function(req, res) {
-    const promoterId = req.session.user;
+app.post('/post_event', async function(req, res) {
+const promoterId = req.session.user;
 
-    artists = req.body.artist_list.split(", ")
-    output_list = []
-    
-    let outputArr = [];
+artists = req.body.artist_list.split(", ")
+output_list = []
 
-    for (let i = 0; i < artists.length; i++) {
-        let artistObj = {
-            artist: artists[i],
-            genre: req.body.genre
-    };
-    outputArr.push(artistObj);
-    }
-  
-    const event = {
-      name: req.body.name,
-      location: req.body.location,
-      genre: req.body.genre,
-      artist_list: outputArr,
-      attendees: [],
-      promoter_id: promoterId.id,
-      price: req.body.price,
-      date: req.body.date
-    };
-  
-    const eventsController = new EventsController();
-    await eventsController.createEvent(event);
-    res.redirect('/events_list');
-  });
+let outputArr = [];
+
+for (let i = 0; i < artists.length; i++) {
+    let artistObj = {
+        artist: artists[i],
+        genre: req.body.genre
+};
+outputArr.push(artistObj);
+}
+
+const event = {
+    name: req.body.name,
+    location: req.body.location,
+    genre: req.body.genre,
+    artist_list: outputArr,
+    attendees: [],
+    promoter_id: promoterId.id,
+    price: req.body.price,
+    date: req.body.date
+};
+
+const eventsController = new EventsController();
+await eventsController.createEvent(event);
+res.redirect('/events_list');
+});
   
 app.get('/events_list', async function (req, res) {
     const events = new EventsController();
