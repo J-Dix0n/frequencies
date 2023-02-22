@@ -1,0 +1,17 @@
+<ul>
+  <% for (let i = 0; i < events.length; i++) { %>
+    <li>
+      <h3><%= events[i].name %></h3>
+      <p><strong>Location:</strong> <%= events[i].location %></p>
+      <p><strong>Genre:</strong> <%= events[i].genre %></p>
+     <p><strong>Artist List:</strong></p>
+        <ul>
+          <% for (let j = 0; j < events[i].artist_list.length; j++) { %>
+            <li><%= events[i].artist_list[j].artist %> - <%= events[i].artist_list[j].genre %></li>
+          <% } %>
+        </ul>
+      <p><strong>Price:</strong> <%= events[i].price %></p>
+      <p><strong>Date:</strong> <%= events[i].date %></p>
+    </li>
+  <% } %>
+</ul>
