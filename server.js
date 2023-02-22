@@ -3,6 +3,7 @@ const session = require('express-session')
 const bodyParser = require('body-parser')
 const ListenerController = require("./Controllers/ListenerController")
 const PromoterController = require("./Controllers/PromoterController")
+const EventsController = require("./Controllers/EventsController")
 let app = express();
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({
@@ -66,5 +67,34 @@ app.get('/user/:id', async function (req, res) {
     const type = req.session.type;
     res.render('pages/user_page', {user: user, type: type});
 });
+
+app.get('/post_event', async function (req, res) {
+    res.render('pages/post_event');
+  });
+
+  app.post('/post_event', async function(req, res) {
+    const promoterId = req.session.user;
+    
+    const event = {
+        name: req.body.name,
+        location: req.body.location,
+        genre: req.body.genre,
+        artist_list: req.body.artist_list,
+        attendees: [],
+        promoter_id: promoterId.id,
+        price: req.body.price
+      };
+      const eventsController = new EventsController();
+      await eventsController.createEvent(event);
+      res.redirect('/events_list');
+    });
+
+  
+app.get('/events_list', async function (req, res) {
+    const events = new EventsController();
+    const list_events = await events.getEvents();
+    res.render('pages/events_list', { events : list_events });
+});
+
 
 app.listen(3000);
