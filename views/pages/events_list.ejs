@@ -1,0 +1,11 @@
+<ul>
+  <% for (let i = 0; i < events.length; i++) { %>
+    <li>
+      <h3><%= events[i].name %></h3>
+      <p><strong>Location:</strong> <%= events[i].location %></p>
+      <p><strong>Genre:</strong> <%= events[i].genre %></p>
+      <p><strong>artist list:</strong> <%= events[i].artist_list %></p>
+      <p><strong>Price:</strong> <%= events[i].price %></p>
+    </li>
+  <% } %>
+</ul>
