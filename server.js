@@ -261,7 +261,7 @@ app.get('/frequencies', async function (req, res) {
     const type = req.session.type;
     const listeners = new ListenerController();
     const list_listeners = await listeners.list_users();
-    res.render('pages/frequencies', {listeners : list_listeners, user: user, type: type });
+    res.render('pages/frequencies', {listeners : list_listeners, user: user, type: type , random_pick: ""});
 });
 
 app.post('/frequencies', async function (req, res) {
@@ -269,7 +269,18 @@ app.post('/frequencies', async function (req, res) {
     const type = req.session.type;
     const listeners = new ListenerController();
     const list_listeners = await listeners.filtered_users(req.body.filter);
-    res.render('pages/frequencies', {listeners : list_listeners, user: user, type: type});
+    const random_pick = await listeners.generate_user(req.body.filter)
+    res.render('pages/frequencies', {listeners : list_listeners, user: user, type: type, random_pick: random_pick});
 });
+
+app.post('/frequencies/:id/confirm/:other', async function (req, res) {
+    const listeners = new ListenerController();
+    await listeners.swipe_right(req.params.id, req.params.other);
+    res.redirect('/frequencies')
+})
+
+app.post('/frequencies/:id/deny/:other', async function (req, res) {
+    
+})
 
 app.listen(3000);
