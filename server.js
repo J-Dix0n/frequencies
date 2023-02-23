@@ -144,11 +144,13 @@ app.get('/user/listener/:id/messages', async function (req, res) {
 
 app.get('/user/promoter/:id', async function (req, res) {
     const eventClass = new EventsController();
+    const listnerOrPromoter = req.session.type
     const promoter = req.session.user;
+
     const promoterId = promoter.id;
     const promoterEvents = await eventClass.fetchEventsByPromoter(promoterId);
 
-    res.render('pages/user_page_promoter', {user: promoter, events: promoterEvents});
+    res.render('pages/user_page_promoter', {user: promoter, events: promoterEvents, type: listnerOrPromoter});
 });
 
 app.post('/user/promoter/event/:id', async function (req, res) {
@@ -160,40 +162,40 @@ app.post('/user/promoter/event/:id', async function (req, res) {
     res.redirect('/user/promoter/:id')
   });
 
-  app.get('/user/promoter/event/update/:id', async function (req, res) {
-    try {
-      const eventClass = new EventsController();
-      const eventId = req.params.id;
-      const eventToUpdate = await eventClass.getEventById(eventId); 
-      res.render('pages/update_event', { eventToUpdate, user: req.session.user });
-    } catch (err) {
-      console.error(err);
-    }
-  });
+app.get('/user/promoter/event/update/:id', async function (req, res) {
+try {
+    const eventClass = new EventsController();
+    const eventId = req.params.id;
+    const eventToUpdate = await eventClass.getEventById(eventId); 
+    res.render('pages/update_event', { eventToUpdate, user: req.session.user });
+} catch (err) {
+    console.error(err);
+}
+});
 
-  app.post('/user/promoter/event/update/:id', async function (req, res) {
-    try {
-      const eventClass = new EventsController();
-      const eventId = req.params.id;
+app.post('/user/promoter/event/update/:id', async function (req, res) {
+try {
+    const eventClass = new EventsController();
+    const eventId = req.params.id;
 
-      const updatedEvent = {
-        name: req.body.name,
-        location: req.body.location,
-        genre: req.body.genre,
-        artist_list: JSON.parse(req.body.artist_list),
-        attendees: JSON.parse(req.body.attendees),
-        promoter_id: req.session.user.id,
-        price: req.body.price,
-        date: req.body.date
-      };
-  
-      await eventClass.updateEvent(eventId, updatedEvent); 
-      res.redirect(`/user/promoter/${req.session.user.id}`);
-    } catch (err) {
-      console.error(err);
-      res.sendStatus(500);
-    }
-  });
+    const updatedEvent = {
+    name: req.body.name,
+    location: req.body.location,
+    genre: req.body.genre,
+    artist_list: JSON.parse(req.body.artist_list),
+    attendees: JSON.parse(req.body.attendees),
+    promoter_id: req.session.user.id,
+    price: req.body.price,
+    date: req.body.date
+    };
+
+    await eventClass.updateEvent(eventId, updatedEvent); 
+    res.redirect(`/user/promoter/${req.session.user.id}`);
+} catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+}
+});
 
 app.get('/post_event', async function (req, res) {
     const user = req.session.user;
@@ -238,6 +240,18 @@ app.get('/events_list', async function (req, res) {
     const events = new EventsController();
     const list_events = await events.getEvents();
     res.render('pages/events_list', { events : list_events , user: user , type: type});
+});
+
+app.get('/event/:id', async function (req, res) {
+    const event = new EventsController();
+    const promoter = new PromoterController();
+
+    const eventId = req.params.id;
+    const eventInfo = await event.getEventById(eventId);
+
+    const promoterInfo = await promoter.getPromoterById(eventInfo.promoter_id);
+
+    res.render('pages/event_info', {event: eventInfo, promoter: promoterInfo});
 });
 
 app.get('/frequencies', async function (req, res) {
