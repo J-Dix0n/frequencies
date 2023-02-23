@@ -46,7 +46,7 @@ app.post('/user', async function (req, res) {
         if (result.length !== 0) {
             req.session.user = result[0]
             req.session.type = "listener"
-            res.redirect(`/user/listener/${result[0].id}`)
+            res.redirect(`/user/listener/${result[0].id}/profile`)
         } else {
             res.redirect('/log_in');
         }
@@ -63,11 +63,34 @@ app.post('/user', async function (req, res) {
     };
 })
 
-app.get('/user/listener/:id', async function (req, res) {
+app.get('/user/listener/:id/profile', async function (req, res) {
     const user = req.session.user;
     const type = req.session.type;
     res.render('pages/user_page_listener', {user: user, type: type});
 });
+
+app.post('/user/listener/profile/success', async function (req, res) {
+    const listener = new ListenerController()
+    const preferences = {
+        "genre": `${req.body.genre}`,
+        "favourite_artist": `${req.body.artist}`
+    };
+    if (preferences.genre !== "" || preferences.artist !== "") {
+        await listener.update_preferences(preferences, req.session.user.email)
+    }
+    if (req.body.age !== "") { 
+        await listener.update_age(req.body.age, req.session.user.email)
+    }
+    if (req.body.location !== "") { 
+        await listener.update_location(req.body.location, req.session.user.email)
+    }
+    if (req.body.bio !== "") { 
+        await listener.update_bio(req.body.bio, req.session.user.email)
+    }
+    const result = await listener.list_specific_user(req.session.user.id)
+    req.session.user = result[0]
+    res.redirect('/user/listener/:id/profile')
+})
 
 app.post('/user/listener/:id/messages/:other/send', async function (req, res) {
     const message = new MessageController()
