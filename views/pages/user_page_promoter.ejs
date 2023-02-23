@@ -13,12 +13,14 @@
           <p>Location: <%= event.location %></p>
           <p>Price: £<%= event.price %></p>
           <p>Genre: <%= event.genre %></p>
-          <form method="POST" action="/user/promoter/event/<%=event.id%>">
-            <button type="submit">Delete</button>
-          </form>
-          <form method="GET" action="/user/promoter/event/update/<%=event.id%>">
-            <button type="submit">Update</button>
-          </form>
+          <% if (type === 'promoter') { %>
+            <form method="POST" action="/user/promoter/event/<%=event.id%>">
+              <button type="submit">Delete</button>
+            </form>
+            <form method="GET" action="/user/promoter/event/update/<%=event.id%>">
+              <button type="submit">Update</button>
+            </form>
+          <% } %>
         </li>
       <% }); %>
   </ul>
