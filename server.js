@@ -159,5 +159,10 @@ app.get('/events_list', async function (req, res) {
     res.render('pages/events_list', { events : list_events , user: user , type: type});
 });
 
+app.get('/frequencies', async function (req, res) {
+    const listeners = new ListenerController();
+    const list_listeners = await listeners.list_users();
+    res.render('pages/frequencies', {listeners : list_listeners });
+});
 
 app.listen(3000);
