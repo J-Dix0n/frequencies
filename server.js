@@ -5,6 +5,19 @@ const ListenerController = require("./Controllers/ListenerController")
 const PromoterController = require("./Controllers/PromoterController")
 const EventsController = require("./Controllers/EventsController")
 const MessageController = require("./Controllers/MessageController")
+const multer = require("multer")
+const path = require ('path')
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'images')
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname))
+    }
+})
+const upload = multer({storage : storage})
+
+
 let app = express();
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({
@@ -62,6 +75,16 @@ app.post('/user', async function (req, res) {
         }
     };
 })
+
+app.get('/user/listener/:id/upload', (req, res) => {
+    res.render('pages/upload');
+});
+
+app.post('/user/listener/:id/upload', upload.single("image"), async (req, res) => {
+    const listener = new ListenerController();
+    await listener.update_picture(req.file.filename, req.session.user.email)
+    res.send("Image Uploaded");
+});
 
 app.get('/user/listener/:id/profile', async function (req, res) {
     const user = req.session.user;
