@@ -5,8 +5,22 @@
       </head>
       <body>
           <main>
-                <!-- <script src="../../Scripts/add_field"></script> -->
                 <%- include('../partials/listener_navbar') %>
+
+                <% if (random_pick != "") { %>
+                    <p>Random user:</p>
+                    <p><%= random_pick.first_name %> <%= random_pick.last_name %></p>
+                    <p><%= random_pick.bio %></p>
+                    <img width="50" height="50" src="/<%= random_pick.picture %>">
+                    <form form action="/frequencies/<%= user.id %>/confirm/<%= random_pick.id %>" method="POST">
+                        <input type="submit" value="<3">
+                    </form>
+                    <form form action="/frequencies/<%= user.id %>/deny/<%= random_pick.id %>" method="POST">
+                        <input type="submit" value="X">
+                    </form>
+                <% } %>
+
+                <!-- <script src="../../Scripts/add_field"></script> -->
                 <form form action="/frequencies" method="POST">
                     <label for="filter">Choose a genre:</label>
                     <select class="filter" name="filter" id="filter">
@@ -46,7 +60,7 @@
                 <!-- <button type="button" class="add_field">Add filter</button> -->
 
                 <% for (let i = 0; i < listeners.length; i++) { %>
-                    <p><strong><%=listeners[i].first_name%></strong> <%= listeners[i].age %></p>
+                    <p><strong><%=listeners[i].first_name%> <%=listeners[i].last_name%></strong> <%= listeners[i].age %></p>
                     <p><%= listeners[i].bio %></p>
                 <% } %>
           </main>
