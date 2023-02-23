@@ -66,6 +66,8 @@ app.post('/user', async function (req, res) {
 app.get('/user/listener/:id/profile', async function (req, res) {
     const user = req.session.user;
     const type = req.session.type;
+    console.log("on profile entry")
+    console.log(req.session.user)
     res.render('pages/user_page_listener', {user: user, type: type});
 });
 
@@ -87,6 +89,8 @@ app.post('/user/listener/profile/success', async function (req, res) {
     if (req.body.bio !== "") { 
         await listener.update_bio(req.body.bio, req.session.user.email)
     }
+    const result = await listener.list_specific_user(req.session.user.id)
+    req.session.user = result[0]
     res.redirect('/user/listener/:id/profile')
 })
 
