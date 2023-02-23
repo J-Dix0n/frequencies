@@ -5,6 +5,7 @@
     </head>
     <body>
         <main>
+          <div class="user_page">
             <%- include('../partials/listener_navbar') %>
             <p>Listener</p>
             <p><%= user.first_name %> <%= user.last_name %></p>
@@ -36,6 +37,7 @@
               </form>
               <a href="upload">Upload a profile picture</a>
               <img width="50" height="50" src="/<%= user.picture %>" >
+              </div>
         </main>
     </body>
 </html>

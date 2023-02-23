@@ -5,6 +5,7 @@
       </head>
       <body>
           <main>
+            <div class="frequencies_page">
                 <%- include('../partials/listener_navbar') %>
 
                 <% if (random_pick != "") { %>
@@ -63,6 +64,7 @@
                     <p><strong><%=listeners[i].first_name%> <%=listeners[i].last_name%></strong> <%= listeners[i].age %></p>
                     <p><%= listeners[i].bio %></p>
                 <% } %>
+                </div>
           </main>
       </body>
   </html>
