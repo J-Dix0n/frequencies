@@ -92,7 +92,6 @@ class ListenerController {
     }
 
     async filtered_users(body_array) {
-        console.log(body_array);
         const client = await pool.connect();
         let result = await client.query("SELECT * FROM listeners");
         let listeners = []
@@ -104,7 +103,6 @@ class ListenerController {
                 }
             }
         }
-        console.log(listeners)
         return listeners;
     }
 
