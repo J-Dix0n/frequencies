@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
-
+app.use(express.static((path.join(__dirname, './public'))))
 app.use(session({secret: "RANDOMSTRING", resave: true, saveUninitialized: true}))
 //#######################
 
@@ -257,9 +257,19 @@ app.get('/event/:id', async function (req, res) {
 });
 
 app.get('/frequencies', async function (req, res) {
+    const user = req.session.user;
+    const type = req.session.type;
     const listeners = new ListenerController();
     const list_listeners = await listeners.list_users();
-    res.render('pages/frequencies', {listeners : list_listeners });
+    res.render('pages/frequencies', {listeners : list_listeners, user: user, type: type });
+});
+
+app.post('/frequencies', async function (req, res) {
+    const user = req.session.user;
+    const type = req.session.type;
+    const listeners = new ListenerController();
+    const list_listeners = await listeners.filtered_users(req.body.filter);
+    res.render('pages/frequencies', {listeners : list_listeners, user: user, type: type});
 });
 
 app.listen(3000);

@@ -1,4 +1,54 @@
-<% for (let i = 0; i < listeners.length; i++) { %>
-      <p><strong><%=listeners[i].first_name%></strong> <%= listeners[i].age %></p>
-      <p><%= listeners[i].bio %></p>
-  <% } %>
+  <!DOCTYPE html>
+  <html lang="en">
+      <head>
+  
+      </head>
+      <body>
+          <main>
+                <!-- <script src="../../Scripts/add_field"></script> -->
+                <%- include('../partials/listener_navbar') %>
+                <form form action="/frequencies" method="POST">
+                    <label for="filter">Choose a genre:</label>
+                    <select class="filter" name="filter" id="filter">
+                        <option value="----">----</option>
+                        <option value="Rock">Rock</option>
+                        <option value="Indie">Indie</option>
+                        <option value="Electronic">Electronic</option>
+                        <option value="Alternative">Alternative</option>
+                        <option value="Metal">Metal</option>
+                    </select>
+                    <select class="filter" name="filter" id="filter">
+                        <option value="----">----</option>
+                        <option value="Rock">Rock</option>
+                        <option value="Indie">Indie</option>
+                        <option value="Electronic">Electronic</option>
+                        <option value="Alternative">Alternative</option>
+                        <option value="Metal">Metal</option>
+                    </select>
+                    <select class="filter" name="filter" id="filter">
+                        <option value="----">----</option>
+                        <option value="Rock">Rock</option>
+                        <option value="Indie">Indie</option>
+                        <option value="Electronic">Electronic</option>
+                        <option value="Alternative">Alternative</option>
+                        <option value="Metal">Metal</option>
+                    </select>
+                    <select class="filter" name="filter" id="filter">
+                        <option value="----">----</option>
+                        <option value="Rock">Rock</option>
+                        <option value="Indie">Indie</option>
+                        <option value="Electronic">Electronic</option>
+                        <option value="Alternative">Alternative</option>
+                        <option value="Metal">Metal</option>
+                    </select>
+                    <input type="Submit" value="Filter">
+                </form>
+                <!-- <button type="button" class="add_field">Add filter</button> -->
+
+                <% for (let i = 0; i < listeners.length; i++) { %>
+                    <p><strong><%=listeners[i].first_name%></strong> <%= listeners[i].age %></p>
+                    <p><%= listeners[i].bio %></p>
+                <% } %>
+          </main>
+      </body>
+  </html>
