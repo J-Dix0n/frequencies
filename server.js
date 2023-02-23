@@ -144,11 +144,13 @@ app.get('/user/listener/:id/messages', async function (req, res) {
 
 app.get('/user/promoter/:id', async function (req, res) {
     const eventClass = new EventsController();
-    const listnerOrPromoter = req.session.type
-    const promoter = req.session.user;
+    const promoterClass = new PromoterController();
 
-    const promoterId = promoter.id;
-    const promoterEvents = await eventClass.fetchEventsByPromoter(promoterId);
+    const listnerOrPromoter = req.session.type
+    const promoter = await promoterClass.getPromoterById(req.params.id);
+
+    const promoterEvents = await eventClass.fetchEventsByPromoter(promoter.id);
+    
 
     res.render('pages/user_page_promoter', {user: promoter, events: promoterEvents, type: listnerOrPromoter});
 });
