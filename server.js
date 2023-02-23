@@ -114,6 +114,41 @@ app.post('/user/promoter/event/:id', async function (req, res) {
     res.redirect('/user/promoter/:id')
   });
 
+  app.get('/user/promoter/event/update/:id', async function (req, res) {
+    try {
+      const eventClass = new EventsController();
+      const eventId = req.params.id;
+      const eventToUpdate = await eventClass.getEventById(eventId); 
+      res.render('pages/update_event', { eventToUpdate, user: req.session.user });
+    } catch (err) {
+      console.error(err);
+    }
+  });
+
+  app.post('/user/promoter/event/update/:id', async function (req, res) {
+    try {
+      const eventClass = new EventsController();
+      const eventId = req.params.id;
+
+      const updatedEvent = {
+        name: req.body.name,
+        location: req.body.location,
+        genre: req.body.genre,
+        artist_list: JSON.parse(req.body.artist_list),
+        attendees: JSON.parse(req.body.attendees),
+        promoter_id: req.session.user.id,
+        price: req.body.price,
+        date: req.body.date
+      };
+  
+      await eventClass.updateEvent(eventId, updatedEvent); 
+      res.redirect(`/user/promoter/${req.session.user.id}`);
+    } catch (err) {
+      console.error(err);
+      res.sendStatus(500);
+    }
+  });
+
 app.get('/post_event', async function (req, res) {
     const user = req.session.user;
     res.render('pages/post_event', {user: user});
