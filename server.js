@@ -66,8 +66,6 @@ app.post('/user', async function (req, res) {
 app.get('/user/listener/:id/profile', async function (req, res) {
     const user = req.session.user;
     const type = req.session.type;
-    console.log("on profile entry")
-    console.log(req.session.user)
     res.render('pages/user_page_listener', {user: user, type: type});
 });
 
