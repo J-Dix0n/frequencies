@@ -1,0 +1,28 @@
+<%- include('../partials/promoter_navbar') %>
+
+<h1>Update Event: <%= eventToUpdate.name %></h1>
+
+<form method="POST" action="/user/promoter/event/update/<%=eventToUpdate.id%>">
+  <label for="name">Event Name:</label>
+  <input type="text" name="name" value="<%=eventToUpdate.name%>"><br>
+
+  <label for="location">Location:</label>
+  <input type="text" name="location" value="<%=eventToUpdate.location%>"><br>
+
+  <label for="genre">Genre:</label>
+  <input type="text" name="genre" value="<%=eventToUpdate.genre%>"><br>
+
+  <label for="artist_list">Artists:</label>
+  <input type="text" name="artist_list" value="<%=JSON.stringify(eventToUpdate.artist_list)%>"><br>
+
+  <label for="attendees">Attendees:</label>
+  <input type="text" name="attendees" value='<%=JSON.stringify(eventToUpdate.attendees)%>'><br>
+
+  <label for="price">Price:</label>
+  <input type="number" name="price" step="0.01" value="<%=eventToUpdate.price%>"><br>
+
+  <label for="date">Date:</label>
+  <input type="date" name="date" value="<%=eventToUpdate.date.toISOString().substr(0,10)%>"><br>
+
+  <input type="submit" value="Update">
+</form>
