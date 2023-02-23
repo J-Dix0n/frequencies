@@ -28,6 +28,20 @@ class PromoterController {
             console.log(err)
         }
     }
+
+    async getPromoterById(id) {
+        try {
+          const client = await pool.connect();
+          const query = 'SELECT * FROM promoters WHERE id = $1';
+          const values = [id];
+          const result = await client.query(query, values);
+          client.end();
+          return result.rows[0];
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
 }
 
 module.exports = PromoterController;

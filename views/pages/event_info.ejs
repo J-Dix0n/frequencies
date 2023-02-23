@@ -1,0 +1,12 @@
+<h1><%= event.name %></h1>
+<p><strong>Promoter:</strong> <%= promoter.company_name %> <a href="/user/promoter/<%= promoter.id %>" class="btn btn-primary">Promoter Page</a></p>
+<p><strong>Location:</strong> <%= event.location %></p>
+<p><strong>Date:</strong> <%= event.date %></p>
+<p><strong>Price:</strong> £<%= event.price %></p>
+<p><strong>Genre:</strong> <%= event.genre %></p>
+<p><strong>Artist List:</strong></p>
+<ul>
+  <% for (let i = 0; i < event.artist_list.length; i++) { %>
+    <li><%= event.artist_list[i].artist %> - <%= event.artist_list[i].genre %></li>
+  <% } %>
+</ul>
