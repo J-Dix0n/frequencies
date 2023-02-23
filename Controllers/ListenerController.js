@@ -92,17 +92,19 @@ class ListenerController {
     }
 
     async filtered_users(body_array) {
+        console.log(body_array);
         const client = await pool.connect();
         let result = await client.query("SELECT * FROM listeners");
         let listeners = []
         result = result.rows;
         for (let i = 0; i < body_array.length; i++) {
             for (let j = 0; j < result.length; j++) {
-                if (result[j].preferences[0].genre === body_array[i] && !listeners.includes(result[j])) {
+                if (result[j].preferences[0].genre === body_array[i] && !listeners.includes(result[j] && result[j].preferences[0].genre != "----")) {
                     listeners.push(result[j]);
                 }
             }
         }
+        console.log(listeners)
         return listeners;
     }
 
