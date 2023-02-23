@@ -18,6 +18,17 @@ class ListenerController {
         return result.rows;
     }
 
+    async update_picture(picture, email) {
+        const client = await pool.connect();
+        try {
+            await client.query('UPDATE listeners SET picture = $1 WHERE email = $2', [picture, email])  
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
+
+
     async sign_up(first_name, last_name, email, password) {
         const client = await pool.connect();
         const result = await client.query('INSERT INTO listeners (first_name, last_name, email, password) VALUES ($1, $2, $3, $4)', [first_name, last_name, email, password])

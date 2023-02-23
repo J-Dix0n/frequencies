@@ -9,6 +9,7 @@ CREATE TABLE listeners (
     preferences jsonb,
     age INT,
     location TEXT,
+    picture TEXT DEFAULT 'default.jpeg',
     events jsonb,  /* status [1 = interested, 2 = attending, 3 = attended]*/ 
     friends jsonb, /* status [1 = pending, 2 = accepted]*/
     following jsonb,
@@ -27,6 +28,7 @@ CREATE TABLE promoters (
     email TEXT,
     password TEXT,
     company_name TEXT,
+    picture TEXT DEFAULT 'default.jpeg',
     company_location TEXT,
     events jsonb, /* status: [1 = upcoming, 2 = ended]*/
     followers jsonb
