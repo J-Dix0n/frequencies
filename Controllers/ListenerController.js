@@ -9,7 +9,7 @@ class ListenerController {
         const client = await pool.connect();
         const result = await client.query('SELECT * FROM listeners;')
         console.log(result.rows)
-        return result;
+        return result.rows;
     }
 
     async sign_up(first_name, last_name, email, password) {
