@@ -1,0 +1,93 @@
+@import url("https://fonts.googleapis.com/css?family=Raleway:300,400");
+@import url("https://fonts.googleapis.com/css?family=Montserrat:700");
+
+body {
+  margin-top: 40px;
+  background-color: rgba(31,31,31,255);
+  font-size: 22px;
+  line-height: 28px;
+  letter-spacing: 4px;
+  font-family: "Raleway";
+  font-weight: 400;
+  color: grey;
+}
+.fixed-nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  min-height: 100px;
+  padding: 0 25px;
+  box-sizing: border-box;
+  background-color: rgba(31,31,31,255);
+  box-shadow: 0 0 15px 2px rgba(0,0,0,0.5);
+}
+
+.frequencies_page {
+  padding-top: 100px;
+}
+
+.events_list, .l_messages {
+  padding-top: 80px;
+}
+
+.user_page, .user_page_p, .post_event {
+  padding-top: 70px;
+}
+
+
+.navbar {
+    float: left;
+    padding-top: 35px;
+    color: grey;
+}
+  
+  .navbar a {
+    font-size: 16px;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+  
+  .dropdown {
+    float: right;
+    padding-top: 30px;
+    padding-right: 50px;
+  }
+  
+  .dropdown .dropbtn { 
+    border: none;
+    outline: none;
+    color: grey;
+    padding: 14px 16px;
+    background-color: inherit;
+    margin: 0;
+  }
+  
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: rgba(31,31,31,255);
+    max-width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+  .dropdown-content a {
+    color: grey;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+  }
+  
+  .dropdown-content a:hover {
+    background-color: aqua;
+    color: rgba(31,31,31,255);
+  }
+  
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }

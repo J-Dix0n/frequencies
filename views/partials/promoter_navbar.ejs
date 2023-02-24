@@ -1,6 +1,17 @@
-<ul>
-    <li><a href="/user/promoter/<%= user.id %>">User Profile</a></li>
-    <li><a href="/events_list">Events</a></li>
-    <li><a href="/post_event">Post An Event</a></li>
-    <li><a>Following List</a></li>
-</ul>
+<head>
+    <link href="/css/style.css" rel="stylesheet" type="text/css">
+</head>
+<div class="fixed-nav-bar">
+<div class="navbar">F R E Q U E N C <span style="color:aqua">I </span> E S </div>
+    <div class="dropdown">
+    <button class="dropbtn"><span style="color:aqua">[Menu Placeholder] </span>
+      <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-content">
+        <a href="/user/promoter/<%= user.id %>">User Profile</a>
+        <a href="/events_list">Events</a>
+        <a href="/post_event">Post An Event</a>
+        <a>Following</a>
+    </div>
+  </div> 
+</div>
