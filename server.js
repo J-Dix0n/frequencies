@@ -164,12 +164,14 @@ class App {
         });
 
         app.post('/user/promoter/event/:id', async function (req, res) {
-            const eventClass = new EventsController(client);
+            const eventClass = new EventsController();
             const deleteEventId = req.params.id
+            const promoterId = req.session.user.id
+            console.log(promoterId);
 
             await eventClass.deleteEvent(deleteEventId)
 
-            res.redirect('/user/promoter/:id')
+            res.redirect(`/user/promoter/${promoterId}`)
         });
 
         app.get('/user/promoter/event/update/:id', async function (req, res) {
