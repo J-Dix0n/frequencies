@@ -21,7 +21,6 @@
                     </form>
                 <% } %>
 
-                <!-- <script src="../../Scripts/add_field"></script> -->
                 <form form action="/frequencies" method="POST">
                     <label for="filter">Choose a genre:</label>
                     <select class="filter" name="filter" id="filter">
@@ -58,7 +57,6 @@
                     </select>
                     <input type="Submit" value="Filter">
                 </form>
-                <!-- <button type="button" class="add_field">Add filter</button> -->
 
                 <% for (let i = 0; i < listeners.length; i++) { %>
                     <p><strong><%=listeners[i].first_name%> <%=listeners[i].last_name%></strong> <%= listeners[i].age %></p>

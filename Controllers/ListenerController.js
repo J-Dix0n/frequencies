@@ -1,8 +1,6 @@
-const pool = require("../database")
-
 class ListenerController {
-    constructor() {
-
+    constructor(client) {
+        this.client = client
     }
 
     get_random(array) {
@@ -10,21 +8,18 @@ class ListenerController {
     }
 
     async list_users() {
-        const client = await pool.connect();
-        const result = await client.query('SELECT * FROM listeners;')
+        const result = await this.client.query('SELECT * FROM listeners;')
         return result.rows;
     }
 
     async list_specific_user(id) {
-        const client = await pool.connect();
-        const result = await client.query('SELECT * FROM listeners WHERE id = $1;', [id])
+        const result = await this.client.query('SELECT * FROM listeners WHERE id = $1;', [id])
         return result.rows;
     }
 
     async update_picture(picture, email) {
-        const client = await pool.connect();
         try {
-            await client.query('UPDATE listeners SET picture = $1 WHERE email = $2', [picture, email])  
+            await this.client.query('UPDATE listeners SET picture = $1 WHERE email = $2', [picture, email])  
         }
         catch(err){
             console.log(err)
@@ -33,15 +28,12 @@ class ListenerController {
 
 
     async sign_up(first_name, last_name, email, password) {
-        const client = await pool.connect();
-        const result = await client.query('INSERT INTO listeners (first_name, last_name, email, password) VALUES ($1, $2, $3, $4)', [first_name, last_name, email, password])
-        client.end();
+        const result = await this.client.query('INSERT INTO listeners (first_name, last_name, email, password) VALUES ($1, $2, $3, $4)', [first_name, last_name, email, password])
     }
 
     async log_in(email, password) {
-        const client = await pool.connect();
         try {
-            const result = await client.query('SELECT * FROM listeners WHERE email = $1 AND password = $2', [email, password]);
+            const result = await this.client.query('SELECT * FROM listeners WHERE email = $1 AND password = $2', [email, password]);
             return result.rows;
         }
         catch(err) {
@@ -50,9 +42,8 @@ class ListenerController {
     }
 
     async update_preferences(preferences, email) {
-        const client = await pool.connect();
         try {
-            await client.query("UPDATE listeners SET preferences = '[]' || $1 ::jsonb WHERE email = $2", [preferences, email])  
+            await this.client.query("UPDATE listeners SET preferences = '[]' || $1 ::jsonb WHERE email = $2", [preferences, email])
         }
         catch(err){
             console.log(err)
@@ -60,9 +51,8 @@ class ListenerController {
     }
 
     async update_age(age, email) {
-        const client = await pool.connect();
         try {
-            await client.query('UPDATE listeners SET age = $1 WHERE email = $2', [age, email])  
+            await this.client.query('UPDATE listeners SET age = $1 WHERE email = $2', [age, email])
         }
         catch(err){
             console.log(err)
@@ -70,9 +60,8 @@ class ListenerController {
     }
 
     async update_location(location, email) {
-        const client = await pool.connect();
         try {
-            await client.query('UPDATE listeners SET location = $1 WHERE email = $2', [location, email])  
+            await this.client.query('UPDATE listeners SET location = $1 WHERE email = $2', [location, email])
         }
         catch(err){
             console.log(err)
@@ -80,9 +69,8 @@ class ListenerController {
     }
 
     async update_bio(bio, email) {
-        const client = await pool.connect();
         try {
-            await client.query('UPDATE listeners SET bio = $1 WHERE email = $2', [bio, email])  
+            await this.client.query('UPDATE listeners SET bio = $1 WHERE email = $2', [bio, email])
         }
         catch(err){
             console.log(err)
@@ -90,14 +78,12 @@ class ListenerController {
     }
 
     async get_name(id) {
-        const client = await pool.connect();
-        const result = await client.query('SELECT first_name, last_name FROM listeners WHERE id = $1;', [id]);
+        const result = await this.client.query('SELECT first_name, last_name FROM listeners WHERE id = $1;', [id]);
         return `${result.rows[0].first_name} ${result.rows[0].last_name}`
     }
 
     async filtered_users(body_array) {
-        const client = await pool.connect();
-        let result = await client.query("SELECT * FROM listeners");
+        let result = await this.client.query("SELECT * FROM listeners");
         let listeners = []
         result = result.rows;
         for (let i = 0; i < body_array.length; i++) {
@@ -111,9 +97,8 @@ class ListenerController {
     }
 
     async swipe_right(swiper_id, swipee_id) {
-        const client = await pool.connect();
-        let result = await client.query("SELECT friends FROM listeners WHERE id = $1;", [swiper_id]);
-        let swipee = await client.query("SELECT friends FROM listeners WHERE id = $1;", [swipee_id]);
+        let result = await this.client.query("SELECT friends FROM listeners WHERE id = $1;", [swiper_id]);
+        let swipee = await this.client.query("SELECT friends FROM listeners WHERE id = $1;", [swipee_id]);
         let friends = ""
         for (let i = 0; i < 2; i++) {
             if (i === 0) {
@@ -128,9 +113,9 @@ class ListenerController {
                 } else {
                     friends.push({status: '1', listener_id: `${swipee_id}`});
                 }
-                await client.query("UPDATE listeners SET friends = DEFAULT WHERE id = $1", [swiper_id]);
+                await this.client.query("UPDATE listeners SET friends = DEFAULT WHERE id = $1", [swiper_id]);
                 for(let i = 0; i < friends.length; i++) {
-                    await client.query("UPDATE listeners SET friends = friends || $1 ::jsonb WHERE id = $2", [friends[i], swiper_id])
+                    await this.client.query("UPDATE listeners SET friends = friends || $1 ::jsonb WHERE id = $2", [friends[i], swiper_id])
                 }
             } else if (i === 1) {
                 friends = swipee.rows[0].friends;
@@ -144,9 +129,9 @@ class ListenerController {
                 } else {
                     friends.push({status: '1', listener_id: `${swiper_id}`});
                 }
-                await client.query("UPDATE listeners SET friends = DEFAULT WHERE id = $1", [swipee_id]);
+                await this.client.query("UPDATE listeners SET friends = DEFAULT WHERE id = $1", [swipee_id]);
                 for(let i = 0; i < friends.length; i++) {
-                    await client.query("UPDATE listeners SET friends = friends || $1 ::jsonb WHERE id = $2", [friends[i], swipee_id])
+                    await this.client.query("UPDATE listeners SET friends = friends || $1 ::jsonb WHERE id = $2", [friends[i], swipee_id])
                 }
             }
         }
