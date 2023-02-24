@@ -87,7 +87,7 @@ class ListenerController {
         let user_friends = await this.client.query("SELECT friends FROM listeners WHERE id = $1", [user_id]);
         result = result.rows;
         user_friends = user_friends.rows[0].friends
-        let denied = []
+        let denied = [`${user_id}`]
         let listeners = []
         user_friends.forEach((object) => {
             if (object.status > 1 && !denied.includes(object.listener_id)) {
@@ -217,8 +217,8 @@ class ListenerController {
         }
       }
 
-    async generate_user(body_array) {
-        let users = await this.filtered_users(body_array);
+    async generate_user(body_array, user_id) {
+        let users = await this.filtered_users(body_array, user_id);
         let choice = this.get_random(users);
         return choice
     }
