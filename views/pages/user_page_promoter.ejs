@@ -1,8 +1,24 @@
-<div class="user_page_p">
+<% if (type === "listener") { %>
+  <%- include('../partials/listener_navbar') %>
+<% } else if (type === "promoter") { %>
   <%- include('../partials/promoter_navbar') %>
+<% } %>
 
 <h1>Welcome <%= user.company_name %></h1>
 <p>Email: <%= user.email %></p>
+
+<% if (followed === 'true') { %>
+  <form method="POST" action="/user/unfollow">
+    <input type="hidden" name="promoter_id" value="<%= user.id %>">
+    <input type="hidden" name="position" value="<%= position %>">
+    <button type="submit">Unfollow</button>
+  </form>
+<% } else { %>
+  <form method="POST" action="/user/follow">
+    <input type="hidden" name="promoter_id" value="<%= user.id %>">
+    <button type="submit">Follow</button>
+  </form>
+<% } %>
 
 <h2>Upcoming Events:</h2>
 <% if (events.length > 0) { %>
