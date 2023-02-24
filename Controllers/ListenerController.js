@@ -145,6 +145,14 @@ class ListenerController {
         }
       }
 
+      async followPromoter(promoterId, id) {
+        try {
+            await this.client.query(`UPDATE listeners SET following = following || '[{"promoter_id": "${promoterId}"}]' WHERE id = $1;`, [id])
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
     async generate_user(body_array) {
         let users = await this.filtered_users(body_array);
         let choice = this.get_random(users);

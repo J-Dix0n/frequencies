@@ -184,9 +184,15 @@ class App {
             
             res.redirect(`/user/promoter/${promoterId}`)
         });
+
+        app.post('/user/follow', async function (req, res) {
+            const listenerClass = new ListenerController(client);
+            const promoterId = req.body.promoter_id
+            await listenerClass.followPromoter(promoterId, req.session.user.id)
+            
+            res.redirect(`/user/promoter/${promoterId}`)
+        });
         
-
-
         app.post('/user/promoter/event/:id', async function (req, res) {
             const eventClass = new EventsController();
             const deleteEventId = req.params.id
