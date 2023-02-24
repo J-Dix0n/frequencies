@@ -153,12 +153,11 @@ class App {
         app.get('/user/promoter/:id', async function (req, res) {
             const eventClass = new EventsController(client);
             const promoterClass = new PromoterController(client);
-
             const listnerOrPromoter = req.session.type
             const promoter = await promoterClass.getPromoterById(req.params.id);
+            const follow = await listenerClass.list_specific_user(req.session.user.id);
 
             const promoterEvents = await eventClass.fetchEventsByPromoter(promoter.id);
-            
 
             res.render('pages/user_page_promoter', {user: promoter, events: promoterEvents, type: listnerOrPromoter});
         });
