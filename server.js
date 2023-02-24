@@ -102,24 +102,30 @@ class App {
 
         app.post('/user/listener/profile/success', async function (req, res) {
             const listener = new ListenerController(client)
-            const preferences = {
-                "genre": `${req.body.genre}`,
-                "favourite_artist": `${req.body.artist}`
+            const genres = {
+                "genre": `${req.body.genre}`
             };
-            if (preferences.genre !== "" || preferences.artist !== "") {
-                await listener.update_preferences(preferences, req.session.user.email)
+            const favourite_artist = {
+                "favourite_artist": `${req.body.artist}`
+            }
+            const preferences = [genres, favourite_artist];
+
+            console.log(preferences);
+
+            if (preferences !== "") {
+                await listener.update_preferences(preferences, req.session.user.id)
             }
             if (req.body.age !== "") { 
-                await listener.update_age(req.body.age, req.session.user.email)
+                await listener.update_age(req.body.age, req.session.user.id)
             }
             if (req.body.location !== "") { 
-                await listener.update_location(req.body.location, req.session.user.email)
+                await listener.update_location(req.body.location, req.session.user.id)
             }
             if (req.body.bio !== "") { 
-                await listener.update_bio(req.body.bio, req.session.user.email)
+                await listener.update_bio(req.body.bio, req.session.user.id)
             }
             const result = await listener.list_specific_user(req.session.user.id)
-            req.session.user = result[0]
+            req.session.user = result;
             res.redirect('/user/listener/:id/profile')
         })
 

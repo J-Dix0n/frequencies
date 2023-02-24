@@ -41,9 +41,16 @@ class ListenerController {
         }
     }
 
-    async update_preferences(preferences, email) {
+    async update_preferences(preferences, id) {
         try {
-            await this.client.query("UPDATE listeners SET preferences = '[]' || $1 ::jsonb WHERE email = $2", [preferences, email])
+            let split = preferences[0].genre.split(",");
+            // await this.client.query("UPDATE listeners SET preferences = '[]'");
+            for(let i=0; i < split.length; i++) {
+                await this.client.query("UPDATE listeners SET preferences = preferences || $1 ::jsonb WHERE id = $2", [{"genre": `${split[i]}`}, id]);
+            } 
+            if (preferences[1].favourite_artist) {
+                await this.client.query("UPDATE listeners SET preferences = preferences || $1 ::jsonb WHERE id = $2", [{"favourite_artist": `${preferences[1].favourite_artist}`}, id]);
+            }
         }
         catch(err){
             console.log(err)
