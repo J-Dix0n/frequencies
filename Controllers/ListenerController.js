@@ -82,14 +82,27 @@ class ListenerController {
         return `${result.rows[0].first_name} ${result.rows[0].last_name}`
     }
 
-    async filtered_users(body_array) {
+    async filtered_users(body_array, user_id) {
         let result = await this.client.query("SELECT * FROM listeners");
-        let listeners = []
+        let user_friends = await this.client.query("SELECT friends FROM listeners WHERE id = $1", [user_id]);
         result = result.rows;
-        for (let i = 0; i < body_array.length; i++) {
-            for (let j = 0; j < result.length; j++) {
-                if (result[j].preferences[0].genre === body_array[i] && !listeners.includes(result[j] && result[j].preferences[0].genre != "----")) {
-                    listeners.push(result[j]);
+        user_friends = user_friends.rows[0].friends
+        let denied = []
+        let listeners = []
+        user_friends.forEach((object) => {
+            if (object.status > 1 && !denied.includes(object.listener_id)) {
+                denied.push(object.listener_id)
+            }
+        })
+        result = result.filter((object) => {
+            return !denied.includes(String(object.id))
+        })
+        if (result.length > 0) {
+            for (let i = 0; i < body_array.length; i++) {
+                for (let j = 0; j < result.length; j++) {
+                    if (result[j].preferences[0].genre === body_array[i] && !listeners.includes(result[j])) {
+                        listeners.push(result[j]);
+                    }
                 }
             }
         }
@@ -137,6 +150,57 @@ class ListenerController {
         }
     }
 
+    async swipe_left(swiper_id, swipee_id) {
+        let result = await this.client.query("SELECT friends FROM listeners WHERE id = $1;", [swiper_id]);
+        let swipee = await this.client.query("SELECT friends FROM listeners WHERE id = $1;", [swipee_id]);
+        let friends = ""
+        for (let i = 0; i < 2; i++) {
+            if (i === 0) {
+                friends = result.rows[0].friends;
+                if(friends.filter((object) => object.listener_id === String(swipee_id)).length > 0) {
+                    friends = friends.map(object => {
+                        if(object.listener_id === String(swipee_id)) {
+                            object.status = '3'
+                        }
+                        return object;
+                    })
+                } else {
+                    friends.push({status: '3', listener_id: `${swipee_id}`});
+                }
+                await this.client.query("UPDATE listeners SET friends = DEFAULT WHERE id = $1", [swiper_id]);
+                for(let i = 0; i < friends.length; i++) {
+                    await this.client.query("UPDATE listeners SET friends = friends || $1 ::jsonb WHERE id = $2", [friends[i], swiper_id])
+                }
+            } else if (i === 1) {
+                friends = swipee.rows[0].friends;
+                if(friends.filter((object) => object.listener_id === String(swiper_id)).length > 0) {
+                    friends = friends.map(object => {
+                        if(object.listener_id === String(swiper_id)) {
+                            object.status = '3'
+                        }
+                        return object;
+                    })
+                } else {
+                    friends.push({status: '3', listener_id: `${swiper_id}`});
+                }
+                await this.client.query("UPDATE listeners SET friends = DEFAULT WHERE id = $1", [swipee_id]);
+                for(let i = 0; i < friends.length; i++) {
+                    await this.client.query("UPDATE listeners SET friends = friends || $1 ::jsonb WHERE id = $2", [friends[i], swipee_id])
+                }
+            }
+        }
+    }
+
+    async generate_user(body_array, user_id) {
+        let users = await this.filtered_users(body_array, user_id);
+        if (users.length > 0) {
+            users = this.get_random(users);
+        } else {
+            users = "null";
+        }
+        return users
+    }
+    
     async unfollowPromoter(position, id) {
         try {
             await this.client.query(`UPDATE listeners SET following = following - ${position} WHERE id = $1;`, [id])
