@@ -167,7 +167,6 @@ class App {
             const eventClass = new EventsController();
             const deleteEventId = req.params.id
             const promoterId = req.session.user.id
-            console.log(promoterId);
 
             await eventClass.deleteEvent(deleteEventId)
 

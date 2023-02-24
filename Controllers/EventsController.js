@@ -46,9 +46,11 @@ class EventsController {
 
     async deleteEvent(id) {
       try {
+        const client = await pool.connect();
         const query = `DELETE FROM events WHERE id = $1`;
         const values = [id];
-        await this.client.query(query, values);
+        await client.query(query, values);
+        client.end();
       } catch (err) {
         console.error(err);
       }
