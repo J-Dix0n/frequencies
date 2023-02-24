@@ -173,8 +173,19 @@ class App {
                 }
             }
 
-            res.render('pages/user_page_promoter', {user: promoter, events: promoterEvents, type: listnerOrPromoter, follow: followed});
+            res.render('pages/user_page_promoter', {user: promoter, events: promoterEvents, type: listnerOrPromoter, followed: followed, position: position});
         });
+
+        app.post('/user/unfollow', async function (req, res) {
+            const listenerClass = new ListenerController(client);
+            const promoterId = req.body.promoter_id
+            const position = req.body.position;
+            await listenerClass.unfollowPromoter(position, req.session.user.id)
+            
+            res.redirect(`/user/promoter/${promoterId}`)
+        });
+        
+
 
         app.post('/user/promoter/event/:id', async function (req, res) {
             const eventClass = new EventsController();
