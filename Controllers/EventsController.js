@@ -1,15 +1,13 @@
 const pool = require("../database")
 
 class EventsController {
-    constructor() {
-
+    constructor(client) {
+      this.client = client
     }
 
     async getEvents() {
         try {
-            const client = await pool.connect();
-            const result = await client.query('SELECT * FROM events');
-            client.end();
+            const result = await this.client.query('SELECT * FROM events');
             return result.rows;
         } catch (err) {
         
@@ -18,11 +16,9 @@ class EventsController {
 
     async getEventById(id) {
       try {
-        const client = await pool.connect();
         const query = 'SELECT * FROM events WHERE id = $1';
         const values = [id];
-        const result = await client.query(query, values);
-        client.end();
+        const result = await this.client.query(query, values);
         return result.rows[0];
       } catch (err) {
         console.error(err);
@@ -31,7 +27,6 @@ class EventsController {
 
     async createEvent(event) {
         try {
-          const client = await pool.connect();
           const query = `INSERT INTO events ("name", "location", "genre", "artist_list", "attendees", "promoter_id", "price", "date") VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`;
           const values = [
             event.name,
@@ -43,8 +38,7 @@ class EventsController {
             event.price,
             event.date
           ];
-          await client.query(query, values);
-          client.end();
+          await this.client.query(query, values);
         } catch (err) {
           console.error(err);
         }
@@ -52,11 +46,9 @@ class EventsController {
 
     async deleteEvent(id) {
       try {
-        const client = await pool.connect();
         const query = `DELETE FROM events WHERE id = $1`;
         const values = [id];
-        await client.query(query, values);
-        client.end();
+        await this.client.query(query, values);
       } catch (err) {
         console.error(err);
       }
@@ -64,11 +56,9 @@ class EventsController {
     
     async fetchEventsByPromoter(id) {
       try {
-        const client = await pool.connect();
         const query = 'SELECT * FROM events WHERE promoter_id = $1'
         const values = [id];
-        const result = await client.query(query, values);
-        client.end();
+        const result = await this.client.query(query, values);
         return result.rows;
       } catch (err) {
         console.error(err);
@@ -77,7 +67,6 @@ class EventsController {
     
     async updateEvent(event_id, updatedEvent) {
       try {
-        const client = await pool.connect();
         const query = `
           UPDATE events SET
             name = $1,
@@ -102,8 +91,7 @@ class EventsController {
           event_id
         ];
 
-        const result = await client.query(query, values);
-        client.end();
+        const result = await this.client.query(query, values);
         return result.rowCount;
       } catch (err) {
         console.error(err);

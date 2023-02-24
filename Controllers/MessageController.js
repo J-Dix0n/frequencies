@@ -1,18 +1,14 @@
-const pool = require("../database")
-
 class MessageController {
-    constructor() {
-
+    constructor(pool) {
+        this.client = pool
     }
 
     async send_message(sentuser_id, receiveuser_id, message) {
-        const client = await pool.connect();
-        await client.query('INSERT INTO messages (sentuser_id, receiveuser_id, message, date) VALUES ($1, $2, $3, $4);', [sentuser_id, receiveuser_id, message, new Date()])
+        await this.client.query('INSERT INTO messages (sentuser_id, receiveuser_id, message, date) VALUES ($1, $2, $3, $4);', [sentuser_id, receiveuser_id, message, new Date()])
     }
 
     async get_messaged_id(user_id) {
-        const client = await pool.connect();
-        const result = await client.query('SELECT sentuser_id, receiveuser_id FROM messages WHERE (sentuser_id = $1) OR (receiveuser_id = $1);', [user_id]);
+        const result = await this.client.query('SELECT sentuser_id, receiveuser_id FROM messages WHERE (sentuser_id = $1) OR (receiveuser_id = $1);', [user_id]);
         const ids = [];
         result.rows.forEach(function (object) {
             if (object.sentuser_id === user_id && !ids.includes(object.receiveuser_id)) {
@@ -25,8 +21,7 @@ class MessageController {
     }
 
     async get_messages(user1, user2) {
-        const client = await pool.connect();
-        const result = await client.query('SELECT * FROM messages WHERE (sentuser_id = $1 AND receiveuser_id = $2) OR (sentuser_id = $2 AND receiveuser_id = $1);', [user1, user2]);
+        const result = await this.client.query('SELECT * FROM messages WHERE (sentuser_id = $1 AND receiveuser_id = $2) OR (sentuser_id = $2 AND receiveuser_id = $1);', [user1, user2]);
         return result.rows
     }
 }
