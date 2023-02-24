@@ -251,9 +251,7 @@ class App {
         app.post('/post_event', async function(req, res) {
         const promoterId = req.session.user;
 
-        artists = req.body.artist_list.split(", ")
-        output_list = []
-
+        const artists = req.body.artist_list.split(", ");
         let outputArr = [];
 
         for (let i = 0; i < artists.length; i++) {
