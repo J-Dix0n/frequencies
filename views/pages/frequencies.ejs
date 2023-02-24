@@ -8,7 +8,7 @@
             <div class="frequencies_page">
                 <%- include('../partials/listener_navbar') %>
 
-                <% if (random_pick != "") { %>
+                <% if (random_pick != "null") { %> 
                     <p>Random user:</p>
                     <p><%= random_pick.first_name %> <%= random_pick.last_name %></p>
                     <p><%= random_pick.bio %></p>
@@ -19,6 +19,8 @@
                     <form form action="/frequencies/<%= user.id %>/deny/<%= random_pick.id %>" method="POST">
                         <input type="submit" value="X">
                     </form>
+                <% } else { %>
+                    <p>No users found!</p>
                 <% } %>
 
                 <form form action="/frequencies" method="POST">

@@ -7,9 +7,13 @@
     <body>
         <main>
             <%- include('../partials/listener_navbar') %>
-            <p>Messages</p>
+            <p>Messages:</p>
             <% info.forEach(function (object) { %>
-                <a href="/user/listener/<%= user.id %>/messages/<%= object.id %>"</a>><%= object.name %></a>
+                <a href="/user/listener/<%= user.id %>/messages/<%= object.id %>"</a><%= object.name %></a>
+            <% }); %>
+            <p>Friends:</p>
+            <% friends.forEach(function (object) { %>
+                <a href="/user/listener/<%= user.id %>/messages/<%= object.id %>"</a><%= object.name %></a>
             <% }); %>
         </main>
     </body>

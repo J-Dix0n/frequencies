@@ -193,8 +193,12 @@ class ListenerController {
 
     async generate_user(body_array, user_id) {
         let users = await this.filtered_users(body_array, user_id);
-        let choice = this.get_random(users);
-        return choice
+        if (users.length > 0) {
+            users = this.get_random(users);
+        } else {
+            users = "null";
+        }
+        return users
     }
 }
 

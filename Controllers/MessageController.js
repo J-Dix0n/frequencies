@@ -20,6 +20,17 @@ class MessageController {
         return ids;
     }
 
+    async get_friends_id(user_id) {
+        const result = await this.client.query('SELECT friends FROM listeners WHERE id = $1', [user_id])
+        let ids = []
+        result.rows[0].friends.forEach((object) => {
+            if (object.status === '2') {
+                ids.push(object.listener_id)
+            }
+        });
+        return ids;
+    }
+
     async get_messages(user1, user2) {
         const result = await this.client.query('SELECT * FROM messages WHERE (sentuser_id = $1 AND receiveuser_id = $2) OR (sentuser_id = $2 AND receiveuser_id = $1);', [user1, user2]);
         return result.rows

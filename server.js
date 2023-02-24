@@ -141,13 +141,18 @@ class App {
             const user = req.session.user;
             const type = req.session.type;
             const info = [];
+            const friends = [];
             const message = new MessageController(client)
             const listener = new ListenerController(client)
             const message_users = await message.get_messaged_id(user.id);
+            const friend_users = await message.get_friends_id(user.id);
             for(let i = 0; i < (message_users).length; i++) {
                 info.push({'id': message_users[i], 'name': await listener.get_name(message_users[i])})
             }
-            res.render('pages/listener_messages', {user: user, type: type, info: info});
+            for(let i = 0; i < (friend_users).length; i++) {
+                friends.push({'id': friend_users[i], 'name': await listener.get_name(friend_users[i])})
+            }
+            res.render('pages/listener_messages', {user: user, type: type, info: info, friends: friends});
         });
 
         app.get('/user/promoter/:id', async function (req, res) {
@@ -270,7 +275,8 @@ class App {
             const type = req.session.type;
             const listeners = new ListenerController(client);
             const list_listeners = await listeners.list_users();
-            res.render('pages/frequencies', {listeners : list_listeners, user: user, type: type , random_pick: ""});
+            const random_pick = "null";
+            res.render('pages/frequencies', {listeners : list_listeners, user: user, type: type , random_pick: random_pick});
         });
 
         app.post('/frequencies', async function (req, res) {
