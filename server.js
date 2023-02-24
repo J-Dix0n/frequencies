@@ -158,16 +158,46 @@ class App {
         app.get('/user/promoter/:id', async function (req, res) {
             const eventClass = new EventsController(client);
             const promoterClass = new PromoterController(client);
-
+            const listenerClass = new ListenerController(client);
             const listnerOrPromoter = req.session.type
             const promoter = await promoterClass.getPromoterById(req.params.id);
-
+            const follow = await listenerClass.list_specific_user(req.session.user.id);
             const promoterEvents = await eventClass.fetchEventsByPromoter(promoter.id);
+            req.session.user.following = follow[0].following;
+            let followerList =  req.session.user.following
             
+            let followed = '';
+            let position = -1;
 
-            res.render('pages/user_page_promoter', {user: promoter, events: promoterEvents, type: listnerOrPromoter});
+            if (listnerOrPromoter === 'listener') {
+                for(let i = 0; i < followerList.length; i++) {
+                    if (followerList[i].promoter_id === req.params.id) {
+                        followed = 'true'
+                        position = i;
+                    } 
+                }
+            }
+
+            res.render('pages/user_page_promoter', {user: promoter, events: promoterEvents, type: listnerOrPromoter, followed: followed, position: position});
         });
 
+        app.post('/user/unfollow', async function (req, res) {
+            const listenerClass = new ListenerController(client);
+            const promoterId = req.body.promoter_id
+            const position = req.body.position;
+            await listenerClass.unfollowPromoter(position, req.session.user.id)
+            
+            res.redirect(`/user/promoter/${promoterId}`)
+        });
+
+        app.post('/user/follow', async function (req, res) {
+            const listenerClass = new ListenerController(client);
+            const promoterId = req.body.promoter_id
+            await listenerClass.followPromoter(promoterId, req.session.user.id)
+            
+            res.redirect(`/user/promoter/${promoterId}`)
+        });
+        
         app.post('/user/promoter/event/:id', async function (req, res) {
             const eventClass = new EventsController();
             const deleteEventId = req.params.id
