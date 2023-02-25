@@ -1,22 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
+<div class="signup">
     <head>
-
-    </head>
-    <body>
-        <main>
-            <p>Sign up promoter</p>
-            <form action="/sign_up_p/success" method="POST">
-                <input type="text" name="first_name" placeholder="First Name">
-                <input type="text" name="last_name" placeholder="Last Name">
-                <input type="text" name="email" placeholder="Email">
-                <input type="password" name="password" placeholder="Password">
-                <input type="company_name" name="company_name" placeholder="Company Name">
-                <input type="location" name="location" placeholder="Location">
-                <input type="submit" value="Submit">
-            </form>
-            <a href="/">Listener Sign up</a>
-            <a href="/log_in">Log in</a>
-        </main>
-    </body>
-</html>
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+      </head>
+      <h1 id="titleL"> F R E Q U E N C <span style="color:aqua">I</span> E S</h1>
+      <h3 id="create">CREATE AN ACCOUNT</h3>
+      <div class="login">
+        Already have an account? <span style="color:white"><a id="loginLink" href="/log_in">Sign in</span></a><br><br>
+        <form action="/sign_up_p/success" method="POST">
+            <input id="sign-up-input" style="color: aqua" type="text" name="first_name" placeholder="First Name">
+            <input id="sign-up-input" style="color: aqua" type="text" name="last_name" placeholder="Last Name">
+            <input id="sign-up-input" style="color: aqua" type="text" name="email" placeholder="Email">
+            <input style="color: aqua" type="password" name="password" placeholder="Password" id="myInput">
+            <i class="far fa-eye" id="togglePassword" onclick="myFunction()"></i>
+            <input id="sign-up-input" style="color: aqua" type="company_name" name="company_name" placeholder="Company Name">
+            <input id="sign-up-input" style="color: aqua" type="location" name="location" placeholder="Location">
+            <button class="button" type="submit">CREATE ACCOUNT</button>
+        </form>
+            <span style="color:white"><a id =loginLink href="/">Go back</span></a>
+        </form>
+    </div>
+    
+    <script>
+    function myFunction() {
+      var x = document.getElementById("myInput");
+      if (x.type === "password") {
+        x.type = "text";
+      } else {
+        x.type = "password";
+      }
+    }
+    </script>
+    </div>
