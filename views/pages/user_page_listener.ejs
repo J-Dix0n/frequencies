@@ -19,7 +19,7 @@
                   <option value="techno">Techno</option>
                   <option value="house">House</option>
                 </select>
-                <br><br>
+                <br>
                 <input style="color: aqua" type="text" name="age" id="age" placeholder="Age">
                 <input style="color: aqua" type="text" name="location" id="location" placeholder="Location">
                 <input style="color: aqua" type="text" name="artist" id="artist" placeholder="Favourite Artist">
@@ -36,7 +36,6 @@
               <p><%= user.first_name %> <%= user.last_name %>, <%= user.age %></p>
               <p><%= user.location %></p>
               <p><%= user.bio %></p>
-              <p style="text-transform: capitalize">Genre: <%= user.preferences[0].genre %></p>
               </div>
               </div>
 
