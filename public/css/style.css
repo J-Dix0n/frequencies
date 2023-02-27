@@ -574,3 +574,50 @@ html, body {
     -ms-transition: box-shadow 0.5s ease;
     transition: box-shadow 0.5s ease;
   }
+
+  .event-map {
+    float: right;
+    margin-right: 100px;
+    margin-top: 150px;
+  }
+
+  .event-id-container {
+    position: absolute;
+    top: 150px;
+    font-family: Titillium Web;
+    color: grey;
+    border: 1px solid rgb(42, 42, 42);
+    border-radius: 10px;
+    padding: 1px;
+    left: 50px;
+    background-color: rgba(48, 48, 48, 0.2);
+    width: 750px;
+  }
+  
+  .event-id {
+    padding: 80px;
+    padding-top: 20px;
+    padding-bottom: 30px;
+  }
+
+  #event-status {
+    width: 25%;
+    height: 35px;
+    margin-bottom: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border: none;
+    outline: none;
+    padding: 10px;
+    font-size: 12px;
+    color: grey;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    box-shadow: inset 0 -5px 45px rgba(100, 100, 100, 0.2),
+      0 1px 1px rgba(255, 255, 255, 0.2);
+    -webkit-transition: box-shadow 0.5s ease;
+    -moz-transition: box-shadow 0.5s ease;
+    -o-transition: box-shadow 0.5s ease;
+    -ms-transition: box-shadow 0.5s ease;
+    transition: box-shadow 0.5s ease;
+  }

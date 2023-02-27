@@ -127,7 +127,7 @@ class ListenerController {
             console.log(err)
         }
     }
-
+    
     async get_name(id) {
         const result = await this.client.query('SELECT first_name, last_name FROM listeners WHERE id = $1;', [id]);
         return `${result.rows[0].first_name} ${result.rows[0].last_name}`
