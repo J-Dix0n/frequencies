@@ -4,7 +4,11 @@ class MessageController {
     }
 
     async send_message(sentuser_id, receiveuser_id, message) {
-        await this.client.query('INSERT INTO messages (sentuser_id, receiveuser_id, message, date) VALUES ($1, $2, $3, $4);', [sentuser_id, receiveuser_id, message, new Date()])
+        await this.client.query('INSERT INTO messages (sentuser_id, receiveuser_id, message, date, type) VALUES ($1, $2, $3, $4, $5);', [sentuser_id, receiveuser_id, message, new Date(), "text"])
+    }
+
+    async send_event(sentuser_id, receiveuser_id, event_id) {
+        await this.client.query('INSERT INTO messages (sentuser_id, receiveuser_id, message, date, type) VALUES ($1, $2, $3, $4, $5);', [sentuser_id, receiveuser_id, `/event/${event_id}`, new Date(), "event"])
     }
 
     async get_messaged_id(user_id) {

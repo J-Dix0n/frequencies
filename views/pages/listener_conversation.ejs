@@ -7,19 +7,32 @@
         <%- include('../partials/listener_navbar') %>
         <main>
             <div class="message-container">
-            <p id=conversation>YOUR CONVERSATION</p>
-            <% conversation.forEach(function (object) { %>
-                <% if (object.sentuser_id === user.id) { %>
-                    <p class="user_message"><%= object.message %></p>
-                <% } else { %>
-                    <p class="other_message"><%= object.message %></p>
-                <% } %>
-            <% }) %>
-            <form action="/user/listener/<%= participants[0] %>/messages/<%= participants[1] %>/send" method="POST">
-                <input style="color:aqua" id="message-input" type="text" name="message" placeholder="Send a message">
-                <button class="convo-button" type="submit">SEND</button>
-            </form>
-                </div>
+                <p id=conversation>YOUR CONVERSATION</p>
+                <% conversation.forEach(function (object) { %>
+                    <% if (object.sentuser_id === user.id && object.type === "text") { %>
+                        <p class="user_message"><%= object.message %></p>
+                    <% } else if (object.sentuser_id != user.id && object.type === "text") { %>
+                        <p class="other_message"><%= object.message %></p>
+                    <% } else if (object.sentuser_id === user.id && object.type === "event") { %>
+                        <a href="<%= object.message %>" class="user_message">Event Link</a>
+                    <% } else if (object.sentuser_id != user.id && object.type === "event") { %>
+                        <a href="<%= object.message %>" class="other_message">Event Link</a>
+                    <% } %>
+                <% }) %>
+                <form action="/user/listener/<%= participants[0] %>/messages/<%= participants[1] %>/send" method="POST">
+                    <input style="color:aqua" id="message-input" type="text" name="message" placeholder="Send a message">
+                    <button class="convo-button" type="submit">SEND</button>
+                </form>
+                <form form action="/user/listener/<%= participants[0] %>/messages/<%= participants[1] %>/send_event" method="POST">
+                    <label for="event">Send an event</label>
+                    <select name="event_id">
+                        <% for(let i = 0; i < events.length; i++) { %>
+                            <option value="<%= events[i].id %>"><%= events[i].name %></option>
+                        <% } %>
+                    </select>
+                    <input type="Submit" value="Send">
+                </form>
+            </div>
         </main>
     </body>
 </html>
