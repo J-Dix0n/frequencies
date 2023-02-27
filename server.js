@@ -161,6 +161,16 @@ class App {
             res.redirect('/user/listener/:id/profile')
         })
 
+        app.post('/user/listener/profile/playlist/update', async function(req, res) {
+            const listener = new ListenerController(client)
+            if (req.body.playlist !== "") { 
+                await listener.update_playlist(req.body.playlist, req.session.user.id)
+            }
+            const result = await listener.list_specific_user(req.session.user.id)
+            req.session.user = result[0]
+            res.redirect('/user/listener/:id/profile')
+        })
+
         app.post('/user/listener/:id/messages/:other/send', async function (req, res) {
             const message = new MessageController(client)
             await message.send_message(req.params.id, req.params.other, req.body.message)
