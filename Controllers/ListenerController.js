@@ -55,6 +55,7 @@ class ListenerController {
     async update_preferences(preferences, id) {
         try {
             let split = preferences[0].genre.split(",");
+
             await this.client.query("UPDATE listeners SET preferences = '[]' WHERE id = $1", [id]);
             for(let i=0; i < split.length; i++) {
                 if (split[i] != "----") {
@@ -108,7 +109,6 @@ class ListenerController {
         result = result.rows;
         user_friends = user_friends.rows[0].friends
         let denied = [`${user_id}`]
-        let listeners = []
         user_friends.forEach((object) => {
             if (object.status > 1 && !denied.includes(object.listener_id)) {
                 denied.push(object.listener_id)
@@ -117,13 +117,16 @@ class ListenerController {
         result = result.filter((object) => {
             return !denied.includes(String(object.id))
         })
+        let listeners = [[], [], [], [], []]
         if (result.length > 0) {
-            for (let i = 0; i < body_array.length; i++) {
-                for (let j = 0; j < result.length; j++) {
-                    if (result[j].preferences[0].genre === body_array[i] && !listeners.includes(result[j])) {
-                        listeners.push(result[j]);
+            for (let j = 0; j < result.length; j++) {
+                let genres = 0
+                for (let i = 0; i < result[j].preferences.length; i++) {
+                    if (body_array.includes(result[j].preferences[i].genre)) {
+                        genres += 1;
                     }
                 }
+                listeners[4 - genres].push(result[j])
             }
         }
         return listeners;
@@ -144,7 +147,7 @@ class ListenerController {
                         return object;
                     })
                 } else {
-                    friends.push({status: '1', listener_id: `${swipee_id}`});
+                    friends.push({status: '4', listener_id: `${swipee_id}`});
                 }
                 await this.client.query("UPDATE listeners SET friends = DEFAULT WHERE id = $1", [swiper_id]);
                 for(let i = 0; i < friends.length; i++) {
@@ -255,8 +258,24 @@ class ListenerController {
 
     async generate_user(body_array, user_id) {
         let users = await this.filtered_users(body_array, user_id);
-        let choice = this.get_random(users);
+        let result = []
+        for (let i = 0; i < users.length; i++) {
+            if (users[i].length > 0 && result.length === 0) {
+                result = users[i];
+            }
+        }
+        let choice = this.get_random(result);
         return choice
+    }
+
+    async get_genres(user_id) {
+        let user = await this.client.query("SELECT preferences FROM listeners WHERE id = $1;", [user_id]);
+        user = user.rows[0].preferences
+        let genres = []
+        for(let i = 0; i < user.length; i++) {
+            genres.push(user[i].genre)
+        }
+        return genres;
     }
 }
 
