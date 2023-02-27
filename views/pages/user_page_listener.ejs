@@ -53,6 +53,11 @@
               <p><%= user.first_name %> <%= user.last_name %>, <%= user.age %></p>
               <p><%= user.location %></p>
               <p><%= user.bio %></p>
+              <ul>
+                <% for (let i = 0; i < user.preferences.length; i++) { %>
+                  <li><%= user.preferences[i].genre %></li>
+                <% } %>
+              </ul>
               </div>
               </div>
 
