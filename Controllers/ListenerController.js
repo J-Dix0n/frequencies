@@ -17,6 +17,17 @@ class ListenerController {
         return result.rows;
     }
 
+    async get_friends_id(user_id) {
+        const result = await this.client.query('SELECT friends FROM listeners WHERE id = $1', [user_id])
+        let ids = []
+        result.rows[0].friends.forEach((object) => {
+            if (object.status === '2') {
+                ids.push(object.listener_id)
+            }
+        });
+        return ids;
+    }
+
     async update_picture(picture, email) {
         try {
             await this.client.query('UPDATE listeners SET picture = $1 WHERE email = $2', [picture, email])  

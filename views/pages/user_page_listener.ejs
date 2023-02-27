@@ -68,7 +68,14 @@
 
               <div class="friends-container">
                 <div class="friends">
-                  Friends List Placeholder
+                  Friends List:
+                  <ul>
+                    <% friends.forEach(function (object) { %>
+                    <li>
+                      <a href="/user/listener/<%= user.id %>/messages/<%= object.id %>"</a><%= object.name %></a>
+                    </li>
+                    <% }); %>
+                  </ul>
                 </div>
               </div>
           </div>

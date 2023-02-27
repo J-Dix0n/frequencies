@@ -95,6 +95,13 @@ class App {
         app.get('/user/listener/:id/profile', async function (req, res) {
             const user = req.session.user;
             const type = req.session.type;
+            const friends = [];
+            const listener = new ListenerController(client)
+            const friend_users = await listener.get_friends_id(user.id);
+            for(let i = 0; i < (friend_users).length; i++) {
+                friends.push({'id': friend_users[i], 'name': await listener.get_name(friend_users[i])})
+            }
+
             const eventInfo = new EventsController(client);
             const attendingEvents = [];
             const attendingEventsInfo = []
@@ -110,7 +117,7 @@ class App {
                 attendingEventsInfo.push(attendingEvent);
             }
             
-            res.render('pages/user_page_listener', {user: user, type: type, events: attendingEventsInfo});
+            res.render('pages/user_page_listener', {user: user, type: type, events: attendingEventsInfo, friends: friends});
         });
 
         app.post('/user/listener/profile/success', async function (req, res) {
