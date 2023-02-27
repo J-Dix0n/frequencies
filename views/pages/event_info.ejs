@@ -19,3 +19,12 @@
     <li><%= event.artist_list[i].artist %> - <%= event.artist_list[i].genre %></li>
   <% } %>
 </ul>
+<% if(event.location === "Manchester") { %>
+  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d75993.07573186597!2d-2.293502513546102!3d53.47232715211126!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487a4d4c5226f5db%3A0xd9be143804fe6baa!2sManchester!5e0!3m2!1sen!2suk!4v1677490883816!5m2!1sen!2suk" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> 
+<% } else if(event.location === "London") { %>
+  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d158857.72810619872!2d-0.24168185390008648!3d51.52877184101125!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47d8a00baf21de75%3A0x52963a5addd52a99!2sLondon!5e0!3m2!1sen!2suk!4v1677490993194!5m2!1sen!2suk" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+<% } else if(event.location === "Glasgow") { %>
+  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d143322.1634594396!2d-4.372541128587075!3d55.85557336185401!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x488815562056ceeb%3A0x71e683b805ef511e!2sGlasgow!5e0!3m2!1sen!2suk!4v1677493734952!5m2!1sen!2suk" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+<% } else if(event.location === "Blackpool") { %>
+  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d75359.25539343027!2d-3.0942420000798947!3d53.825489778346395!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487b4117e942d017%3A0xb52db2179232c2c9!2sBlackpool!5e0!3m2!1sen!2suk!4v1677493753780!5m2!1sen!2suk" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+<% } %>
