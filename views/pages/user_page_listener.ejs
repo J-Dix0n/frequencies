@@ -58,6 +58,17 @@
               </div>
               </div>
 
+              <div class="playlist-container">
+                <% if(user.playlist !== "") { %>
+                  <a href="<%= user.playlist %>">My Playlist</a>
+                <% } %>
+                <form action="/user/listener/profile/playlist/update" method="POST">
+                  <label for="playlist">Enter your playlist:</label>
+                  <input type="text" name="playlist" id="playlist" placeholder="Playlist">
+                  <button class="update-button" value="Update" type="submit">UPDATE</button>
+                </form>
+              </div>
+
               <div class="events-container">
                 <div class="events">
                   Events list:

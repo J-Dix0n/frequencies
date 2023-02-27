@@ -56,6 +56,19 @@ body {
   word-wrap: break-word;
 }
 
+.playlist-container {
+  position: absolute;
+  right: 300px;
+  bottom: 150px;
+  border: 1px solid rgb(42, 42, 42);
+  border-radius: 10px;
+  padding: 1px;
+  background-color: rgb(48, 48, 48, 0.2);
+  max-width: 200px;
+  max-height: 150px;
+  word-wrap: break-word;
+}
+
 .profile-pic {
   padding: 80px;
   overflow: hidden;
