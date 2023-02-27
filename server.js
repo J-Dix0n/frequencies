@@ -58,6 +58,11 @@ class App {
             res.render('pages/log_in')
         })
 
+        app.post('/log_out', async function (req, res) {
+            req.session.destroy();
+            res.redirect('/log_in');
+        })
+
         app.post('/user', async function (req, res) {
             if (req.body.user_type === "listener") {
                 const listener = new ListenerController(client)
