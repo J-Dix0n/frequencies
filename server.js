@@ -95,6 +95,23 @@ class App {
         app.get('/user/listener/:id/profile', async function (req, res) {
             const user = req.session.user;
             const type = req.session.type;
+            const eventInfo = new EventsController(client);
+            const attendingEvents = [];
+            const attendingEventsInfo = []
+            
+            user.events.forEach(event => {
+                if (event.status === "2") {
+                attendingEvents.push(event.event_id);
+                }
+            });
+
+            for (const event of attendingEvents) {
+                const attendingEvent = await eventInfo.getEventById(event);
+                attendingEventsInfo.push(attendingEvent);
+            }
+
+            console.log(attendingEventsInfo)
+            
             res.render('pages/user_page_listener', {user: user, type: type});
         });
 
