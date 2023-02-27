@@ -2,7 +2,6 @@ class App {
     constructor() {
 
     }
-
     async application() {
         const express = require('express');
         const session = require('express-session')
@@ -22,7 +21,6 @@ class App {
             }
         })
         const upload = multer({storage : storage})
-
 
         let app = express();
         app.set('view engine', 'ejs');
@@ -292,7 +290,7 @@ class App {
             const eventId = req.params.id;
             const eventInfo = await event.getEventById(eventId);
             const promoterInfo = await promoter.getPromoterById(eventInfo.promoter_id);
-            
+
             res.render('pages/event_info', {event: eventInfo, promoter: promoterInfo});
         });
 
@@ -339,6 +337,7 @@ class App {
         app.post('/frequencies/:id/deny/:other', async function (req, res) {
             const listeners = new ListenerController(client);
             await listeners.swipe_left(req.params.id, req.params.other);
+            
             res.redirect('/frequencies')
         })
 
