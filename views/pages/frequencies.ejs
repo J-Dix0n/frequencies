@@ -9,10 +9,13 @@
                 <%- include('../partials/listener_navbar') %>
                 <p>Filtering by : <%= filter %></p>
                 <% if (random_pick != "null") { %> 
-                    <p>Random user:</p>
-                    <p><%= random_pick.first_name %> <%= random_pick.last_name %></p>
-                    <p><%= random_pick.bio %></p>
                     <img width="50" height="50" src="/<%= random_pick.picture %>">
+                    <p>Name: <%= random_pick.first_name %> <%= random_pick.last_name %></p>
+                    <p>Age: <%= random_pick.age %></p>
+                    <p>Location: <%= random_pick.location %></p>
+                    <p>Bio: <%= random_pick.bio %></p>
+                    <p>Favourite Artist: <%= fave_artist %></p>
+                    <p>Top Genres: <%= genres %></p>
                     <form form action="/frequencies/<%= user.id %>/confirm/<%= random_pick.id %>" method="POST">
                         <input type="submit" value="<3">
                     </form>

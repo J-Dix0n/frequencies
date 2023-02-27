@@ -363,33 +363,21 @@ class App {
             const listeners = new ListenerController(client);
             let random_pick = ""
             if (req.session.filter === "Genre") {
-                const genres = await listeners.get_genres(req.session.user.id);
+                let genres = await listeners.get_genres(req.session.user.id);
                 random_pick = await listeners.generate_user(genres, req.session.user.id, "Genre")
             } else if (req.session.filter === "Location") {
                 random_pick = await listeners.generate_user(req.session.user.location, req.session.user.id, "Location")
             } else if (req.session.filter === "Favourite Artist") {
-                const artist = await listeners.get_favourite_artist(req.session.user.id);
+                let artist = await listeners.get_favourite_artist(req.session.user.id);
                 random_pick = await listeners.generate_user(artist, req.session.user.id, "Favourite Artist")
             }
+            let genres = await listeners.get_genres(req.session.user.id);
+            let fave_artist = await listeners.get_favourite_artist(req.session.user.id);
             
-            res.render('pages/frequencies', {user: user, type: type , random_pick: random_pick, filter: req.session.filter});
+            res.render('pages/frequencies', {user: user, type: type , random_pick: random_pick, filter: req.session.filter, fave_artist, genres});
         });
 
         app.post('/frequencies/search', async function (req, res) {
-            const user = req.session.user;
-            const type = req.session.type;
-            const listeners = new ListenerController(client);
-            let random_pick = ""
-            if (req.body.filter === "Genre") {
-                const genres = await listeners.get_genres(req.session.user.id);
-                random_pick = await listeners.generate_user(genres, req.session.user.id, "Genre")
-            } else if (req.body.filter === "Location") {
-                random_pick = await listeners.generate_user(req.session.user.location, req.session.user.id, "Location")
-            } else if (req.body.filter === "Favourite Artist") {
-                const artist = await listeners.get_favourite_artist(req.session.user.id);
-                random_pick = await listeners.generate_user(artist, req.session.user.id, "Favourite Artist")
-            }
-            req.session.random_pick = random_pick
             req.session.filter = req.body.filter
             res.redirect('/frequencies')
         });
@@ -397,34 +385,12 @@ class App {
         app.post('/frequencies/:id/confirm/:other', async function (req, res) {
             const listeners = new ListenerController(client);
             await listeners.swipe_right(req.params.id, req.params.other);
-            let random_pick = ""
-            if (req.session.filter === "Genre") {
-                const genres = await listeners.get_genres(req.session.user.id);
-                random_pick = await listeners.generate_user(genres, req.session.user.id, "Genre")
-            } else if (req.session.filter === "Location") {
-                random_pick = await listeners.generate_user(req.session.user.location, req.session.user.id, "Location")
-            } else if (req.session.filter === "Favourite Artist") {
-                const artist = await listeners.get_favourite_artist(req.session.user.id);
-                random_pick = await listeners.generate_user(artist, req.session.user.id, "Favourite Artist")
-            }
-            req.session.random_pick = random_pick
             res.redirect('/frequencies')
         })
 
         app.post('/frequencies/:id/deny/:other', async function (req, res) {
             const listeners = new ListenerController(client);
             await listeners.swipe_left(req.params.id, req.params.other);
-            let random_pick = ""
-            if (req.session.filter === "Genre") {
-                const genres = await listeners.get_genres(req.session.user.id);
-                random_pick = await listeners.generate_user(genres, req.session.user.id, "Genre")
-            } else if (req.session.filter === "Location") {
-                random_pick = await listeners.generate_user(req.session.user.location, req.session.user.id, "Location")
-            } else if (req.session.filter === "Favourite Artist") {
-                const artist = await listeners.get_favourite_artist(req.session.user.id);
-                random_pick = await listeners.generate_user(artist, req.session.user.id, "Favourite Artist")
-            }
-            req.session.random_pick = random_pick
             res.redirect('/frequencies')
         })
 
