@@ -100,12 +100,15 @@ class App {
 
         app.post('/user/listener/profile/success', async function (req, res) {
             const listener = new ListenerController(client)
-            const preferences = {
-                "genre": `${req.body.genre}`,
-                "favourite_artist": `${req.body.artist}`
+            const genres = {
+                "genre": `${req.body.genre}`
             };
-            if (preferences.genre !== "" || preferences.artist !== "") {
-                await listener.update_preferences(preferences, req.session.user.email)
+            const favourite_artist = {
+                "favourite_artist": `${req.body.artist}`
+            }
+            const preferences = [genres, favourite_artist];
+            if (preferences !== "") {
+                await listener.update_preferences(preferences, req.session.user.id)
             }
             if (req.body.age !== "") { 
                 await listener.update_age(req.body.age, req.session.user.email)
