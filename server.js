@@ -103,13 +103,12 @@ class App {
             for(let i = 0; i < (friend_users).length; i++) {
                 friends.push({'id': friend_users[i], 'name': await listener.get_name(friend_users[i])})
             }
-
             const eventInfo = new EventsController(client);
             const attendingEvents = [];
             const attendingEventsInfo = []
 
             user.events.forEach(event => {
-                if (event.status === "2") {
+                if (event.status === "2" || event.status === 2 ) {
                 attendingEvents.push(event.event_id);
                 }
             });
@@ -334,6 +333,10 @@ class App {
             else {
                 await listenerClass.updateEventStatus(req.session.user.id, indexOfEventStatus, status);
             }
+
+            const listenerInfoSessionUpdate = await listenerClass.list_specific_user(req.session.user.id);
+            req.session.user.events = listenerInfoSessionUpdate[0].events
+
             res.redirect(`/event/${eventId}`);
           });
 
