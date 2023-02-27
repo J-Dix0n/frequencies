@@ -289,12 +289,9 @@ class App {
         app.get('/event/:id', async function (req, res) {
             const event = new EventsController(client);
             const promoter = new PromoterController(client);
-            const listenerClass = new ListenerController(client);
             const eventId = req.params.id;
             const eventInfo = await event.getEventById(eventId);
             const promoterInfo = await promoter.getPromoterById(eventInfo.promoter_id);
-            const listenerInfo = await listenerClass.list_specific_user(req.session.user.id);
-            console.log(listenerInfo[0].events)
             
             res.render('pages/event_info', {event: eventInfo, promoter: promoterInfo});
         });
@@ -303,7 +300,17 @@ class App {
             const listenerClass = new ListenerController(client);
             const eventId = req.params.id;
             const status = req.body['event-status'];
-            await listenerClass.updateEventStatus(req.session.user.id, eventId, status);
+            const listenerInfo = await listenerClass.list_specific_user(req.session.user.id);
+
+            const indexOfEventStatus = listenerInfo[0].events.findIndex(event => event.event_id === eventId);
+
+            if(indexOfEventStatus === -1){
+                await listenerClass.addEventStatus(req.session.user.id, eventId, status);
+            }
+            else {
+                await listenerClass.updateEventStatus(req.session.user.id, eventId, status);
+            }
+            
             res.redirect(`/event/${eventId}`);
           });
 
