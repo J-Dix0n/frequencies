@@ -1,20 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
+<div class="signup">
     <head>
-
-    </head>
-    <body>
-        <main>
-            <p>Log in</p>
-            <form action="/user" method="POST">
-                <input type="text" name="email" placeholder="Email">
-                <input type="password" name="password" placeholder="Password">
-                <input type="radio" id="listener" value="listener" name="user_type">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+      </head>
+      <h1 id="titleL"> F R E Q U E N C <span style="color:aqua">I</span> E S</h1>
+      <h3 id="create">SIGN IN</h3>
+      <div class="login">
+        Don't have an account? <span style="color:white"><a id="loginLink" href="/">Sign Up</span></a><br><br>
+        <form action="/user" method="POST">
+            <input id="sign-up-input" style="color: aqua" type="text" name="email" placeholder="Email">
+            <input style="color: aqua" type="password" name="password" placeholder="Password" id="myInput">
+            <i class="far fa-eye" id="togglePassword" onclick="myFunction()"></i><br>
+            <input style="color: aqua" type="radio" id="listener" value="listener" name="user_type">
                 <label for="listener">Listener</label>
-                <input type="radio" id="promoter" value="promoter" name="user_type">
-                <label for="promoter">Promoter</label>
-                <input type="submit" value="Submit">
-            </form>
-        </main>
-    </body>
-</html>
+                <input style="color: aqua" type="radio" id="promoter" value="promoter" name="user_type">
+                <label for="promoter">Promoter</label><br><br>
+            <button class="button" type="submit">SIGN IN</button>
+        </form>
+    </div>
+
+    <img id="logo" src="/icon2.png" height="50">
+    
+    <script>
+    function myFunction() {
+      var x = document.getElementById("myInput");
+      if (x.type === "password") {
+        x.type = "text";
+      } else {
+        x.type = "password";
+      }
+    }
+    </script>
+    </div>

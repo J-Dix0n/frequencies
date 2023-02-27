@@ -4,11 +4,12 @@
 <div class="fixed-nav-bar">
 <div class="navbar">F R E Q U E N C <span style="color:aqua">I </span> E S </div>
     <div class="dropdown">
-    <button class="dropbtn"><span style="color:aqua">[Menu Placeholder] </span>
+    <button class="dropbtn">
+      <span style="color:aqua" id="menu"><img id="menu-logo" src="/icon.png" height="60"></span>
       <i class="fa fa-caret-down"></i>
     </button>
     <div class="dropdown-content">
-      <a href="/user/listener/<%= user.id %>/profile">User Profile</a>
+      <a href="/user/listener/<%= user.id %>/profile">Profile</a>
       <a href="/frequencies">Frequencies</a>
       <a href="/user/listener/<%= user.id %>/messages">Messages</a>
       <a href="/events_list">Events</a>
