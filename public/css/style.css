@@ -484,7 +484,22 @@ html, body {
     display: block;
     text-align: left;
   }
+
+  .logout {
+    background: none;
+    border: none;
+    text-transform: uppercase;
+    color: inherit;
+    font-family: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
+    font-weight: inherit;
+    text-align: inherit;
+    padding: inherit;
+    font-size: inherit;
+  }
   
+
   .dropdown-content a:hover {
     background-color: aqua;
     color: rgba(31,31,31,255);
