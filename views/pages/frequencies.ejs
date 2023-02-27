@@ -7,7 +7,7 @@
           <main>
             <div class="frequencies_page">
                 <%- include('../partials/listener_navbar') %>
-
+                <p>Filtering by : <%= filter %></p>
                 <% if (random_pick != "null") { %> 
                     <p>Random user:</p>
                     <p><%= random_pick.first_name %> <%= random_pick.last_name %></p>
@@ -28,7 +28,7 @@
                     <select class="filter" name="filter" id="filter">
                         <option value="Genre">Genre</option>
                         <option value="Location">Location</option>
-                        <option value="Favourite Artist">Indie</option>
+                        <option value="Favourite Artist">Favourite Artist</option>
                     </select>
                     <input type="Submit" value="Filter">
                 </form>

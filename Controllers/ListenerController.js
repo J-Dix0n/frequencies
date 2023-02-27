@@ -103,7 +103,7 @@ class ListenerController {
         return `${result.rows[0].first_name} ${result.rows[0].last_name}`
     }
 
-    async filtered_users(body_array, user_id) {
+    async filtered_users_genre(body_array, user_id) {
         let result = await this.client.query("SELECT * FROM listeners");
         let user_friends = await this.client.query("SELECT friends FROM listeners WHERE id = $1", [user_id]);
         result = result.rows;
@@ -127,6 +127,56 @@ class ListenerController {
                     }
                 }
                 listeners[4 - genres].push(result[j])
+            }
+        }
+        return listeners;
+    }
+
+    async filtered_users_location(location, user_id) {
+        let result = await this.client.query("SELECT * FROM listeners");
+        let user_friends = await this.client.query("SELECT friends FROM listeners WHERE id = $1", [user_id]);
+        result = result.rows;
+        user_friends = user_friends.rows[0].friends
+        let denied = [`${user_id}`]
+        user_friends.forEach((object) => {
+            if (object.status > 1 && !denied.includes(object.listener_id)) {
+                denied.push(object.listener_id)
+            }
+        })
+        result = result.filter((object) => {
+            return !denied.includes(String(object.id))
+        })
+        let listeners = []
+        if (result.length > 0) {
+            for (let j = 0; j < result.length; j++) {
+                if (result[j].location === location) {
+                    listeners.push(result[j])
+                }
+            }
+        }
+        return listeners;
+    }
+
+    async filtered_users_artist(artist, user_id) {
+        let result = await this.client.query("SELECT * FROM listeners");
+        let user_friends = await this.client.query("SELECT friends FROM listeners WHERE id = $1", [user_id]);
+        result = result.rows;
+        user_friends = user_friends.rows[0].friends
+        let denied = [`${user_id}`]
+        user_friends.forEach((object) => {
+            if (object.status > 1 && !denied.includes(object.listener_id)) {
+                denied.push(object.listener_id)
+            }
+        })
+        result = result.filter((object) => {
+            return !denied.includes(String(object.id))
+        })
+        let listeners = []
+        if (result.length > 0) {
+            for (let j = 0; j < result.length; j++) {
+                if (await this.get_favourite_artist(result[j].id) === artist) {
+                    listeners.push(result[j])
+                }
             }
         }
         return listeners;
@@ -213,16 +263,6 @@ class ListenerController {
             }
         }
     }
-
-    async generate_user(body_array, user_id) {
-        let users = await this.filtered_users(body_array, user_id);
-        if (users.length > 0) {
-            users = this.get_random(users);
-        } else {
-            users = "null";
-        }
-        return users
-    }
     
     async unfollowPromoter(position, id) {
         try {
@@ -256,16 +296,35 @@ class ListenerController {
         }
     } 
 
-    async generate_user(body_array, user_id) {
-        let users = await this.filtered_users(body_array, user_id);
-        let result = []
-        for (let i = 0; i < users.length; i++) {
-            if (users[i].length > 0 && result.length === 0) {
-                result = users[i];
+    async generate_user(body_array, user_id, filter) {
+        if (filter === "Genre") {
+            let users = await this.filtered_users_genre(body_array, user_id);
+            let result = []
+            for (let i = 0; i < users.length; i++) {
+                if (users[i].length > 0 && result.length === 0) {
+                    result = users[i];
+                }
             }
+            let choice = this.get_random(result);
+            if (choice === undefined) {
+                choice = "null";
+            }
+            return choice
+        } else if (filter === "Location") {
+            let users = await this.filtered_users_location(body_array, user_id)
+            let choice = this.get_random(users);
+            if (choice === undefined) {
+                choice = "null";
+            }
+            return choice
+        } else if (filter === "Favourite Artist") {
+            let users = await this.filtered_users_artist(body_array, user_id);
+            let choice = this.get_random(users);
+            if (choice === undefined) {
+                choice = "null";
+            }
+            return choice
         }
-        let choice = this.get_random(result);
-        return choice
     }
 
     async get_genres(user_id) {
@@ -273,9 +332,23 @@ class ListenerController {
         user = user.rows[0].preferences
         let genres = []
         for(let i = 0; i < user.length; i++) {
-            genres.push(user[i].genre)
+            if (user[i].genre != undefined) {
+                genres.push(user[i].genre)
+            }
         }
         return genres;
+    }
+
+    async get_favourite_artist(user_id) {
+        let user = await this.client.query("SELECT preferences FROM listeners WHERE id = $1;", [user_id]);
+        user = user.rows[0].preferences
+        let artist = []
+        for(let i = 0; i < user.length; i++) {
+            if (user[i].favourite_artist != undefined) {
+                artist.push(user[i].favourite_artist)
+            }
+        }
+        return artist[0];
     }
 }
 
