@@ -57,7 +57,8 @@ CREATE TABLE messages (
     SentUser_id int,
     ReceiveUser_id int,
     Message text,
-    Date timestamp
+    Date timestamp,
+    type text
 );
 
 INSERT INTO listeners ("first_name", "last_name", "email", "password", "preferences", "age", "location", "events", "friends", "following", "bio") VALUES
@@ -82,7 +83,7 @@ INSERT INTO events ("name", "location", "genre", "artist_list", "attendees", "pr
 ('Fatboy Slim', 'Manchester','Electronic','[{"artist" : "Fatboy Slim", "genre" : "Electronic"}]', '[{"listener_id" : "6"}]', 4, 45.10, '11/03/2023'),
 ('Paramore', 'London', 'Alternative', '[{"artist" : "Paramore", "genre" : "Alternative"}]', '[]', 1, 50.00, '04/23/2023');
 
-INSERT INTO messages (sentuser_id, receiveuser_id, message) VALUES (1, 2, 'hi'), (2, 1, 'how are you?'), (1, 2, 'not bad thanks'), (3, 1, 'hi!'), (2, 3, 'I hate that guy');
+INSERT INTO messages (sentuser_id, receiveuser_id, message, type) VALUES (1, 2, 'hi', 'text'), (2, 1, 'how are you?', 'text'), (1, 2, 'not bad thanks', 'text'), (3, 1, 'hi!', 'text'), (2, 3, 'I hate that guy', 'text');
 
 INSERT INTO listeners ("first_name", "last_name", "email", "password", "preferences", "age", "location", "bio") VALUES
 ('Jamie', 'Boyadjiev', 'jboyadjiev@gmail.com', 'jbpassword', '[{ "genre" : "Indie"}, {"favorite_artist": "Arctic Monkeys"}]', 24, 'London', 'Hi, I''m Jamie'),

@@ -191,12 +191,20 @@ class App {
             res.redirect(`/user/listener/${req.params.id}/messages/${req.params.other}`)
         });
 
+        app.post('/user/listener/:id/messages/:other/send_event', async function (req, res) {
+            const message = new MessageController(client)
+            await message.send_event(req.params.id, req.params.other, req.body.event_id)
+            res.redirect(`/user/listener/${req.params.id}/messages/${req.params.other}`)
+        });
+
         app.get('/user/listener/:id/messages/:other', async function (req, res) {
             const user = req.session.user;
             const type = req.session.type;
             const message = new MessageController(client)
+            const eventcont = new EventsController(client)
+            let events = await eventcont.getEvents();
             const conversation = await message.get_messages(req.params.id, req.params.other)
-            res.render('pages/listener_conversation', {user: user, type: type, conversation: conversation, participants: [req.params.id, req.params.other]});
+            res.render('pages/listener_conversation', {user: user, type: type, conversation: conversation, participants: [req.params.id, req.params.other], events: events});
         });
 
         app.get('/user/listener/:id/messages', async function (req, res) {
