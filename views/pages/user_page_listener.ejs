@@ -58,10 +58,14 @@
 
               <div class="events-container">
                 <div class="events">
-                  <% for (let i = 0; i < events.length; i++) { %>
-                    <h3><%= events[i].name %></h3>
-                    <br>
-                  <% } %>
+                  Events list:
+                  <ul>
+                    <% for (let i = 0; i < events.length; i++) { %>
+                      <li>
+                        <h3><%= events[i].name %></h3>
+                      </li>
+                      <% } %>
+                  </ul>
                 </div>
               </div>
               
