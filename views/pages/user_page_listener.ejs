@@ -11,7 +11,7 @@
               <div class="preferences">
                 <h3 class="update-pref">UPDATE YOUR PREFERENCES</h3>
             <form action="/user/listener/profile/success" method="POST">
-                <label for="genre">Choose a genre:</label>
+                <label for="genre">Choose a favourite genre:</label>
                 <select name="genre" id="genre">
                   <option value="----">----</option>
                   <option value="Rock">Rock</option>
@@ -42,16 +42,33 @@
                 <input style="color: aqua" type="text" name="artist" id="artist" placeholder="Favourite Artist">
                 <input style="color: aqua" type="text" name="bio" id="bio" placeholder="Bio">
                 <br><br>
-                <input type="submit" value="Update">
-                <br><br>
+                <button class="update-button" value="Update" type="submit">UPDATE</button>
               </form>
-              <p>Age: <%= user.age %></p>
-              <p>Location: <%= user.location %></p>
-              <p>Favourite Artist: <%= user.preferences[0].favourite_artist %></p>
-              <p>Bio: <%= user.bio %></p>
-              <a href="upload">Upload a profile picture</a>
-              <img width="50" height="50" src="/<%= user.picture %>" >
               </div>
+            </div>
+              <div class="profile-pic-container">
+                <div class="profile-pic">
+              <img id="upload-img" width="200" height="200" src="/<%= user.picture %>"><br>
+              <a id="upload" href="upload">Change profile picture</a><br>
+              <p><%= user.first_name %> <%= user.last_name %>, <%= user.age %></p>
+              <p><%= user.location %></p>
+              <p><%= user.bio %></p>
+              </div>
+              </div>
+
+              <div class="events-container">
+                <div class="events">
+                  Attending Events Placeholder
+                  <br>
+                </div>
+              </div>
+
+              <div class="friends-container">
+                <div class="friends">
+                  Friends List Placeholder
+                </div>
+              </div>
+          </div>
         </main>
     </body>
 </html>
