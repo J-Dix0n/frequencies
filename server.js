@@ -317,30 +317,38 @@ class App {
             const user = req.session.user;
             const type = req.session.type;
             const listeners = new ListenerController(client);
-            const list_listeners = await listeners.list_users();
-            const random_pick = "null";
-            res.render('pages/frequencies', {listeners : list_listeners, user: user, type: type , random_pick: random_pick});
+            let random_pick = ""
+            if (req.session.random_pick != undefined) {
+                random_pick = req.session.random_pick;
+            } else {
+                random_pick = "null";
+            }
+            res.render('pages/frequencies', {user: user, type: type , random_pick: random_pick});
         });
 
-        app.post('/frequencies', async function (req, res) {
+        app.post('/frequencies/search', async function (req, res) {
             const user = req.session.user;
             const type = req.session.type;
             const listeners = new ListenerController(client);
-            const list_listeners = await listeners.filtered_users(req.body.filter, req.session.user.id);
             const random_pick = await listeners.generate_user(req.body.filter, req.session.user.id)
-            res.render('pages/frequencies', {listeners : list_listeners, user: user, type: type, random_pick: random_pick});
+            req.session.filter = req.body.filter
+            req.session.random_pick = random_pick
+            res.redirect('/frequencies')
         });
 
         app.post('/frequencies/:id/confirm/:other', async function (req, res) {
             const listeners = new ListenerController(client);
             await listeners.swipe_right(req.params.id, req.params.other);
+            const random_pick = await listeners.generate_user(req.session.filter, req.session.user.id)
+            req.session.random_pick = random_pick
             res.redirect('/frequencies')
         })
 
         app.post('/frequencies/:id/deny/:other', async function (req, res) {
             const listeners = new ListenerController(client);
             await listeners.swipe_left(req.params.id, req.params.other);
-            
+            const random_pick = await listeners.generate_user(req.session.filter, req.session.user.id)
+            req.session.random_pick = random_pick
             res.redirect('/frequencies')
         })
 
