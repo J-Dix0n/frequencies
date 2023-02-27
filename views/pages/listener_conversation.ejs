@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-
+            <link href="/css/style.css" rel="stylesheet" type="text/css">
     </head>
-    <body>
+    <body class="conversation">
+        <%- include('../partials/listener_navbar') %>
         <main>
-            <form action="/user/listener/<%= participants[0] %>/messages/<%= participants[1] %>/send" method="POST">
-                <input type="text" name="message" placeholder="Send a message!">
-                <input type="submit" value="Submit">
-            </form>
-            <p>Conversation</p>
+            <div class="message-container">
+            <p id=conversation>YOUR CONVERSATION</p>
             <% conversation.forEach(function (object) { %>
                 <% if (object.sentuser_id === user.id) { %>
                     <p class="user_message"><%= object.message %></p>
@@ -17,6 +15,11 @@
                     <p class="other_message"><%= object.message %></p>
                 <% } %>
             <% }) %>
+            <form action="/user/listener/<%= participants[0] %>/messages/<%= participants[1] %>/send" method="POST">
+                <input style="color:aqua" id="message-input" type="text" name="message" placeholder="Send a message">
+                <button class="convo-button" type="submit">SEND</button>
+            </form>
+                </div>
         </main>
     </body>
 </html>
