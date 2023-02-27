@@ -350,7 +350,7 @@ class App {
             const user = req.session.user;
             const type = req.session.type;
             const listeners = new ListenerController(client);
-            const genres = listeners.get_genres(req.session.user.id);
+            const genres = await listeners.get_genres(req.session.user.id);
             const random_pick = await listeners.generate_user(genres, req.session.user.id)
             req.session.filter = req.body.filter
             req.session.random_pick = random_pick
@@ -360,7 +360,7 @@ class App {
         app.post('/frequencies/:id/confirm/:other', async function (req, res) {
             const listeners = new ListenerController(client);
             await listeners.swipe_right(req.params.id, req.params.other);
-            const genres = listeners.get_genres(req.session.user.id);
+            const genres = await listeners.get_genres(req.session.user.id);
             const random_pick = await listeners.generate_user(genres, req.session.user.id)
             req.session.random_pick = random_pick
             res.redirect('/frequencies')
