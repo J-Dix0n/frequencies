@@ -101,7 +101,23 @@ class App {
             for(let i = 0; i < (friend_users).length; i++) {
                 friends.push({'id': friend_users[i], 'name': await listener.get_name(friend_users[i])})
             }
-            res.render('pages/user_page_listener', {user: user, type: type, friends: friends});
+
+            const eventInfo = new EventsController(client);
+            const attendingEvents = [];
+            const attendingEventsInfo = []
+
+            user.events.forEach(event => {
+                if (event.status === "2") {
+                attendingEvents.push(event.event_id);
+                }
+            });
+
+            for (const event of attendingEvents) {
+                const attendingEvent = await eventInfo.getEventById(event);
+                attendingEventsInfo.push(attendingEvent);
+            }
+            
+            res.render('pages/user_page_listener', {user: user, type: type, events: attendingEventsInfo, friends: friends});
         });
 
         app.post('/user/listener/profile/success', async function (req, res) {

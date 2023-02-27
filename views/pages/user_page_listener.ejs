@@ -58,10 +58,13 @@
 
               <div class="events-container">
                 <div class="events">
-                  Attending Events Placeholder
-                  <br>
+                  <% for (let i = 0; i < events.length; i++) { %>
+                    <h3><%= events[i].name %></h3>
+                    <br>
+                  <% } %>
                 </div>
               </div>
+              
 
               <div class="friends-container">
                 <div class="friends">
