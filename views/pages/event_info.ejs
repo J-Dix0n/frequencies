@@ -1,14 +1,13 @@
-<h1><%= event.name %></h1>
-<p><strong>Promoter:</strong> <%= promoter.company_name %> <a href="/user/promoter/<%= promoter.id %>" class="btn btn-primary">Promoter Page</a></p>
-<form method="POST" action="/event/<%= event.id %>/status">
-  <label for="event-status">Mark yourself as:</label>
-  <select id="event-status" name="event-status">
-    <option value="0">Not interested</option>
-    <option value="1">Interested</option>
-    <option value="2">Going</option>
-  </select>
-  <button type="submit">Save</button>
-</form>
+<% if (user.type === "listener") { %>
+  <%- include('../partials/listener_navbar') %>
+<% } else if (user.type === "promoter") { %>
+  <%- include('../partials/promoter_navbar') %>
+<% } %>
+
+<div class="event-id-container">
+  <div class="event-id">
+    <h1><%= event.name %></h1>
+<p><strong>Promoter:</strong> <%= promoter.company_name %> <a id="loginLink" href="/user/promoter/<%= promoter.id %>" class="btn btn-primary">Promoter Page</a></p>
 <p><strong>Location:</strong> <%= event.location %></p>
 <p><strong>Date:</strong> <%= event.date %></p>
 <p><strong>Price:</strong> £<%= event.price %></p>
@@ -19,6 +18,20 @@
     <li><%= event.artist_list[i].artist %> - <%= event.artist_list[i].genre %></li>
   <% } %>
 </ul>
+<form method="POST" action="/event/<%= event.id %>/status">
+  <label for="event-status">Mark yourself as:</label>
+  <select id="event-status" name="event-status">
+    <option value="0">Not interested</option>
+    <option value="1">Interested</option>
+    <option value="2">Going</option>
+  </select>
+  <button class ="update-button" type="submit">Save</button>
+</form>
+  </div>
+</div>
+
+
+<div class="event-map">
 <% if(event.location === "Manchester") { %>
   <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d75993.07573186597!2d-2.293502513546102!3d53.47232715211126!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487a4d4c5226f5db%3A0xd9be143804fe6baa!2sManchester!5e0!3m2!1sen!2suk!4v1677490883816!5m2!1sen!2suk" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> 
 <% } else if(event.location === "London") { %>
@@ -28,3 +41,4 @@
 <% } else if(event.location === "Blackpool") { %>
   <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d75359.25539343027!2d-3.0942420000798947!3d53.825489778346395!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487b4117e942d017%3A0xb52db2179232c2c9!2sBlackpool!5e0!3m2!1sen!2suk!4v1677493753780!5m2!1sen!2suk" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
 <% } %>
+</div>

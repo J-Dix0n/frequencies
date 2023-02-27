@@ -330,8 +330,9 @@ class App {
             const eventId = req.params.id;
             const eventInfo = await event.getEventById(eventId);
             const promoterInfo = await promoter.getPromoterById(eventInfo.promoter_id);
+            const user_type = req.session
 
-            res.render('pages/event_info', {event: eventInfo, promoter: promoterInfo});
+            res.render('pages/event_info', {event: eventInfo, promoter: promoterInfo, user: user_type});
         });
 
         app.post('/event/:id/status', async function (req, res) {
