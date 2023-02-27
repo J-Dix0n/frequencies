@@ -1,5 +1,14 @@
 <h1><%= event.name %></h1>
 <p><strong>Promoter:</strong> <%= promoter.company_name %> <a href="/user/promoter/<%= promoter.id %>" class="btn btn-primary">Promoter Page</a></p>
+<form method="POST" action="/event/<%= event.id %>/status">
+  <label for="event-status">Mark yourself as:</label>
+  <select id="event-status" name="event-status">
+    <option value="0">Not interested</option>
+    <option value="1">Interested</option>
+    <option value="2">Going</option>
+  </select>
+  <button type="submit">Save</button>
+</form>
 <p><strong>Location:</strong> <%= event.location %></p>
 <p><strong>Date:</strong> <%= event.date %></p>
 <p><strong>Price:</strong> £<%= event.price %></p>

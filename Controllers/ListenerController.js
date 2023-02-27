@@ -209,13 +209,29 @@ class ListenerController {
         }
       }
 
-      async followPromoter(promoterId, id) {
+    async followPromoter(promoterId, id) {
+    try {
+        await this.client.query(`UPDATE listeners SET following = following || '[{"promoter_id": "${promoterId}"}]' WHERE id = $1;`, [id])
+    } catch (err) {
+        console.error(err); 
+    }
+    }
+
+    async addEventStatus(id, eventId, status){
+    try {
+        await this.client.query(`UPDATE listeners SET events = events || '[{"status": "${status}", "event_id": "${eventId}"}]' WHERE id = $1;`, [id])
+    } catch (err) {
+        console.error(err); 
+    }
+    }
+
+    async updateEventStatus(id, indexOfEventStatus, status){
         try {
-            await this.client.query(`UPDATE listeners SET following = following || '[{"promoter_id": "${promoterId}"}]' WHERE id = $1;`, [id])
+            await this.client.query(`UPDATE listeners SET events = jsonb_set(events, '{${indexOfEventStatus},status}', '${status}'::jsonb) WHERE id = $1;`, [id])
         } catch (err) {
-          console.error(err);
+            console.error(err); 
         }
-      }
+    } 
 
     async generate_user(body_array, user_id) {
         let users = await this.filtered_users(body_array, user_id);
@@ -223,5 +239,6 @@ class ListenerController {
         return choice
     }
 }
+
 
 module.exports = ListenerController;

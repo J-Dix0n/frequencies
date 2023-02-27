@@ -2,7 +2,6 @@ class App {
     constructor() {
 
     }
-
     async application() {
         const express = require('express');
         const session = require('express-session')
@@ -22,7 +21,6 @@ class App {
             }
         })
         const upload = multer({storage : storage})
-
 
         let app = express();
         app.set('view engine', 'ejs');
@@ -289,14 +287,28 @@ class App {
         app.get('/event/:id', async function (req, res) {
             const event = new EventsController(client);
             const promoter = new PromoterController(client);
-
             const eventId = req.params.id;
             const eventInfo = await event.getEventById(eventId);
-
             const promoterInfo = await promoter.getPromoterById(eventInfo.promoter_id);
 
             res.render('pages/event_info', {event: eventInfo, promoter: promoterInfo});
         });
+
+        app.post('/event/:id/status', async function (req, res) {
+            const listenerClass = new ListenerController(client);
+            const eventId = req.params.id;
+            const status = req.body['event-status'];
+            const listenerInfo = await listenerClass.list_specific_user(req.session.user.id);
+
+            const indexOfEventStatus = listenerInfo[0].events.findIndex(event => event.event_id === eventId);
+            if(indexOfEventStatus === -1){
+                await listenerClass.addEventStatus(req.session.user.id, eventId, status);
+            }
+            else {
+                await listenerClass.updateEventStatus(req.session.user.id, indexOfEventStatus, status);
+            }
+            res.redirect(`/event/${eventId}`);
+          });
 
         app.get('/frequencies', async function (req, res) {
             const user = req.session.user;
@@ -325,6 +337,7 @@ class App {
         app.post('/frequencies/:id/deny/:other', async function (req, res) {
             const listeners = new ListenerController(client);
             await listeners.swipe_left(req.params.id, req.params.other);
+            
             res.redirect('/frequencies')
         })
 
