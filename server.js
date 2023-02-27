@@ -369,7 +369,7 @@ class App {
         app.post('/frequencies/:id/deny/:other', async function (req, res) {
             const listeners = new ListenerController(client);
             await listeners.swipe_left(req.params.id, req.params.other);
-            const genres = listeners.get_genres(req.session.user.id);
+            const genres = await listeners.get_genres(req.session.user.id);
             const random_pick = await listeners.generate_user(genres, req.session.user.id)
             req.session.random_pick = random_pick
             res.redirect('/frequencies')
