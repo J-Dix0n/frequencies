@@ -119,6 +119,15 @@ class ListenerController {
         }
     }
 
+    async update_playlist(playlist, id) {
+        try {
+            await this.client.query('UPDATE listeners SET playlist = $1 WHERE id = $2', [playlist, id])
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
+    
     async get_name(id) {
         const result = await this.client.query('SELECT first_name, last_name FROM listeners WHERE id = $1;', [id]);
         return `${result.rows[0].first_name} ${result.rows[0].last_name}`
