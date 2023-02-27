@@ -52,18 +52,39 @@ class ListenerController {
         }
     }
 
-    async update_preferences(preferences, id) {
+    async update_preferences(preferences, id, current_artist, current_genres) {
         try {
-            let split = preferences[0].genre.split(",");
+            let text_filter = preferences[0].genre.replace(/[-,]/g, '')
+            if (text_filter != "") {
+                let split = preferences[0].genre.split(",");
 
-            await this.client.query("UPDATE listeners SET preferences = '[]' WHERE id = $1", [id]);
-            for(let i=0; i < split.length; i++) {
-                if (split[i] != "----") {
-                    await this.client.query("UPDATE listeners SET preferences = preferences || $1 ::jsonb WHERE id = $2", [{"genre": `${split[i]}`}, id]);
+                await this.client.query("UPDATE listeners SET preferences = '[]' WHERE id = $1", [id]);
+                for(let i=0; i < split.length; i++) {
+                    if (split[i] != "----") {
+                        await this.client.query("UPDATE listeners SET preferences = preferences || $1 ::jsonb WHERE id = $2", [{"genre": `${split[i]}`}, id]);
+                    }
+                } 
+            } else {
+                let split = ""
+                if (current_genres.includes(",")) {
+                    split = current_genres.split(",");
+                } else {
+                    split = current_genres
                 }
-            } 
-            if (preferences[1].favourite_artist) {
+                
+
+                await this.client.query("UPDATE listeners SET preferences = '[]' WHERE id = $1", [id]);
+                for(let i=0; i < split.length; i++) {
+                    if (split[i] != "----") {
+                        await this.client.query("UPDATE listeners SET preferences = preferences || $1 ::jsonb WHERE id = $2", [{"genre": `${split[i]}`}, id]);
+                    }
+                } 
+            }
+            
+            if (preferences[1].favourite_artist != "") {
                 await this.client.query("UPDATE listeners SET preferences = preferences || $1 ::jsonb WHERE id = $2", [{"favourite_artist": `${preferences[1].favourite_artist}`}, id]);
+            } else {
+                await this.client.query("UPDATE listeners SET preferences = preferences || $1 ::jsonb WHERE id = $2", [{"favourite_artist": `${current_artist}`}, id]);
             }
         }
         catch(err){
