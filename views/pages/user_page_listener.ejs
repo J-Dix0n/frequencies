@@ -68,7 +68,20 @@
                   </ul>
                 </div>
               </div>
-              
+
+              <div class="followers-container">
+                <div class="Followers">
+                  Events list:
+                  <ul>
+                    <% for (let i = 0; i < followers.length; i++) { %>
+                      <li>
+                        <h3><%= followers[i].company_name %></h3>
+                        <a href="/user/promoter/<%= followers[i].id %>">View promoter page</a>
+                      </li>
+                    <% } %>
+                  </ul>
+                </div>
+              </div>
 
               <div class="friends-container">
                 <div class="friends">
