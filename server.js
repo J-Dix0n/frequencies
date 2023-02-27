@@ -309,7 +309,6 @@ class App {
             else {
                 await listenerClass.updateEventStatus(req.session.user.id, indexOfEventStatus, status);
             }
-            
             res.redirect(`/event/${eventId}`);
           });
 
