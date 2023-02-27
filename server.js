@@ -65,6 +65,7 @@ class App {
                 if (result.length !== 0) {
                     req.session.user = result[0]
                     req.session.type = "listener"
+                    req.session.random_pick = "null"
                     res.redirect(`/user/listener/${result[0].id}/profile`)
                 } else {
                     res.redirect('/log_in');
@@ -75,6 +76,7 @@ class App {
                 if (result.length !== 0) {
                     req.session.user = result[0]
                     req.session.type = "promoter"
+                    req.session.random_pick = "null"
                     res.redirect(`/user/promoter/${result[0].id}`)
                 } else {
                     res.redirect('/log_in');
@@ -339,12 +341,8 @@ class App {
             const user = req.session.user;
             const type = req.session.type;
             const listeners = new ListenerController(client);
-            let random_pick = ""
-            if (req.session.random_pick != undefined) {
-                random_pick = req.session.random_pick;
-            } else {
-                random_pick = "null";
-            }
+            const genres = await listeners.get_genres(req.session.user.id);
+            const random_pick = await listeners.generate_user(genres, req.session.user.id)
             res.render('pages/frequencies', {user: user, type: type , random_pick: random_pick});
         });
 
@@ -352,7 +350,8 @@ class App {
             const user = req.session.user;
             const type = req.session.type;
             const listeners = new ListenerController(client);
-            const random_pick = await listeners.generate_user(req.body.filter, req.session.user.id)
+            const genres = listeners.get_genres(req.session.user.id);
+            const random_pick = await listeners.generate_user(genres, req.session.user.id)
             req.session.filter = req.body.filter
             req.session.random_pick = random_pick
             res.redirect('/frequencies')
@@ -361,7 +360,8 @@ class App {
         app.post('/frequencies/:id/confirm/:other', async function (req, res) {
             const listeners = new ListenerController(client);
             await listeners.swipe_right(req.params.id, req.params.other);
-            const random_pick = await listeners.generate_user(req.session.filter, req.session.user.id)
+            const genres = listeners.get_genres(req.session.user.id);
+            const random_pick = await listeners.generate_user(genres, req.session.user.id)
             req.session.random_pick = random_pick
             res.redirect('/frequencies')
         })
@@ -369,7 +369,8 @@ class App {
         app.post('/frequencies/:id/deny/:other', async function (req, res) {
             const listeners = new ListenerController(client);
             await listeners.swipe_left(req.params.id, req.params.other);
-            const random_pick = await listeners.generate_user(req.session.filter, req.session.user.id)
+            const genres = listeners.get_genres(req.session.user.id);
+            const random_pick = await listeners.generate_user(genres, req.session.user.id)
             req.session.random_pick = random_pick
             res.redirect('/frequencies')
         })
