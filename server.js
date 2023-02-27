@@ -131,8 +131,11 @@ class App {
                 const attendingEvent = await eventInfo.getEventById(event);
                 attendingEventsInfo.push(attendingEvent);
             }
+
+            let genres = await listener.get_genres(req.session.user.id);
+            let fave_artist = await listener.get_favourite_artist(req.session.user.id);
             
-            res.render('pages/user_page_listener', {user: user, type: type, events: attendingEventsInfo, friends: friends, followers: followers});
+            res.render('pages/user_page_listener', {user: user, type: type, events: attendingEventsInfo, friends: friends, followers: followers, fave_artist: fave_artist, genres: genres});
         });
 
         app.post('/user/listener/profile/success', async function (req, res) {
@@ -145,7 +148,7 @@ class App {
             }
             const preferences = [genres, favourite_artist];
             if (preferences !== "") {
-                await listener.update_preferences(preferences, req.session.user.id)
+                await listener.update_preferences(preferences, req.session.user.id, await listener.get_favourite_artist(req.session.user.id), await listener.get_genres(req.session.user.id))
             }
             if (req.body.age !== "") { 
                 await listener.update_age(req.body.age, req.session.user.email)
@@ -158,7 +161,7 @@ class App {
             }
             const result = await listener.list_specific_user(req.session.user.id)
             req.session.user = result[0]
-            res.redirect('/user/listener/:id/profile')
+            res.redirect(`/user/listener/${req.session.user.id}/profile`)
         })
 
         app.post('/user/listener/profile/playlist/update', async function(req, res) {
