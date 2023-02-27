@@ -133,6 +133,7 @@ body {
   margin: 0;
   display: flex;
   flex: wrap;
+  height: 350px;
 }
 
 .card-list > :not(:first-child){
@@ -187,7 +188,19 @@ body {
 .card-name{
   font-weight: bold;
   font-size: .8rem;
+  font-family: Titillium Web;
+  font-size: 14px;
   text-transform: uppercase;
+  margin-bottom: 0;
+}
+
+.card-date{
+  font-weight: bold;
+  font-size: .8rem;
+  font-family: Titillium Web;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: black;
   margin-bottom: 0;
 }
 
@@ -211,6 +224,9 @@ body {
   font-size: 14px;
   opacity: .6;
   color:black;
+  font-size: 13px;
+  text-transform: uppercase;
+  font-family: Titillium Web;
 }
 
 .login {
@@ -463,4 +479,85 @@ html, body {
   
   .dropdown:hover .dropdown-content {
     display: block;
+  }
+
+  .user_message {
+    position: relative;
+    padding: 10px 20px;
+    color: #333;
+    background-color: #2edce5;
+    border-radius: 25px;
+    box-shadow: 0 8px 6px -6px black;
+    font-family: Titillium Web;
+    font-size: 14px;
+  }
+
+  .other_message {
+    position: relative;
+  padding: 10px 20px;
+  background: #E5E5EA;
+  border-radius: 25px;
+  color: black;
+  font-family: Titillium Web;
+  font-size: 14px;
+  }
+
+  .message-container {
+    padding-top: 100px;
+    padding-left: 60px;
+    max-width: 400px;
+  }
+
+  #conversation {
+    padding-left: 100px;
+    padding-top: 10px;
+    letter-spacing: 1px;
+    font-family: Titillium Web;
+    color: rgb(173, 171, 171);
+  }
+
+  .convo-button {
+    width: 100px;
+    height: 40px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    margin-left: 125px;
+    font-weight: 500;
+    color: #000;
+    background-color: grey;
+    border: none;
+    border-radius: 45px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    }
+  
+  .convo-button:hover {
+    background-color: #2edce5;
+    box-shadow: 0px 10px 10px rgba(46, 195, 229, 0.4);
+    color: #fff;
+  }
+
+  #message-input{
+    width: 380px;
+    margin-bottom: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border: none;
+    outline: none;
+    padding: 10px;
+    font-size: 13px;
+    color: #fff;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    box-shadow: inset 0 -5px 45px rgba(100, 100, 100, 0.2),
+      0 1px 1px rgba(255, 255, 255, 0.2);
+    -webkit-transition: box-shadow 0.5s ease;
+    -moz-transition: box-shadow 0.5s ease;
+    -o-transition: box-shadow 0.5s ease;
+    -ms-transition: box-shadow 0.5s ease;
+    transition: box-shadow 0.5s ease;
   }
