@@ -225,6 +225,14 @@ class ListenerController {
     }
     }
 
+    async updateEventStatus(id, indexOfEventStatus, status){
+        try {
+            await this.client.query(`UPDATE listeners SET events = jsonb_set(events, '{${indexOfEventStatus},status}', '${status}'::jsonb) WHERE id = $1;`, [id])
+        } catch (err) {
+            console.error(err); 
+        }
+    } 
+
     async generate_user(body_array, user_id) {
         let users = await this.filtered_users(body_array, user_id);
         let choice = this.get_random(users);

@@ -303,12 +303,11 @@ class App {
             const listenerInfo = await listenerClass.list_specific_user(req.session.user.id);
 
             const indexOfEventStatus = listenerInfo[0].events.findIndex(event => event.event_id === eventId);
-
             if(indexOfEventStatus === -1){
                 await listenerClass.addEventStatus(req.session.user.id, eventId, status);
             }
             else {
-                await listenerClass.updateEventStatus(req.session.user.id, eventId, status);
+                await listenerClass.updateEventStatus(req.session.user.id, indexOfEventStatus, status);
             }
             
             res.redirect(`/event/${eventId}`);
