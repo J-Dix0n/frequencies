@@ -84,7 +84,7 @@ class App {
         })
 
         app.post('/sign_up/success', async function (req, res) {
-            if (/\w+@\w+\.com/.test(req.body.email) && req.body.password.length >= 8) {
+            if (/\w+@\w+\.com/.test(req.body.email) && req.body.password.length >= 8 && req.body.first_name !== "" && req.body.last_name !== "" && req.body.email !== "" && req.body.password !== "") {
                 const listener = new ListenerController(client)
                 const result = await listener.sign_up(req.body.first_name, req.body.last_name, req.body.email, req.body.password)
                 if (result !== "exists") {
@@ -98,9 +98,6 @@ class App {
                 req.session.error = "Incorrect email or password"
                 res.redirect('/')
             }
-            const listener = new ListenerController(client)
-            await listener.sign_up(req.body.first_name, req.body.last_name, req.body.email, req.body.password)
-            res.redirect('/log_in')
         })
 
         app.get('/log_in', async function (req, res) {
@@ -147,6 +144,19 @@ class App {
         app.post('/user/listener/:id/upload', upload.single("image"), async (req, res) => {
             const listener = new ListenerController(client);
             await listener.update_picture(req.file.filename, req.session.user.email)
+            req.session.user.picture = req.file.filename;
+            res.redirect(`/user/listener/${req.session.user.id}/profile`);
+        });
+
+        app.get('/user/promoter/:id/upload', sessionChecker, userPermission, (req, res) => {
+            const user = req.session.user;
+            const type = req.session.type;
+            res.render('pages/upload_p', {user: user, type: type});
+        });
+
+        app.post('/user/promoter/:id/upload', upload.single("image"), async (req, res) => {
+            const promoter = new PromoterController(client);
+            await promoter.update_picture(req.file.filename, req.session.user.email)
             req.session.user.picture = req.file.filename;
             res.redirect(`/user/listener/${req.session.user.id}/profile`);
         });

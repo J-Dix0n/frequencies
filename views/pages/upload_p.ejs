@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link href="/css/style.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <%- include('../partials/promoter_navbar') %>
+
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        
+        <h1>Upload Image</h1>
+
+        <form method ='POST' action ='/user/promoter/:id/upload' enctype="multipart/form-data">
+            <input type="file" name ="image">
+            <input type="submit">
+        </form>
+        
+    </body>
+</html>
