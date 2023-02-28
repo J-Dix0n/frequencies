@@ -9,6 +9,7 @@ CREATE TABLE listeners (
     preferences jsonb,
     age INT,
     location TEXT,
+    playlist TEXT DEFAULT '37i9dQZF1DWXRqgorJj26U',
     picture TEXT DEFAULT 'default.jpeg',
     events jsonb,  /* status [1 = interested, 2 = attending, 3 = attended]*/ 
     friends jsonb, /* status [1 = pending, 2 = accepted]*/
