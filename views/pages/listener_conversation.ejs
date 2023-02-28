@@ -20,7 +20,7 @@
                     <% } %>
                 <% }) %>
                 <form action="/user/listener/<%= participants[0] %>/messages/<%= participants[1] %>/send" method="POST">
-                    <input style="color:aqua" id="message-input" type="text" name="message" placeholder="Send a message">
+                    <input style="color:aqua" id="message-input" type="text" name="message" placeholder="Send a message" required>
                     <button class="convo-button" type="submit">SEND</button>
                 </form>
                 <form form action="/user/listener/<%= participants[0] %>/messages/<%= participants[1] %>/send_event" method="POST">

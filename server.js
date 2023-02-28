@@ -187,8 +187,16 @@ class App {
 
         app.post('/user/listener/:id/messages/:other/send', async function (req, res) {
             const message = new MessageController(client)
-            await message.send_message(req.params.id, req.params.other, req.body.message)
-            res.redirect(`/user/listener/${req.params.id}/messages/${req.params.other}`)
+            if(req.body.message !== "") {
+                const body_message = req.body.message;
+                const trimmed = body_message.trim();
+                await message.send_message(req.params.id, req.params.other, trimmed);
+                res.redirect(`/user/listener/${req.params.id}/messages/${req.params.other}`)
+            } else {
+                res.redirect(`/user/listener/${req.params.id}/messages/${req.params.other}`)
+            }
+            
+            
         });
 
         app.post('/user/listener/:id/messages/:other/send_event', async function (req, res) {
