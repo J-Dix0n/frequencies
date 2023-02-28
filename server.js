@@ -466,9 +466,9 @@ class App {
             const eventId = req.params.id;
             const eventInfo = await event.getEventById(eventId);
             const promoterInfo = await promoter.getPromoterById(eventInfo.promoter_id);
-            const user_type = req.session
-
-            res.render('pages/event_info', {event: eventInfo, promoter: promoterInfo, user: user_type});
+            const user = req.session.user
+            const type = req.session.type
+            res.render('pages/event_info', {event: eventInfo, promoter: promoterInfo, user: user, type: type});
         });
 
         app.post('/event/:id/status', async function (req, res) {
@@ -512,6 +512,20 @@ class App {
             res.redirect(`/event/${eventId}`);
         });
         
+
+        app.get('/event/:id/upload', sessionChecker, (req, res) => {
+            const user = req.session.user;
+            const type = req.session.type;
+            const event = req.params.id
+            res.render('pages/upload_e', {user: user, type: type, event: event});
+        });
+
+        app.post('/event/:id/upload', upload.single("image"), async (req, res) => {
+            const events = new EventsController(client);
+            await events.update_picture(req.file.filename, req.params.id)
+            req.session.user.picture = req.file.filename;
+            res.redirect(`/event/${req.params.id}`);
+        });
 
         app.get('/frequencies', sessionChecker, async function (req, res) {
             const user = req.session.user;
