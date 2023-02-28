@@ -110,15 +110,23 @@ class EventsController {
       }
     }
 
-      async removeAttendee(position, id) {
+    async removeAttendee(position, id) {
         try {
             await this.client.query(`UPDATE events SET attendees = attendees - ${position} WHERE id = $1;`, [id])
         } catch (err) {
           console.error(err);
         }
       }
+
+    async findAllAttendeeEvents(AttendeeId) {
+      try {
+        const result = await this.client.query(`SELECT * FROM events WHERE attendees @> '[{"listener_id": "${AttendeeId}"}]';`)
+        return result
+      } catch (err) {
+        console.error(err);
+      }
     }
+  }
+  
     
-
-
 module.exports = EventsController;

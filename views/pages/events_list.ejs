@@ -5,28 +5,28 @@
     <%- include('../partials/promoter_navbar') %>
   <% } %>
 
-  <form action="/events_list" method="get">
-    <label for="location">Filter by Location:</label>
-    <select id="location" name="location">
-      <option value="">All Locations</option>
-      <% const locations = Array.from(new Set(events.map(event => event.location))); %>
-      <% for (let i = 0; i < locations.length; i++) { %>
-        <option value="<%= locations[i] %>" <% if (selectedLocation === locations[i]) { %>selected<% } %>><%= locations[i] %></option>
-      <% } %>
-    </select>
-    <label for="min-price">Min Price:</label>
-    <input type="number" id="min-price" name="min-price" min="0">
-    <label for="max-price">Max Price:</label>
-    <input type="number" id="max-price" name="max-price" min="0">
-    <label for="friend">Filter by Friend:</label>
-    <select id="friend" name="friend">
-      <option value="">All Friends</option>
-      <% for (let i = 0; i < listenersFriends.length; i++) { %>
-        <option value="<%= listenersFriends[i].first_name %> <%= listenersFriends[i].last_name %>"><%= listenersFriends[i].first_name %> <%= listenersFriends[i].last_name %></option>
-      <% } %>
-    </select>
-    <button type="submit">Search</button>
-  </form>
+<form action="/events_list" method="get">
+  <label for="location">Filter by Location:</label>
+  <select id="location" name="location">
+    <option value="">All Locations</option>
+    <% const locations = Array.from(new Set(events.map(event => event.location))); %>
+    <% for (let i = 0; i < locations.length; i++) { %>
+      <option value="<%= locations[i] %>" <% if (selectedLocation === locations[i]) { %>selected<% } %>><%= locations[i] %></option>
+    <% } %>
+  </select>
+  <label for="min-price">Min Price:</label>
+  <input type="number" id="min-price" name="min-price" min="0">
+  <label for="max-price">Max Price:</label>
+  <input type="number" id="max-price" name="max-price" min="0">
+  <label for="friend">Filter by Friend:</label>
+  <select id="friend" name="friend">
+    <option value="">All Friends</option>
+    <% for (let i = 0; i < listenersFriends.length; i++) { %>
+      <option value="<%= listenersFriends[i].first_name %> <%= listenersFriends[i].last_name %>"><%= listenersFriends[i].first_name %> <%= listenersFriends[i].last_name %></option>
+    <% } %>
+  </select>
+  <button type="submit">Search</button>
+</form>
 
 
 <ul class="card-list">
