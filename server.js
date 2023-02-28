@@ -344,11 +344,20 @@ class App {
             const user = req.session.user;
             const type = req.session.type;
             const events = new EventsController(client);
+            const listenerClass = new ListenerController(client);
             const selectedLocation = req.query.location;
             const minPrice = parseFloat(req.query['min-price']);
             const maxPrice = parseFloat(req.query['max-price']);
             const list_events = await events.getEvents();
-          
+            const friendsId = await listenerClass.get_friends_id(user.id);
+
+            const listenersFriends = []
+
+            for (let friend of friendsId) {
+                const friendInfo = await listenerClass.list_specific_user(friend)
+                listenersFriends.push(friendInfo[0])
+            }
+        
             let filtered_events = list_events.filter(event => !selectedLocation || selectedLocation === event.location);
 
             if (minPrice && maxPrice) {
@@ -359,7 +368,7 @@ class App {
               filtered_events = filtered_events.filter(event => event.price <= maxPrice);
             }
           
-            res.render('pages/events_list', { events: filtered_events, user: user, type: type, selectedLocation: selectedLocation });
+            res.render('pages/events_list', { events: filtered_events, user: user, type: type, selectedLocation: selectedLocation, listenersFriends: listenersFriends});
           });
           
 
