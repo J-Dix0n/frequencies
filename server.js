@@ -68,7 +68,7 @@ class App {
 
         app.post('/sign_up_p/success', async function (req, res) {
             const promoter = new PromoterController(client)
-            if (/\w+@\w+\.com/.test(req.body.email) && req.body.password.length >= 8) {
+            if (/\w+@\w+\.com/.test(req.body.email) && req.body.password.length >= 8 && req.body.first_name !== "" && req.body.last_name !== "" && req.body.email !== "" && req.body.password !== "" && req.body.company_name !== "" && req.body.location !== "") {
                 const result = await promoter.sign_up(req.body.first_name, req.body.last_name, req.body.email, req.body.password, req.body.company_name, req.body.location)
                 if (result !== "exists") {
                     req.session.error = ""
@@ -98,6 +98,9 @@ class App {
                 req.session.error = "Incorrect email or password"
                 res.redirect('/')
             }
+            const listener = new ListenerController(client)
+            await listener.sign_up(req.body.first_name, req.body.last_name, req.body.email, req.body.password)
+            res.redirect('/log_in')
         })
 
         app.get('/log_in', async function (req, res) {
@@ -185,7 +188,12 @@ class App {
             let genres = await listener.get_genres(req.session.user.id);
             let fave_artist = await listener.get_favourite_artist(req.session.user.id);
 
-            res.render('pages/user_page_listener', {user: user, type: type, events: attendingEventsInfo, friends: friends, followers: followers, fave_artist: fave_artist, genres: genres});
+            let error = "";
+            if(req.session.error !== undefined) {
+                error = req.session.error
+            }
+
+            res.render('pages/user_page_listener', {user: user, type: type, events: attendingEventsInfo, friends: friends, followers: followers, fave_artist: fave_artist, genres: genres, error: error});
         });
 
         app.post('/user/listener/profile/success', async function (req, res) {
@@ -451,6 +459,10 @@ class App {
                 req.session.filter = "Genre"
             }
             const listeners = new ListenerController(client);
+            if (user.preferences === [] || user.location === null || user.events === []) {
+                req.session.error = "Need to update preferences, location and events."
+                res.redirect('/user/listener/:id/profile')
+            }
             let random_pick = ""
             if (req.session.filter === "Genre") {
                 let genres = await listeners.get_genres(req.session.user.id);
