@@ -34,9 +34,9 @@
     <% if (!selectedLocation || selectedLocation === events[i].location) { %>
       <li class="cards">
         <a class="card" href='/event/<%= events[i].id %>'> 
-          <p class="card-name"><%= events[i].name %></p>
+          <br><p class="card-name"><%= events[i].name %></p>
           <h3 class="card-price">Price: £<%= events[i].price %></h3>
-          <p class="card-date"><%= events[i].date %></p>
+          <p class="card-date"><%= events[i].date %></p><br>
           <p class="card-location"><%= events[i].location %></p>
           <div class="card-img-cont">
             <img src="/<%= events[i].picture %>"

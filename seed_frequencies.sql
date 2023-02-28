@@ -29,7 +29,7 @@ CREATE TABLE promoters (
     email TEXT,
     password TEXT,
     company_name TEXT,
-    picture TEXT DEFAULT 'default.jpeg',
+    picture TEXT DEFAULT 'event_default.jpg',
     company_location TEXT,
     events jsonb, /* status: [1 = upcoming, 2 = ended]*/
     followers jsonb
