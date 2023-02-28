@@ -22,7 +22,7 @@
   <select id="friend" name="friend">
     <option value="">All Friends</option>
     <% for (let i = 0; i < listenersFriends.length; i++) { %>
-      <option value="<%= listenersFriends[i].first_name %> <%= listenersFriends[i].last_name %>"><%= listenersFriends[i].first_name %> <%= listenersFriends[i].last_name %></option>
+      <option value="<%= listenersFriends[i].id %>"><%= listenersFriends[i].first_name %> <%= listenersFriends[i].last_name %></option>
     <% } %>
   </select>
   <button type="submit">Search</button>

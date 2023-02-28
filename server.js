@@ -353,19 +353,19 @@ class App {
             const selectedFriend = req.query.friend;
 
             const listenersFriends = []
-            const friends_events_list = []
 
             for (let friend of friendsId) {
                 const friendInfo = await listenerClass.list_specific_user(friend)
                 listenersFriends.push(friendInfo[0])
             }
-
-            for(let i = 0; i < listenersFriends.length; i ++){
-                const friends_events = await events.findAllAttendeeEvents(listenersFriends[i].id)
-            }    
-
             let filtered_events = list_events.filter(event => !selectedLocation || selectedLocation === event.location);
+            console.log(filtered_events)
 
+            if (selectedFriend) {
+                const friends_events = (await events.findAllAttendeeEvents(selectedFriend)).rows;
+                filtered_events = friends_events;
+              }
+    
             if (minPrice && maxPrice) {
               filtered_events = filtered_events.filter(event => event.price >= minPrice && event.price <= maxPrice);
             } else if (minPrice) {
