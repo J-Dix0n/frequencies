@@ -404,7 +404,7 @@ html, body {
   padding-left: 20px;
 }
 
-.events_list, .l_messages {
+.events_list {
   padding-top: 120px;
   background-color: rgba(31,31,31,255);
   color: gray;
@@ -488,6 +488,7 @@ html, body {
   .logout {
     background: none;
     border: none;
+    cursor: pointer;
     text-transform: uppercase;
     color: inherit;
     font-family: inherit;
@@ -531,7 +532,7 @@ html, body {
   }
 
   .message-container {
-    padding-top: 100px;
+    padding-top: 150px;
     padding-left: 60px;
     max-width: 400px;
   }
@@ -642,7 +643,7 @@ html, body {
     background-color: rgb(48, 48, 48, 0.2);
     position: absolute;
     top: 50%;
-    left: 50%;
+    left: 52%;
     display: flex;
     flex-direction: column;
     border: 1px solid rgb(42, 42, 42);
@@ -692,7 +693,7 @@ html, body {
   #like {
     position: absolute;
     top: 50%;
-    left: 28%;
+    left: 31%;
   }
 
   #like:hover {
@@ -729,4 +730,90 @@ html, body {
   #finder {
     padding-top: 100px;
     padding-left: 50px;
+  }
+
+  .current-messages {
+    padding-left: 130px;
+    padding-top: 100px;
+  }
+
+  .message-friends {
+    padding-left: 130px;
+  }
+
+  .l_messages {
+    padding-top: 80px;
+    width: 100%;
+    height: 100%;
+    font-family: "Titillium Web";
+    background: rgb(31, 31, 31);
+    color: grey;
+    background-image: url(../bg.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 0px;
+  }
+
+  #event-send {
+    width: 40%;
+    height: 35px;
+    background: rgba(0, 0, 0, 0.3);
+    border: none;
+    outline: none;
+    font-size: 12px;
+    color: grey;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    box-shadow: inset 0 -5px 45px rgba(100, 100, 100, 0.2),
+    0 1px 1px rgba(255, 255, 255, 0.2);
+  }
+
+  .sharer-container {
+    position: absolute;
+    top: 30%;
+    left: 35%;
+    width: 400px;
+  }
+
+  .share-button {
+    width: 80px;
+    height: 25px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+    color: #000;
+    background-color: grey;
+    border: none;
+    border-radius: 45px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    }
+  
+  .share-button:hover {
+    background-color: #2edce5;
+    box-shadow: 0px 10px 10px rgba(46, 195, 229, 0.4);
+    color: #fff;
+  }
+
+  #event-sharer {
+    font-family: Titillium Web;
+    color: grey;
+    line-height: 1;
+  }
+
+  .conversation {
+     width: 100%;
+    height: 100%;
+    font-family: "Titillium Web";
+    background: rgb(31, 31, 31);
+    color: grey;
+    background-image: url(../bg.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 0px;
   }
