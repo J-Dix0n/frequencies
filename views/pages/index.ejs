@@ -18,6 +18,9 @@
             Want to list an event? <span style="color:white"><a id =loginLink href="/sign_up_p">Sign up as a promoter</span></a>
         </form>
     </div>
+    <% if (error != "") { %>
+      <p><%= error %></p>
+    <% } %>
     
     <img id="logo" src="/icon2.png" height="50">
     

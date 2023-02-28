@@ -20,6 +20,10 @@
             <span style="color:white"><a id =loginLink href="/">Go back</span></a>
         </form>
     </div>
+
+    <% if (error != "") { %>
+      <p><%= error %></p>
+    <% } %>
     
     <img id="logo" src="/icon2.png" height="50">
 

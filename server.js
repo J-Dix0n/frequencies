@@ -32,36 +32,61 @@ class App {
         app.use(session({secret: "RANDOMSTRING", resave: true, saveUninitialized: true}))
         const pool = require("./database")
         const client = await pool.connect();
+        const sessionChecker = (req, res, next) => {
+            if (!req.session.user) {
+                res.redirect("/log_in");
+            } else {
+                next();
+            }
+        };
+        const userPermission = (req, res, next) => {
+            if (req.session.user.id != req.params.id && req.session.type === "listener") {
+                res.redirect(`/user/listener/${req.session.user.id}/profile`);
+            } else if (req.session.type === "promoter") {
+                res.redirect(`/user/promoter/${req.session.user.id}/profile`);
+            } else {
+                next();
+            }
+        };
         //#######################
 
         app.get('/', async function (req, res) {
-            res.render('pages/index');
+            let error = ""
+            if (req.session.error !== undefined) {
+                error = req.session.error
+            }
+            res.render('pages/index', {error: error});
         })
 
         app.get('/sign_up_p', async function (req, res) {
-            res.render('pages/sign_up_p');
+            let error = ""
+            if (req.session.error !== undefined) {
+                error = req.session.error
+            }
+            res.render('pages/sign_up_p', {error: error});
         })
 
         app.post('/sign_up_p/success', async function (req, res) {
             const promoter = new PromoterController(client)
-            if(req.body.first_name !== "" && req.body.last_name !== "" && req.body.email !== "" && req.body.password !== "" && req.body.company_name !== "" && req.body.location !== "") {
-                await promoter.sign_up(req.body.first_name, req.body.last_name, req.body.email, req.body.password, req.body.company_name, req.body.location)
-                res.redirect('/log_in')
+            if (/\w+@\w+\.com/.test(req.body.email) && req.body.password.length >= 8 && req.body.first_name !== "" && req.body.last_name !== "" && req.body.email !== "" && req.body.password !== "" && req.body.company_name !== "" && req.body.location !== "") {
+                const result = await promoter.sign_up(req.body.first_name, req.body.last_name, req.body.email, req.body.password, req.body.company_name, req.body.location)
+                if (result !== "exists") {
+                    req.session.error = ""
+                    res.redirect('/log_in')
+                } else {
+                    req.session.error = "That email already exists"
+                    res.redirect('/sign_up_p')
+                }
             } else {
-                res.redirect('/sign_up_p');
-            }   
+                req.session.error = "Incorrect email or password"
+                res.redirect('/sign_up_p')
+            }
         })
 
         app.post('/sign_up/success', async function (req, res) {
             const listener = new ListenerController(client)
-            if(req.body.first_name !== "" && req.body.last_name !== "" && req.body.email !== "" && req.body.password !== "") {
-                await listener.sign_up(req.body.first_name, req.body.last_name, req.body.email, req.body.password)
-                res.redirect('/log_in')
-            } else {
-                res.redirect('/')
-            }
-            
-            
+            await listener.sign_up(req.body.first_name, req.body.last_name, req.body.email, req.body.password)
+            res.redirect('/log_in')
         })
 
         app.get('/log_in', async function (req, res) {
@@ -92,24 +117,27 @@ class App {
                     req.session.user = result[0]
                     req.session.type = "promoter"
                     req.session.random_pick = "null"
-                    res.redirect(`/user/promoter/${result[0].id}`)
+                    res.redirect(`/user/promoter/${result[0].id}/profile`)
                 } else {
                     res.redirect('/log_in');
                 }
             };
         })
 
-        app.get('/user/listener/:id/upload', (req, res) => {
-            res.render('pages/upload');
+        app.get('/user/listener/:id/upload', sessionChecker, userPermission, (req, res) => {
+            const user = req.session.user;
+            const type = req.session.type;
+            res.render('pages/upload', {user: user, type: type});
         });
 
         app.post('/user/listener/:id/upload', upload.single("image"), async (req, res) => {
             const listener = new ListenerController(client);
             await listener.update_picture(req.file.filename, req.session.user.email)
-            res.send("Image Uploaded");
+            req.session.user.picture = req.file.filename;
+            res.redirect(`/user/listener/${req.session.user.id}/profile`);
         });
 
-        app.get('/user/listener/:id/profile', async function (req, res) {
+        app.get('/user/listener/:id/profile', sessionChecker, userPermission, async function (req, res) {
             const user = req.session.user;
             const type = req.session.type;
             const listener = new ListenerController(client)
@@ -220,7 +248,7 @@ class App {
             res.redirect(`/user/listener/${req.params.id}/messages/${req.params.other}`)
         });
 
-        app.get('/user/listener/:id/messages/:other', async function (req, res) {
+        app.get('/user/listener/:id/messages/:other', sessionChecker, userPermission, async function (req, res) {
             const user = req.session.user;
             const type = req.session.type;
             const message = new MessageController(client)
@@ -230,7 +258,7 @@ class App {
             res.render('pages/listener_conversation', {user: user, type: type, conversation: conversation, participants: [req.params.id, req.params.other], events: events});
         });
 
-        app.get('/user/listener/:id/messages', async function (req, res) {
+        app.get('/user/listener/:id/messages', sessionChecker, userPermission, async function (req, res) {
             const user = req.session.user;
             const type = req.session.type;
             const info = [];
@@ -248,7 +276,7 @@ class App {
             res.render('pages/listener_messages', {user: user, type: type, info: info, friends: friends});
         });
 
-        app.get('/user/promoter/:id', async function (req, res) {
+        app.get('/user/promoter/:id/profile', sessionChecker, async function (req, res) {
             const eventClass = new EventsController(client);
             const promoterClass = new PromoterController(client);
             const listenerClass = new ListenerController(client);
@@ -280,7 +308,7 @@ class App {
             const position = req.body.position;
             await listenerClass.unfollowPromoter(position, req.session.user.id)
             
-            res.redirect(`/user/promoter/${promoterId}`)
+            res.redirect(`/user/promoter/${promoterId}/profile`)
         });
 
         app.post('/user/follow', async function (req, res) {
@@ -288,7 +316,7 @@ class App {
             const promoterId = req.body.promoter_id
             await listenerClass.followPromoter(promoterId, req.session.user.id)
             
-            res.redirect(`/user/promoter/${promoterId}`)
+            res.redirect(`/user/promoter/${promoterId}/profile`)
         });
         
         app.post('/user/promoter/event/:id', async function (req, res) {
@@ -298,10 +326,10 @@ class App {
 
             await eventClass.deleteEvent(deleteEventId)
 
-            res.redirect(`/user/promoter/${promoterId}`)
+            res.redirect(`/user/promoter/${promoterId}/profile`)
         });
 
-        app.get('/user/promoter/event/update/:id', async function (req, res) {
+        app.get('/user/promoter/event/update/:id', sessionChecker, async function (req, res) {
         try {
             const eventClass = new EventsController(client);
             const eventId = req.params.id;
@@ -329,14 +357,14 @@ class App {
             };
 
             await eventClass.updateEvent(eventId, updatedEvent); 
-            res.redirect(`/user/promoter/${req.session.user.id}`);
+            res.redirect(`/user/promoter/${req.session.user.id}/profile`);
         } catch (err) {
             console.error(err);
             res.sendStatus(500);
         }
         });
 
-        app.get('/post_event', async function (req, res) {
+        app.get('/post_event', sessionChecker, async function (req, res) {
             const user = req.session.user;
             res.render('pages/post_event', {user: user});
         });
@@ -371,7 +399,7 @@ class App {
         res.redirect('/events_list');
         });
         
-        app.get('/events_list', async function (req, res) {
+        app.get('/events_list', sessionChecker, async function (req, res) {
             const user = req.session.user;
             const type = req.session.type;
             const events = new EventsController(client);
@@ -379,7 +407,7 @@ class App {
             res.render('pages/events_list', { events : list_events , user: user , type: type});
         });
 
-        app.get('/event/:id', async function (req, res) {
+        app.get('/event/:id', sessionChecker, async function (req, res) {
             const event = new EventsController(client);
             const promoter = new PromoterController(client);
             const eventId = req.params.id;
@@ -410,7 +438,7 @@ class App {
             res.redirect(`/event/${eventId}`);
           });
 
-        app.get('/frequencies', async function (req, res) {
+        app.get('/frequencies', sessionChecker, async function (req, res) {
             const user = req.session.user;
             const type = req.session.type;
             if (req.session.filter === undefined) {

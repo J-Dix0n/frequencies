@@ -9,7 +9,12 @@ class PromoterController {
     }
 
     async sign_up(first_name, last_name, email, password, company_name, location) {
-        const result = await this.client.query('INSERT INTO promoters (first_name, last_name, email, password, company_name, company_location) VALUES ($1, $2, $3, $4, $5, $6)', [first_name, last_name, email, password, company_name, location])
+        const result = await this.client.query('SELECT * FROM promoters WHERE email = $1', [email]);
+        if (result.rows.length === 0) {
+            await this.client.query('INSERT INTO promoters (first_name, last_name, email, password, company_name, company_location) VALUES ($1, $2, $3, $4, $5, $6)', [first_name, last_name, email, password, company_name, location])
+        } else {
+            return "exists"
+        }
     }
 
     async log_in(email, password) {
