@@ -84,6 +84,20 @@ class App {
         })
 
         app.post('/sign_up/success', async function (req, res) {
+            if (/\w+@\w+\.com/.test(req.body.email) && req.body.password.length >= 8) {
+                const listener = new ListenerController(client)
+                const result = await listener.sign_up(req.body.first_name, req.body.last_name, req.body.email, req.body.password)
+                if (result !== "exists") {
+                    req.session.error = ""
+                    res.redirect('/log_in')
+                } else {
+                    req.session.error = "That email already exists"
+                    res.redirect('/')
+                }
+            } else {
+                req.session.error = "Incorrect email or password"
+                res.redirect('/')
+            }
             const listener = new ListenerController(client)
             await listener.sign_up(req.body.first_name, req.body.last_name, req.body.email, req.body.password)
             res.redirect('/log_in')
