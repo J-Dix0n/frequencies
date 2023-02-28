@@ -51,23 +51,43 @@ class App {
         //#######################
 
         app.get('/', async function (req, res) {
-            res.render('pages/index');
+            let error = ""
+            if (req.session.error !== undefined) {
+                error = req.session.error
+            }
+            res.render('pages/index', {error: error});
         })
 
         app.get('/sign_up_p', async function (req, res) {
-            res.render('pages/sign_up_p');
+            let error = ""
+            if (req.session.error !== undefined) {
+                error = req.session.error
+            }
+            res.render('pages/sign_up_p', {error: error});
         })
 
         app.post('/sign_up_p/success', async function (req, res) {
             const promoter = new PromoterController(client)
-            await promoter.sign_up(req.body.first_name, req.body.last_name, req.body.email, req.body.password, req.body.company_name, req.body.location)
-            res.redirect('/log_in')
+            if (/\w+@\w+\.com/.test(req.body.email) && req.body.password.length >= 8) {
+                await promoter.sign_up(req.body.first_name, req.body.last_name, req.body.email, req.body.password, req.body.company_name, req.body.location)
+                req.session.error = ""
+                res.redirect('/log_in')
+            } else {
+                req.session.error = "Incorrect email or password"
+                res.redirect('/sign_up_p')
+            }
         })
 
         app.post('/sign_up/success', async function (req, res) {
-            const listener = new ListenerController(client)
-            await listener.sign_up(req.body.first_name, req.body.last_name, req.body.email, req.body.password)
-            res.redirect('/log_in')
+            if (/\w+@\w+\.com/.test(req.body.email) && req.body.password.length >= 8) {
+                const listener = new ListenerController(client)
+                await listener.sign_up(req.body.first_name, req.body.last_name, req.body.email, req.body.password)
+                req.session.error = ""
+                res.redirect('/log_in')
+            } else {
+                req.session.error = "Incorrect email or password"
+                res.redirect('/')
+            }
         })
 
         app.get('/log_in', async function (req, res) {
