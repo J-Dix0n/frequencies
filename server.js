@@ -84,7 +84,7 @@ class App {
         })
 
         app.post('/sign_up/success', async function (req, res) {
-            if (/\w+@\w+\.com/.test(req.body.email) && req.body.password.length >= 8) {
+            if (/\w+@\w+\.com/.test(req.body.email) && req.body.password.length >= 8 && req.body.first_name !== "" && req.body.last_name !== "" && req.body.email !== "" && req.body.password !== "") {
                 const listener = new ListenerController(client)
                 const result = await listener.sign_up(req.body.first_name, req.body.last_name, req.body.email, req.body.password)
                 if (result !== "exists") {
@@ -98,9 +98,6 @@ class App {
                 req.session.error = "Incorrect email or password"
                 res.redirect('/')
             }
-            const listener = new ListenerController(client)
-            await listener.sign_up(req.body.first_name, req.body.last_name, req.body.email, req.body.password)
-            res.redirect('/log_in')
         })
 
         app.get('/log_in', async function (req, res) {
@@ -147,6 +144,19 @@ class App {
         app.post('/user/listener/:id/upload', upload.single("image"), async (req, res) => {
             const listener = new ListenerController(client);
             await listener.update_picture(req.file.filename, req.session.user.email)
+            req.session.user.picture = req.file.filename;
+            res.redirect(`/user/listener/${req.session.user.id}/profile`);
+        });
+
+        app.get('/user/promoter/:id/upload', sessionChecker, (req, res) => {
+            const user = req.session.user;
+            const type = req.session.type;
+            res.render('pages/upload_p', {user: user, type: type});
+        });
+
+        app.post('/user/promoter/:id/upload', upload.single("image"), async (req, res) => {
+            const promoter = new PromoterController(client);
+            await promoter.update_picture(req.file.filename, req.session.user.email)
             req.session.user.picture = req.file.filename;
             res.redirect(`/user/listener/${req.session.user.id}/profile`);
         });
@@ -313,7 +323,7 @@ class App {
                 }
             }
 
-            res.render('pages/user_page_promoter', {user: promoter, events: promoterEvents, type: listnerOrPromoter, followed: followed, position: position});
+            res.render('pages/user_page_promoter', {promoter: promoter, events: promoterEvents, type: listnerOrPromoter, followed: followed, position: position, user: req.session.user});
         });
 
         app.post('/user/unfollow', async function (req, res) {
@@ -456,9 +466,9 @@ class App {
             const eventId = req.params.id;
             const eventInfo = await event.getEventById(eventId);
             const promoterInfo = await promoter.getPromoterById(eventInfo.promoter_id);
-            const user_type = req.session
-
-            res.render('pages/event_info', {event: eventInfo, promoter: promoterInfo, user: user_type});
+            const user = req.session.user
+            const type = req.session.type
+            res.render('pages/event_info', {event: eventInfo, promoter: promoterInfo, user: user, type: type});
         });
 
         app.post('/event/:id/status', async function (req, res) {
@@ -503,6 +513,20 @@ class App {
         });
         
 
+        app.get('/event/:id/upload', sessionChecker, (req, res) => {
+            const user = req.session.user;
+            const type = req.session.type;
+            const event = req.params.id
+            res.render('pages/upload_e', {user: user, type: type, event: event});
+        });
+
+        app.post('/event/:id/upload', upload.single("image"), async (req, res) => {
+            const events = new EventsController(client);
+            await events.update_picture(req.file.filename, req.params.id)
+            req.session.user.picture = req.file.filename;
+            res.redirect(`/event/${req.params.id}`);
+        });
+
         app.get('/frequencies', sessionChecker, async function (req, res) {
             const user = req.session.user;
             const type = req.session.type;
@@ -527,10 +551,16 @@ class App {
                 let events = await listeners.get_events_id(req.session.user.id);
                 random_pick = await listeners.generate_user(events, req.session.user.id, "Events")
             }
-            let genres = await listeners.get_genres(req.session.user.id);
-            let fave_artist = await listeners.get_favourite_artist(random_pick.id);
+
+            let genres = "";
+            let fave_artist = "";
+
+            if (random_pick != "null") {
+                genres = await listeners.get_genres(random_pick.id);
+                fave_artist = await listeners.get_favourite_artist(random_pick.id);
+            }
             
-            res.render('pages/frequencies', {user: user, type: type , random_pick: random_pick, filter: req.session.filter, fave_artist, genres});
+            res.render('pages/frequencies', {user: user, type: type , random_pick: random_pick, filter: req.session.filter, fave_artist : fave_artist, genres: genres});
         });
 
         app.post('/frequencies/search', async function (req, res) {

@@ -38,6 +38,15 @@ class PromoterController {
         }
       }
 
+    async update_picture(picture, email) {
+        try {
+            await this.client.query('UPDATE promoters SET picture = $1 WHERE email = $2', [picture, email])  
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
+
 }
 
 module.exports = PromoterController;

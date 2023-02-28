@@ -1,6 +1,6 @@
-<% if (user.type === "listener") { %>
+<% if (type === "listener") { %>
   <%- include('../partials/listener_navbar') %>
-<% } else if (user.type === "promoter") { %>
+<% } else if (type === "promoter") { %>
   <%- include('../partials/promoter_navbar') %>
 <% } %>
 
@@ -27,6 +27,10 @@
   </select>
   <button class ="update-button" type="submit">Save</button>
 </form>
+<img src="/<%= event.picture %>" alt="" width="50" height="50">
+<% if (type === 'promoter' && user.id === event.promoter_id) { %>
+  <a href="/event/<%= event.id %>/upload" >Update event picture</a>
+<% } %>
   </div>
 </div>
 

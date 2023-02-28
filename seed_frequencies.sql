@@ -47,7 +47,8 @@ CREATE TABLE events (
     attendees jsonb,
     promoter_id int,
     price int,
-    date date
+    date date,
+    picture TEXT DEFAULT 'default.jpeg'
 );
 
 ALTER TABLE events ALTER COLUMN artist_list SET DEFAULT '[]';
