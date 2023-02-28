@@ -385,23 +385,45 @@ class App {
 
         app.post('/event/:id/status', async function (req, res) {
             const listenerClass = new ListenerController(client);
+            const eventClass = new EventsController(client);
             const eventId = req.params.id;
             const status = req.body['event-status'];
             const listenerInfo = await listenerClass.list_specific_user(req.session.user.id);
-
+        
             const indexOfEventStatus = listenerInfo[0].events.findIndex(event => event.event_id === eventId);
+            
             if(indexOfEventStatus === -1){
                 await listenerClass.addEventStatus(req.session.user.id, eventId, status);
             }
             else {
                 await listenerClass.updateEventStatus(req.session.user.id, indexOfEventStatus, status);
             }
+        
+            if(status === "2"){
+                const check = await eventClass.getEventById(eventId).then(event => event.attendees);
+                const listenerAreadyAttending = check.some(attendee => attendee.listener_id === (req.session.user.id).toString());
+                
+                if(!listenerAreadyAttending){
+                    await eventClass.addAttendee(req.session.user.id, eventId)
+                }
+            }
+            else if(status !== "2"){
+                const attendeesInfo = await eventClass.getEventById(eventId)
+            
+                for(let i = 0; i < attendeesInfo.attendees.length; i++){
+                    if(attendeesInfo.attendees[i].listener_id === (req.session.user.id).toString()){
+                        await eventClass.removeAttendee(i, eventId) 
+                    }
+                }
 
+            }
+         
             const listenerInfoSessionUpdate = await listenerClass.list_specific_user(req.session.user.id);
-            req.session.user.events = listenerInfoSessionUpdate[0].events
-
+            req.session.user.events = listenerInfoSessionUpdate[0].events;
+        
             res.redirect(`/event/${eventId}`);
-          });
+        });
+        
 
         app.get('/frequencies', async function (req, res) {
             const user = req.session.user;
