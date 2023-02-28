@@ -4,29 +4,34 @@
   <% } else if (type === "promoter") { %>
     <%- include('../partials/promoter_navbar') %>
   <% } %>
-  
-  <select id="location-filter">
+
+<form action="/events_list" method="get">
+  <label for="location">Filter by Location:</label>
+  <select id="location" name="location">
     <option value="">All Locations</option>
-    <% const locations = new Set(events.map(event => event.location)); %>
-    <% locations.forEach(location => { %>
-      <option value="<%= location %>"><%= location %></option>
-    <% }); %>
+    <% const locations = Array.from(new Set(events.map(event => event.location))); %>
+    <% for (let i = 0; i < locations.length; i++) { %>
+      <option value="<%= locations[i] %>" <% if (selectedLocation === locations[i]) { %>selected<% } %>><%= locations[i] %></option>
+    <% } %>
   </select>
-  <button id="filter-btn">Filter</button>
-</div>
+  <button type="submit">Search</button>
+</form>
+
 
 <ul class="card-list">
   <% for (let i = 0; i < events.length; i++) { %>
-    <li class="cards">
-      <a class="card" href='/event/<%= events[i].id %>'> 
-        <p class="card-name"><%= events[i].name %></p>
-        <h3 class="card-price">Price: £<%= events[i].price %></h3>
-        <p class="card-date"><%= events[i].date %></p>
-        <p class="card-location"><%= events[i].location %></p>
-        <div class="card-img-cont">
-          <img src="/event_default.jpg" alt="" class="card-img">
-        </div> 
-      </a>
-    </li>
+    <% if (!selectedLocation || selectedLocation === events[i].location) { %>
+      <li class="cards">
+        <a class="card" href='/event/<%= events[i].id %>'> 
+          <p class="card-name"><%= events[i].name %></p>
+          <h3 class="card-price">Price: £<%= events[i].price %></h3>
+          <p class="card-date"><%= events[i].date %></p>
+          <p class="card-location"><%= events[i].location %></p>
+          <div class="card-img-cont">
+            <img src="/event_default.jpg" alt="" class="card-img">
+          </div> 
+        </a>
+      </li>
+    <% } %>
   <% } %>
 </ul>

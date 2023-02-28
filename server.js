@@ -344,9 +344,10 @@ class App {
             const user = req.session.user;
             const type = req.session.type;
             const events = new EventsController(client);
+            const selectedLocation = req.query.location;
             const list_events = await events.getEvents();
-            res.render('pages/events_list', { events : list_events , user: user , type: type});
-        });
+            res.render('pages/events_list', { events: list_events, user: user, type: type, selectedLocation: selectedLocation });
+         });
 
         app.get('/event/:id', async function (req, res) {
             const event = new EventsController(client);
