@@ -148,7 +148,7 @@ class App {
             res.redirect(`/user/listener/${req.session.user.id}/profile`);
         });
 
-        app.get('/user/promoter/:id/upload', sessionChecker, userPermission, (req, res) => {
+        app.get('/user/promoter/:id/upload', sessionChecker, (req, res) => {
             const user = req.session.user;
             const type = req.session.type;
             res.render('pages/upload_p', {user: user, type: type});
@@ -323,7 +323,7 @@ class App {
                 }
             }
 
-            res.render('pages/user_page_promoter', {user: promoter, events: promoterEvents, type: listnerOrPromoter, followed: followed, position: position});
+            res.render('pages/user_page_promoter', {promoter: promoter, events: promoterEvents, type: listnerOrPromoter, followed: followed, position: position, user: req.session.user});
         });
 
         app.post('/user/unfollow', async function (req, res) {
@@ -486,10 +486,16 @@ class App {
                 let events = await listeners.get_events_id(req.session.user.id);
                 random_pick = await listeners.generate_user(events, req.session.user.id, "Events")
             }
-            let genres = await listeners.get_genres(req.session.user.id);
-            let fave_artist = await listeners.get_favourite_artist(random_pick.id);
+
+            let genres = "";
+            let fave_artist = "";
+
+            if (random_pick != "null") {
+                genres = await listeners.get_genres(random_pick.id);
+                fave_artist = await listeners.get_favourite_artist(random_pick.id);
+            }
             
-            res.render('pages/frequencies', {user: user, type: type , random_pick: random_pick, filter: req.session.filter, fave_artist, genres});
+            res.render('pages/frequencies', {user: user, type: type , random_pick: random_pick, filter: req.session.filter, fave_artist : fave_artist, genres: genres});
         });
 
         app.post('/frequencies/search', async function (req, res) {
