@@ -86,15 +86,15 @@ INSERT INTO events ("name", "location", "genre", "artist_list", "attendees", "pr
 INSERT INTO messages (sentuser_id, receiveuser_id, message, type) VALUES (1, 2, 'hi', 'text'), (2, 1, 'how are you?', 'text'), (1, 2, 'not bad thanks', 'text'), (3, 1, 'hi!', 'text'), (2, 3, 'I hate that guy', 'text');
 
 INSERT INTO listeners ("first_name", "last_name", "email", "password", "preferences", "age", "location", "bio") VALUES
-('Jamie', 'Boyadjiev', 'jboyadjiev@gmail.com', 'jbpassword', '[{ "genre" : "Indie"}, {"favorite_artist": "Arctic Monkeys"}]', 24, 'London', 'Hi, I''m Jamie'),
-('Rajani', 'Coeman', 'rcoeman@gmail.com', 'rcpassword', '[{ "genre" : "Indie"}, {"favorite_artist": "The Smiths"}]', 28, 'Manchester', 'Hi, I''m Rajani'),
-('Chinonso', 'Woods', 'cwoods@gmail.com', 'cwpassword', '[{ "genre" : "Indie"}, {"favorite_artist": "Florence + the Machine"}]', 36, 'Glasgow', 'Hi, I''m Chinonso'),
-('Harley', 'Beltz', 'hbeltz@gmail.com', 'hbpassword', '[{ "genre" : "Rock"}, {"favorite_artist": "Led Zeppelin"}]', 31, 'Blackpool', 'Hi, I''m Harley'),
-('Chandra', 'Lundqvist', 'clundqvist@gmail.com', 'clpassword', '[{ "genre" : "Rock"}, {"favorite_artist": "The Who"}]', 26, 'London', 'Hi, I''m Chandra'),
-('Yannig', 'Sobel', 'ysobel@gmail.com', 'yspassword', '[{ "genre" : "Rock"}, {"favorite_artist": "The Beatles"}]', 29, 'Manchester', 'Hi, I''m Yannig'),
-('Samnang', 'Hoedemaker', 'shoedemaker@gmail.com', 'shpassword', '[{ "genre" : "Metal"}, {"favorite_artist": "Metallica"}]', 42, 'Glasgow', 'Hi, I''m Samnang'),
-('Wu', 'Dang', 'wdang@gmail.com', 'wdpassword', '[{ "genre" : "Metal"}, {"favorite_artist": "Iron Maiden"}]', 21, 'London', 'Hi, I''m Wu'),
-('Dwi', 'Virág', 'dvirág@gmail.com', 'dvpassword', '[{ "genre" : "Metal"}, {"favorite_artist": "Slipknot"}]', 27, 'Manchester', 'Hi, I''m Dwi');
+('Jamie', 'Boyadjiev', 'jboyadjiev@gmail.com', 'jbpassword', '[{ "genre" : "Indie"}, {"favourite_artist": "Arctic Monkeys"}]', 24, 'London', 'Hi, I''m Jamie'),
+('Rajani', 'Coeman', 'rcoeman@gmail.com', 'rcpassword', '[{ "genre" : "Indie"}, {"favourite_artist": "The Smiths"}]', 28, 'Manchester', 'Hi, I''m Rajani'),
+('Chinonso', 'Woods', 'cwoods@gmail.com', 'cwpassword', '[{ "genre" : "Indie"}, {"favourite_artist": "Florence + the Machine"}]', 36, 'Glasgow', 'Hi, I''m Chinonso'),
+('Harley', 'Beltz', 'hbeltz@gmail.com', 'hbpassword', '[{ "genre" : "Rock"}, {"favourite_artist": "Led Zeppelin"}]', 31, 'Blackpool', 'Hi, I''m Harley'),
+('Chandra', 'Lundqvist', 'clundqvist@gmail.com', 'clpassword', '[{ "genre" : "Rock"}, {"favourite_artist": "The Who"}]', 26, 'London', 'Hi, I''m Chandra'),
+('Yannig', 'Sobel', 'ysobel@gmail.com', 'yspassword', '[{ "genre" : "Rock"}, {"favourite_artist": "The Beatles"}]', 29, 'Manchester', 'Hi, I''m Yannig'),
+('Samnang', 'Hoedemaker', 'shoedemaker@gmail.com', 'shpassword', '[{ "genre" : "Metal"}, {"favourite_artist": "Metallica"}]', 42, 'Glasgow', 'Hi, I''m Samnang'),
+('Wu', 'Dang', 'wdang@gmail.com', 'wdpassword', '[{ "genre" : "Metal"}, {"favourite_artist": "Iron Maiden"}]', 21, 'London', 'Hi, I''m Wu'),
+('Dwi', 'Virág', 'dvirág@gmail.com', 'dvpassword', '[{ "genre" : "Metal"}, {"favourite_artist": "Slipknot"}]', 27, 'Manchester', 'Hi, I''m Dwi');
 
 
 

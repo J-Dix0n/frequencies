@@ -405,7 +405,7 @@ class App {
                 random_pick = await listeners.generate_user(artist, req.session.user.id, "Favourite Artist")
             }
             let genres = await listeners.get_genres(req.session.user.id);
-            let fave_artist = await listeners.get_favourite_artist(req.session.user.id);
+            let fave_artist = await listeners.get_favourite_artist(random_pick.id);
             
             res.render('pages/frequencies', {user: user, type: type , random_pick: random_pick, filter: req.session.filter, fave_artist, genres});
         });
