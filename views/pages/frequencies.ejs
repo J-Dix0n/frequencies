@@ -4,38 +4,46 @@
   
       </head>
       <body>
-          <main>
+        <main>
             <div class="frequencies_page">
                 <%- include('../partials/listener_navbar') %>
-                <p>Filtering by : <%= filter %></p>
+                <form id="finder" form action="/frequencies/search" method="POST">
+                    <label for="filter">Find me people who </label>
+                    <select class="filter" name="filter" id="filter">
+                        <option value="Genre">Like the same music</option>
+                        <option value="Location">Live near me</option>
+                        <option value="Favourite Artist">Have the same favourite artist</option>
+                        <option value="Events">Are going to my events</option>
+                    </select>
+                    <br><button class="update-button" value="Update" type="submit">FILTER</button>
+                </form>
                 <% if (random_pick != "null") { %> 
-                    <img width="50" height="50" src="/<%= random_pick.picture %>">
-                    <p>Name: <%= random_pick.first_name %> <%= random_pick.last_name %></p>
-                    <p>Age: <%= random_pick.age %></p>
-                    <p>Location: <%= random_pick.location %></p>
-                    <p>Bio: <%= random_pick.bio %></p>
-                    <p>Favourite Artist: <%= fave_artist %></p>
-                    <p>Top Genres: <%= genres %></p>
-                    <form form action="/frequencies/<%= user.id %>/confirm/<%= random_pick.id %>" method="POST">
-                        <input type="submit" value="<3">
-                    </form>
-                    <form form action="/frequencies/<%= user.id %>/deny/<%= random_pick.id %>" method="POST">
-                        <input type="submit" value="X">
-                    </form>
+                        <div class="cards">
+                            <form id ="like" form action="/frequencies/<%= user.id %>/confirm/<%= random_pick.id %>" method="POST">
+                                <input type="image" src="heart.png" width="35" height="35">
+                            </form><br>
+                            <form id="deny" form action="/frequencies/<%= user.id %>/deny/<%= random_pick.id %>" method="POST">
+                                <input type="image" src="cancel.png" width="30" height="30">
+                            </form>
+                            <ul class="card-list">
+                            <a class="listener-card" href=''> 
+                                <p><strong><%= random_pick.first_name %> <%= random_pick.last_name %></strong>, <%= random_pick.age %></p>
+                                <p>Location: <%= random_pick.location %></p>
+                                <p>Top Genres: <%= genres %></p>
+                                <p>Favourite Artist: <%= fave_artist %></p><br><br>
+                                <p><%= random_pick.bio %></p><br>
+                                <div class="listener-card-img-cont">
+                                  <img src="/<%= random_pick.picture %>"
+                                      alt="" class="listener-card-img">
+                                </div> 
+                            </a>
+                        </div>
+                        
+                        </div>
                 <% } else { %>
                     <p>No users found!</p>
                 <% } %>
 
-                <form form action="/frequencies/search" method="POST">
-                    <label for="filter">Filter by:</label>
-                    <select class="filter" name="filter" id="filter">
-                        <option value="Genre">Genre</option>
-                        <option value="Location">Location</option>
-                        <option value="Favourite Artist">Favourite Artist</option>
-                        <option value="Events">Events</option>
-                    </select>
-                    <input type="Submit" value="Filter">
-                </form>
             </div>
           </main>
       </body>
