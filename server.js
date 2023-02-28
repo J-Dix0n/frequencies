@@ -345,9 +345,23 @@ class App {
             const type = req.session.type;
             const events = new EventsController(client);
             const selectedLocation = req.query.location;
+            const minPrice = parseFloat(req.query['min-price']);
+            const maxPrice = parseFloat(req.query['max-price']);
             const list_events = await events.getEvents();
-            res.render('pages/events_list', { events: list_events, user: user, type: type, selectedLocation: selectedLocation });
-         });
+          
+            let filtered_events = list_events.filter(event => !selectedLocation || selectedLocation === event.location);
+
+            if (minPrice && maxPrice) {
+              filtered_events = filtered_events.filter(event => event.price >= minPrice && event.price <= maxPrice);
+            } else if (minPrice) {
+              filtered_events = filtered_events.filter(event => event.price >= minPrice);
+            } else if (maxPrice) {
+              filtered_events = filtered_events.filter(event => event.price <= maxPrice);
+            }
+          
+            res.render('pages/events_list', { events: filtered_events, user: user, type: type, selectedLocation: selectedLocation });
+          });
+          
 
         app.get('/event/:id', async function (req, res) {
             const event = new EventsController(client);
