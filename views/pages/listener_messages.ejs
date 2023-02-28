@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-    <div class="l_messages">
     <head>
 
     </head>
-    <body>
+    <body class="l_messages">
         <main>
+            <div class="current-messages">
             <%- include('../partials/listener_navbar') %>
-            <p>Messages:</p>
+            <h2>CURRENT CONVERSATIONS</h2>
             <% info.forEach(function (object) { %>
-                <a href="/user/listener/<%= user.id %>/messages/<%= object.id %>"</a><%= object.name %></a>
+                <a id=loginLink href="/user/listener/<%= user.id %>/messages/<%= object.id %>"</a><%= object.name %></a><br>
             <% }); %>
-            <p>Friends:</p>
+            </div>
+            <br>
+            <br>
+            <div class = "message-friends">
+            <h2>MESSAGE A FRIEND</h2>
             <% friends.forEach(function (object) { %>
-                <a href="/user/listener/<%= user.id %>/messages/<%= object.id %>"</a><%= object.name %></a>
+                <a id=loginLink href="/user/listener/<%= user.id %>/messages/<%= object.id %>"</a><%= object.name %></a><br>
             <% }); %>
+            </div>
         </main>
     </body>
-    </div>
 </html>

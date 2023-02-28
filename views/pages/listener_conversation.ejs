@@ -18,20 +18,23 @@
                     <% } else if (object.sentuser_id != user.id && object.type === "event") { %>
                         <a href="<%= object.message %>" class="other_message">Event Link</a>
                     <% } %>
-                <% }) %>
+                <% }) %><br><br>
                 <form action="/user/listener/<%= participants[0] %>/messages/<%= participants[1] %>/send" method="POST">
                     <input style="color:aqua" id="message-input" type="text" name="message" placeholder="Send a message" required>
-                    <button class="convo-button" type="submit">SEND</button>
+                    <button class="convo-button" type="submit">SEND</button><br>
                 </form>
-                <form form action="/user/listener/<%= participants[0] %>/messages/<%= participants[1] %>/send_event" method="POST">
-                    <label for="event">Send an event</label>
-                    <select name="event_id">
+            </div>
+            <div class="sharer-container">
+                <form id="event-sharer" form action="/user/listener/<%= participants[0] %>/messages/<%= participants[1] %>/send_event" method="POST">
+                    <label for="event">SHARE AN EVENT</label><br><br>
+                    <select id="event-send" name="event_id">
                         <% for(let i = 0; i < events.length; i++) { %>
                             <option value="<%= events[i].id %>"><%= events[i].name %></option>
                         <% } %>
                     </select>
-                    <input type="Submit" value="Send">
+                    <br><br><button class="share-button" type="submit">Share</button>
                 </form>
+                </div>
             </div>
         </main>
     </body>
