@@ -417,9 +417,38 @@ class App {
             const user = req.session.user;
             const type = req.session.type;
             const events = new EventsController(client);
+            const listenerClass = new ListenerController(client);
+            const selectedLocation = req.query.location;
+            const minPrice = parseFloat(req.query['min-price']);
+            const maxPrice = parseFloat(req.query['max-price']);
             const list_events = await events.getEvents();
-            res.render('pages/events_list', { events : list_events , user: user , type: type});
-        });
+            const friendsId = await listenerClass.get_friends_id(user.id);
+            const selectedFriend = req.query.friend;
+
+            const listenersFriends = []
+
+            for (let friend of friendsId) {
+                const friendInfo = await listenerClass.list_specific_user(friend)
+                listenersFriends.push(friendInfo[0])
+            }
+            let filtered_events = list_events.filter(event => !selectedLocation || selectedLocation === event.location);
+
+            if (selectedFriend) {
+                const friends_events = (await events.findAllAttendeeEvents(selectedFriend)).rows;
+                filtered_events = friends_events;
+              }
+    
+            if (minPrice && maxPrice) {
+              filtered_events = filtered_events.filter(event => event.price >= minPrice && event.price <= maxPrice);
+            } else if (minPrice) {
+              filtered_events = filtered_events.filter(event => event.price >= minPrice);
+            } else if (maxPrice) {
+              filtered_events = filtered_events.filter(event => event.price <= maxPrice);
+            }
+          
+            res.render('pages/events_list', { events: filtered_events, user: user, type: type, selectedLocation: selectedLocation, listenersFriends: listenersFriends});
+          });
+          
 
         app.get('/event/:id', sessionChecker, async function (req, res) {
             const event = new EventsController(client);
@@ -434,23 +463,45 @@ class App {
 
         app.post('/event/:id/status', async function (req, res) {
             const listenerClass = new ListenerController(client);
+            const eventClass = new EventsController(client);
             const eventId = req.params.id;
             const status = req.body['event-status'];
             const listenerInfo = await listenerClass.list_specific_user(req.session.user.id);
-
+        
             const indexOfEventStatus = listenerInfo[0].events.findIndex(event => event.event_id === eventId);
+            
             if(indexOfEventStatus === -1){
                 await listenerClass.addEventStatus(req.session.user.id, eventId, status);
             }
             else {
                 await listenerClass.updateEventStatus(req.session.user.id, indexOfEventStatus, status);
             }
+        
+            if(status === "2"){
+                const check = await eventClass.getEventById(eventId).then(event => event.attendees);
+                const listenerAreadyAttending = check.some(attendee => attendee.listener_id === (req.session.user.id).toString());
+                
+                if(!listenerAreadyAttending){
+                    await eventClass.addAttendee(req.session.user.id, eventId)
+                }
+            }
+            else if(status !== "2"){
+                const attendeesInfo = await eventClass.getEventById(eventId)
+            
+                for(let i = 0; i < attendeesInfo.attendees.length; i++){
+                    if(attendeesInfo.attendees[i].listener_id === (req.session.user.id).toString()){
+                        await eventClass.removeAttendee(i, eventId) 
+                    }
+                }
 
+            }
+         
             const listenerInfoSessionUpdate = await listenerClass.list_specific_user(req.session.user.id);
-            req.session.user.events = listenerInfoSessionUpdate[0].events
-
+            req.session.user.events = listenerInfoSessionUpdate[0].events;
+        
             res.redirect(`/event/${eventId}`);
-          });
+        });
+        
 
         app.get('/frequencies', sessionChecker, async function (req, res) {
             const user = req.session.user;

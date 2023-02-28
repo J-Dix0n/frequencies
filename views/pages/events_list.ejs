@@ -1,30 +1,48 @@
-<head>
-  <link href="/css/style.css" rel="stylesheet" type="text/css">
-</head>
+<div class="events_list">
+  <% if (type === "listener") { %>
+    <%- include('../partials/listener_navbar') %>
+  <% } else if (type === "promoter") { %>
+    <%- include('../partials/promoter_navbar') %>
+  <% } %>
 
-
-<div class="events_list"
-<% if (type === "listener") { %>
-  <%- include('../partials/listener_navbar') %>
-<% } else if (type === "promoter") { %>
-  <%- include('../partials/promoter_navbar') %>
-<% } %>
-</div>
+<form action="/events_list" method="get">
+  <label for="location">Filter by Location:</label>
+  <select id="location" name="location">
+    <option value="">All Locations</option>
+    <% const locations = Array.from(new Set(events.map(event => event.location))); %>
+    <% for (let i = 0; i < locations.length; i++) { %>
+      <option value="<%= locations[i] %>" <% if (selectedLocation === locations[i]) { %>selected<% } %>><%= locations[i] %></option>
+    <% } %>
+  </select>
+  <label for="min-price">Min Price:</label>
+  <input type="number" id="min-price" name="min-price" min="0">
+  <label for="max-price">Max Price:</label>
+  <input type="number" id="max-price" name="max-price" min="0">
+  <label for="friend">Filter by Friend:</label>
+  <select id="friend" name="friend">
+    <option value="">All Friends</option>
+    <% for (let i = 0; i < listenersFriends.length; i++) { %>
+      <option value="<%= listenersFriends[i].id %>"><%= listenersFriends[i].first_name %> <%= listenersFriends[i].last_name %></option>
+    <% } %>
+  </select>
+  <button type="submit">Search</button>
+</form>
 
 
 <ul class="card-list">
   <% for (let i = 0; i < events.length; i++) { %>
-  <li class="cards">
-      <a class="card" href='/event/<%= events[i].id %>'> 
+    <% if (!selectedLocation || selectedLocation === events[i].location) { %>
+      <li class="cards">
+        <a class="card" href='/event/<%= events[i].id %>'> 
           <p class="card-name"><%= events[i].name %></p>
           <h3 class="card-price">Price: £<%= events[i].price %></h3>
           <p class="card-date"><%= events[i].date %></p>
+          <p class="card-location"><%= events[i].location %></p>
           <div class="card-img-cont">
-            <img src="/event_default.jpg"
-                alt="" class="card-img">
+            <img src="/event_default.jpg" alt="" class="card-img">
           </div> 
-          </div>
-        <% } %>
-      </a>
-    </li>
-  </ul>
+        </a>
+      </li>
+    <% } %>
+  <% } %>
+</ul>

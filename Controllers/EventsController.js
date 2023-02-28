@@ -99,7 +99,34 @@ class EventsController {
         console.error(err);
       }
     }
-    
-};
 
+    async addAttendee(listenerID, eventId){
+      try {
+        const query = `UPDATE events SET attendees = attendees || '[{"listener_id" : "${listenerID}"}]' WHERE id = $1;`
+        const values = [eventId];
+        await this.client.query(query, values);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async removeAttendee(position, id) {
+        try {
+            await this.client.query(`UPDATE events SET attendees = attendees - ${position} WHERE id = $1;`, [id])
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
+    async findAllAttendeeEvents(AttendeeId) {
+      try {
+        const result = await this.client.query(`SELECT * FROM events WHERE attendees @> '[{"listener_id": "${AttendeeId}"}]';`)
+        return result
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }
+  
+    
 module.exports = EventsController;

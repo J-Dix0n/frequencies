@@ -329,7 +329,7 @@ class ListenerController {
         try {
             await this.client.query(`UPDATE listeners SET following = following - ${position} WHERE id = $1;`, [id])
         } catch (err) {
-          console.error(err);
+          console.error(err);r
         }
       }
 
