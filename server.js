@@ -359,7 +359,6 @@ class App {
                 listenersFriends.push(friendInfo[0])
             }
             let filtered_events = list_events.filter(event => !selectedLocation || selectedLocation === event.location);
-            console.log(filtered_events)
 
             if (selectedFriend) {
                 const friends_events = (await events.findAllAttendeeEvents(selectedFriend)).rows;
