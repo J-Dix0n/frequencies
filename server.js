@@ -106,13 +106,16 @@ class App {
         })
 
         app.get('/user/listener/:id/upload', sessionChecker, userPermission, (req, res) => {
-            res.render('pages/upload');
+            const user = req.session.user;
+            const type = req.session.type;
+            res.render('pages/upload', {user: user, type: type});
         });
 
         app.post('/user/listener/:id/upload', upload.single("image"), async (req, res) => {
             const listener = new ListenerController(client);
             await listener.update_picture(req.file.filename, req.session.user.email)
-            res.send("Image Uploaded");
+            req.session.user.picture = req.file.filename;
+            res.redirect(`/user/listener/${req.session.user.id}/profile`);
         });
 
         app.get('/user/listener/:id/profile', sessionChecker, userPermission, async function (req, res) {
