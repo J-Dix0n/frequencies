@@ -212,6 +212,32 @@ class ListenerController {
         return listeners;
     }
 
+    async filtered_users_events(event_ids, user_id) {
+        let result = await this.client.query("SELECT * FROM listeners");
+        let user_friends = await this.client.query("SELECT friends FROM listeners WHERE id = $1", [user_id]);
+        result = result.rows;
+        user_friends = user_friends.rows[0].friends
+        let denied = [`${user_id}`]
+        user_friends.forEach((object) => {
+            if (object.status > 1 && !denied.includes(object.listener_id)) {
+                denied.push(object.listener_id)
+            }
+        })
+        result = result.filter((object) => {
+            return !denied.includes(String(object.id))
+        })
+        let listeners = []
+        if (result.length > 0) {
+            for (let j = 0; j < result.length; j++) {
+                let user_event_ids = await this.get_events_id(result[j].id)
+                if (user_event_ids.filter((id) => {return event_ids.includes(id)}).length > 0) {
+                    listeners.push(result[j]);
+                }
+            }
+        }
+        return listeners;
+    }
+
     async swipe_right(swiper_id, swipee_id) {
         let result = await this.client.query("SELECT friends FROM listeners WHERE id = $1;", [swiper_id]);
         let swipee = await this.client.query("SELECT friends FROM listeners WHERE id = $1;", [swipee_id]);
@@ -354,6 +380,14 @@ class ListenerController {
                 choice = "null";
             }
             return choice
+        } else if (filter === "Events") {
+            let users = await this.filtered_users_events(body_array, user_id);
+            let choice = this.get_random(users);
+            if (choice === undefined) {
+                choice = "null";
+            }
+            console.log(choice)
+            return choice
         }
     }
 
@@ -379,6 +413,18 @@ class ListenerController {
             }
         }
         return artist[0];
+    }
+
+    async get_events_id(user_id) {
+        let user = await this.client.query("SELECT events FROM listeners WHERE id = $1;", [user_id]);
+        user = user.rows[0].events
+        let events = []
+        for(let i = 0; i < user.length; i++) {
+            if (user[i].event_id != undefined) {
+                events.push(user[i].event_id)
+            }
+        }
+        return events;
     }
 }
 

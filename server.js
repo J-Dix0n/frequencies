@@ -403,9 +403,12 @@ class App {
             } else if (req.session.filter === "Favourite Artist") {
                 let artist = await listeners.get_favourite_artist(req.session.user.id);
                 random_pick = await listeners.generate_user(artist, req.session.user.id, "Favourite Artist")
+            } else if (req.session.filter === "Events") {
+                let events = await listeners.get_events_id(req.session.user.id);
+                random_pick = await listeners.generate_user(events, req.session.user.id, "Events")
             }
             let genres = await listeners.get_genres(req.session.user.id);
-            let fave_artist = await listeners.get_favourite_artist(req.session.user.id);
+            let fave_artist = await listeners.get_favourite_artist(random_pick.id);
             
             res.render('pages/frequencies', {user: user, type: type , random_pick: random_pick, filter: req.session.filter, fave_artist, genres});
         });
