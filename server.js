@@ -146,7 +146,12 @@ class App {
             let genres = await listener.get_genres(req.session.user.id);
             let fave_artist = await listener.get_favourite_artist(req.session.user.id);
 
-            res.render('pages/user_page_listener', {user: user, type: type, events: attendingEventsInfo, friends: friends, followers: followers, fave_artist: fave_artist, genres: genres});
+            let error = "";
+            if(req.session.error !== undefined) {
+                error = req.session.error
+            }
+
+            res.render('pages/user_page_listener', {user: user, type: type, events: attendingEventsInfo, friends: friends, followers: followers, fave_artist: fave_artist, genres: genres, error: error});
         });
 
         app.post('/user/listener/profile/success', async function (req, res) {
@@ -412,6 +417,10 @@ class App {
                 req.session.filter = "Genre"
             }
             const listeners = new ListenerController(client);
+            if (user.preferences === [] || user.location === null || user.events === []) {
+                req.session.error = "Need to update preferences, location and events."
+                res.redirect('/user/listener/:id/profile')
+            }
             let random_pick = ""
             if (req.session.filter === "Genre") {
                 let genres = await listeners.get_genres(req.session.user.id);

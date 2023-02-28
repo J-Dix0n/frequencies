@@ -46,6 +46,9 @@
               </form>
               </div>
             </div>
+            <% if(error !== "") { %>
+              <p align="center"><%= error %></p>
+            <% } %>
               <div class="profile-pic-container">
                 <div class="profile-pic">
               <img id="upload-img" width="200" height="200" src="/<%= user.picture %>"><br>
