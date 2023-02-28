@@ -44,14 +44,24 @@ class App {
 
         app.post('/sign_up_p/success', async function (req, res) {
             const promoter = new PromoterController(client)
-            await promoter.sign_up(req.body.first_name, req.body.last_name, req.body.email, req.body.password, req.body.company_name, req.body.location)
-            res.redirect('/log_in')
+            if(req.body.first_name !== "" && req.body.last_name !== "" && req.body.email !== "" && req.body.password !== "" && req.body.company_name !== "" && req.body.location !== "") {
+                await promoter.sign_up(req.body.first_name, req.body.last_name, req.body.email, req.body.password, req.body.company_name, req.body.location)
+                res.redirect('/log_in')
+            } else {
+                res.redirect('/sign_up_p');
+            }   
         })
 
         app.post('/sign_up/success', async function (req, res) {
             const listener = new ListenerController(client)
-            await listener.sign_up(req.body.first_name, req.body.last_name, req.body.email, req.body.password)
-            res.redirect('/log_in')
+            if(req.body.first_name !== "" && req.body.last_name !== "" && req.body.email !== "" && req.body.password !== "") {
+                await listener.sign_up(req.body.first_name, req.body.last_name, req.body.email, req.body.password)
+                res.redirect('/log_in')
+            } else {
+                res.redirect('/')
+            }
+            
+            
         })
 
         app.get('/log_in', async function (req, res) {

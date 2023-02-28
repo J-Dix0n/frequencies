@@ -8,13 +8,13 @@
       <div class="login">
         Already have an account? <span style="color:white"><a id="loginLink" href="/log_in">Sign in</span></a><br><br>
         <form action="/sign_up_p/success" method="POST">
-            <input id="sign-up-input" style="color: aqua" type="text" name="first_name" placeholder="First Name">
-            <input id="sign-up-input" style="color: aqua" type="text" name="last_name" placeholder="Last Name">
-            <input id="sign-up-input" style="color: aqua" type="text" name="email" placeholder="Email">
-            <input style="color: aqua" type="password" name="password" placeholder="Password" id="myInput">
+            <input id="sign-up-input" style="color: aqua" type="text" name="first_name" placeholder="First Name" required>
+            <input id="sign-up-input" style="color: aqua" type="text" name="last_name" placeholder="Last Name" required>
+            <input id="sign-up-input" style="color: aqua" type="text" name="email" placeholder="Email" required>
+            <input style="color: aqua" type="password" name="password" placeholder="Password" id="myInput" required>
             <i class="far fa-eye" id="togglePassword" onclick="myFunction()"></i>
-            <input id="sign-up-input" style="color: aqua" type="company_name" name="company_name" placeholder="Company Name">
-            <input id="sign-up-input" style="color: aqua" type="location" name="location" placeholder="Location">
+            <input id="sign-up-input" style="color: aqua" type="company_name" name="company_name" placeholder="Company Name" required>
+            <input id="sign-up-input" style="color: aqua" type="location" name="location" placeholder="Location" required>
             <button class="button" type="submit">CREATE ACCOUNT</button>
         </form>
             <span style="color:white"><a id =loginLink href="/">Go back</span></a>
