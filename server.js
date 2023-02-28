@@ -69,9 +69,14 @@ class App {
         app.post('/sign_up_p/success', async function (req, res) {
             const promoter = new PromoterController(client)
             if (/\w+@\w+\.com/.test(req.body.email) && req.body.password.length >= 8) {
-                await promoter.sign_up(req.body.first_name, req.body.last_name, req.body.email, req.body.password, req.body.company_name, req.body.location)
-                req.session.error = ""
-                res.redirect('/log_in')
+                const result = await promoter.sign_up(req.body.first_name, req.body.last_name, req.body.email, req.body.password, req.body.company_name, req.body.location)
+                if (result !== "exists") {
+                    req.session.error = ""
+                    res.redirect('/log_in')
+                } else {
+                    req.session.error = "That email already exists"
+                    res.redirect('/sign_up_p')
+                }
             } else {
                 req.session.error = "Incorrect email or password"
                 res.redirect('/sign_up_p')
@@ -81,9 +86,14 @@ class App {
         app.post('/sign_up/success', async function (req, res) {
             if (/\w+@\w+\.com/.test(req.body.email) && req.body.password.length >= 8) {
                 const listener = new ListenerController(client)
-                await listener.sign_up(req.body.first_name, req.body.last_name, req.body.email, req.body.password)
-                req.session.error = ""
-                res.redirect('/log_in')
+                const result = await listener.sign_up(req.body.first_name, req.body.last_name, req.body.email, req.body.password)
+                if (result !== "exists") {
+                    req.session.error = ""
+                    res.redirect('/log_in')
+                } else {
+                    req.session.error = "That email already exists"
+                    res.redirect('/')
+                }
             } else {
                 req.session.error = "Incorrect email or password"
                 res.redirect('/')

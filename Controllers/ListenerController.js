@@ -39,7 +39,12 @@ class ListenerController {
 
 
     async sign_up(first_name, last_name, email, password) {
-        await this.client.query('INSERT INTO listeners (first_name, last_name, email, password) VALUES ($1, $2, $3, $4)', [first_name, last_name, email, password])
+        const result = await this.client.query('SELECT * FROM listeners WHERE email = $1', [email]);
+        if (result.rows.length === 0) {
+            await this.client.query('INSERT INTO listeners (first_name, last_name, email, password) VALUES ($1, $2, $3, $4)', [first_name, last_name, email, password])
+        } else {
+            return "exists"
+        }
     }
 
     async log_in(email, password) {
