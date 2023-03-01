@@ -3,7 +3,7 @@
     <head>
         <link href="/css/style.css" rel="stylesheet" type="text/css">
     </head>
-    <body>
+    <body class="l_messages">
         <%- include('../partials/listener_navbar') %>
 
         <br>
@@ -11,13 +11,13 @@
         <br>
         <br>
         <br>
-        
-        <h1>Upload Image</h1>
+        <div class="current-messages">
+        <h2 id="event-create">UPLOAD IMAGE</h2><br>
 
         <form method ='POST' action ='/user/listener/:id/upload' enctype="multipart/form-data">
-            <input type="file" name ="image">
-            <input type="submit">
+            <input type="file" name ="image"><br><br>
+            <button class="update-button" type="submit">Upload</button>
         </form>
-        
+    </div>
     </body>
 </html>
