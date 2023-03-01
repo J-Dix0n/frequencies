@@ -2,27 +2,20 @@
 <html>
   <div class="post_event">
   <head>
-    <title>Create New Event</title>
   </head>
   <body>
     <%- include('../partials/promoter_navbar') %>
 
-    <h1>Create New Event</h1>
-    <form action="/post_event" method="POST">
-      <label for="name">Event Name:</label>
-      <input type="text" id="name" name="name"><br>
-      <label for="location">Location:</label>
-      <input type="text" id="location" name="location"><br>
-      <label for="genre">Genre:</label>
-      <input type="text" id="genre" name="genre"><br>
-      <label for="artist_list">Artist List:</label>
-      <input type="text" id="artist_list" name="artist_list"><br>
-      <label for="price">Price:</label>
-      <input type="text" id="price" name="price"><br>
-      <label for="date">Date:</label>
-      <input type="date" id="date" name="date"><br>
-      <button type="submit">Create Event</button>
-    </form>
-  </body>
-  </div>
+<div class="login">
+  <h2 id="event-create">CREATE A NEW EVENT</h2><br>
+  <form action="/post_event" method="POST">
+      <input style="color: aqua" type="text" name="name" placeholder="Event Name" id="myInput">
+      <input style="color: aqua" type="text" name="location" placeholder="Location" id="myInput">
+      <input style="color: aqua" type="text" name="genre" placeholder="Genre" id="myInput">
+      <input style="color: aqua" type="text" name="artist_list" placeholder="Artist List" id="myInput">
+      <input style="color: aqua" type="text" name="price" placeholder="Price" id="myInput">
+      <input style="color: aqua" type="date" name="date" placeholder="Date" id="myInput">
+      <button class="button" type="submit">CREATE EVENT</button>
+  </form>
+</div>
 </html>

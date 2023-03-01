@@ -160,7 +160,6 @@ body {
   color: rgb(173, 171, 171);
 }
 
-
 .card-list{
   list-style: none;
   padding: 50px;
@@ -840,3 +839,77 @@ html, body {
     background-size: cover;
     margin: 0px;
   }
+
+  .p-events-container {
+    margin-top: 25px;
+    background-color: rgba(48, 48, 48, 0.2);
+    padding-left: 10px;
+    width: 750px;
+    margin-left: 30px;
+    border: 1px solid rgb(42, 42, 42);
+    border-radius: 10px;
+  }
+
+  .p-events {
+    margin-left: 20px;
+  }
+
+  #promoter-name {
+    padding-left: 50px;
+    text-decoration: underline;
+    text-decoration-color: #2edce5;
+  }
+  
+  .p-profile-pic-container {
+    position: absolute;
+    right: 250px;
+    margin-top: 3px;
+    border: 1px solid rgb(42, 42, 42);
+    border-radius: 10px;
+    padding: 1px;
+    background-color: rgb(48, 48, 48, 0.2);
+    max-width: 550px;
+    max-height: 700px;
+    word-wrap: break-word;
+  }
+  .p-profile-pic {
+    padding: 80px;
+    overflow: hidden;
+    padding-top: 20px;
+    padding-bottom: 10px;
+    word-wrap: break-word;
+    max-width: 220px;
+  }
+
+  #p-genre, #p-name, #p-location, #p-artist_list, #p-price, #p-date {
+    width: 15%;
+    height: 35px;
+    margin-bottom: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border: none;
+    outline: none;
+    padding: 10px;
+    font-size: 12px;
+    color: grey;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    box-shadow: inset 0 -5px 45px rgba(100, 100, 100, 0.2),
+      0 1px 1px rgba(255, 255, 255, 0.2);
+    -webkit-transition: box-shadow 0.5s ease;
+    -moz-transition: box-shadow 0.5s ease;
+    -o-transition: box-shadow 0.5s ease;
+    -ms-transition: box-shadow 0.5s ease;
+    transition: box-shadow 0.5s ease;
+  }
+
+  #event-create {
+    padding-top: 50px;
+    font-family: "Raleway";
+    padding-right: 80px;
+    letter-spacing: 4px;
+    font-weight: 400;
+    color: rgb(173, 171, 171);
+    margin:0px;
+  }
+  
