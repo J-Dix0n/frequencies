@@ -431,6 +431,15 @@ class ListenerController {
         }
         return events;
     }
+
+    async seed_for_video(user_id) {
+        if (user_id === 17) {
+            let friends = ['{"status": "1", "listener_id": "13"}', '{"status": "1", "listener_id": "14"}', '{"status": "1", "listener_id": "15"}', '{"status": "1", "listener_id": "16"}']
+            for (let i = 0; i < friends.length; i++) {
+                await this.client.query("UPDATE listeners SET friends = friends || $1 ::jsonb WHERE id = $2", [friends[i], user_id])
+            }
+        }
+    }
 }
 
 

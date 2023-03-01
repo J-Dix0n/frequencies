@@ -117,6 +117,7 @@ class App {
                     req.session.user = result[0]
                     req.session.type = "listener"
                     req.session.random_pick = "null"
+                    await listener.seed_for_video(req.session.user.id)
                     res.redirect(`/user/listener/${result[0].id}/profile`)
                 } else {
                     res.redirect('/log_in');
@@ -468,7 +469,6 @@ class App {
             const promoterInfo = await promoter.getPromoterById(eventInfo.promoter_id);
             const user = req.session.user
             const type = req.session.type
-            eventInfo.date = String(eventInfo.date).slice(0, 15);
             res.render('pages/event_info', {event: eventInfo, promoter: promoterInfo, user: user, type: type});
         });
 

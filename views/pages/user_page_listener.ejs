@@ -76,7 +76,7 @@
                   <ul>
                     <% for (let i = 0; i < events.length; i++) { %>
                       <li>
-                        <h3><%= events[i].name %></h3>
+                        <h3><a id="loginLink" href="/event/<%= events[i].id %>"><%= events[i].name %></a></h3>
                       </li>
                       <% } %>
                   </ul>

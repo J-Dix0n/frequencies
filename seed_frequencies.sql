@@ -47,7 +47,7 @@ CREATE TABLE events (
     attendees jsonb,
     promoter_id int,
     price int,
-    date date,
+    date timestamp,
     picture TEXT DEFAULT 'event_default.jpg'
 );
 
@@ -78,27 +78,28 @@ INSERT INTO promoters ("first_name", "last_name", "email", "password", "company_
 ('Scott', 'Carson', 'sc@scevents.com', 'scpassword', 'SC Events', 'Blackpool', '[{"event_id" : "3", "status": "1"}]', '[{"listener_id" : "4"}]'),
 ('Margaret', 'Atwood', 'ma@maevents.com', 'mapassword', 'MA Events', 'Manchester', '[{"event_id" : "4", "status": "1"}]','[{"listener_id" : "6"}]');
 
-INSERT INTO events ("name", "location", "genre", "artist_list", "attendees", "promoter_id", "price", "date") VALUES
-('Illuminaughty Presents: Utopia', 'London', 'Electronic','[{"artist" : "Astrix", "genre" : "Electronic"}]', '[{"listener_id" : "3"}]', 1, 25.99, '12/04/2023'),
-('Country To Country 2023', 'Glasgow', 'Country', '[{"artist" : "Zac Brown Band", "genre" : "Country"}]', '[{"listener_id" : "2"},{"listener_id" : "7"}]', 2, 99.60,'11/03/2023'),
-('Revival Music Festival Weekender 2023', 'Blackpool', 'Indie', '[{"artist" : "Tofu Fighters", "genre" : "Indie"}]', '[]', 3, 13.59, '04/03/2023'),
-('Fatboy Slim', 'Manchester','Electronic','[{"artist" : "Fatboy Slim", "genre" : "Electronic"}]', '[{"listener_id" : "6"}]', 4, 45.10, '11/03/2023'),
-('Paramore', 'London', 'Alternative', '[{"artist" : "Paramore", "genre" : "Alternative"}]', '[]', 1, 50.00, '04/23/2023');
+INSERT INTO events ("name", "location", "genre", "artist_list", "attendees", "promoter_id", "price", "date", "picture") VALUES
+('Illuminaughty Presents: Utopia', 'London', 'Electronic','[{"artist" : "Astrix", "genre" : "Electronic"}]', '[{"listener_id" : "3"}]', 1, 25.99, '2023-12-04T19:00:00.000Z', 'event_photo1.jpeg'),
+('Country To Country 2023', 'Glasgow', 'Country', '[{"artist" : "Zac Brown Band", "genre" : "Country"}]', '[{"listener_id" : "2"},{"listener_id" : "7"}]', 2, 99.60,'2023-11-03T20:00:00.000Z', 'event_photo2.jpeg'),
+('Revival Music Festival Weekender 2023', 'Blackpool', 'Indie', '[{"artist" : "Tofu Fighters", "genre" : "Indie"}]', '[]', 3, 13.59, '2023-04-03T23:00:00.000Z', 'event_photo3.jpeg'),
+('Fatboy Slim', 'Manchester','Electronic','[{"artist" : "Fatboy Slim", "genre" : "Electronic"}]', '[{"listener_id" : "6"}]', 4, 45.10, '2023-11-03T18:00:00.000Z', 'event_photo4.jpeg'),
+('Paramore', 'London', 'Alternative', '[{"artist" : "Paramore", "genre" : "Alternative"}]', '[{"listener_id" : "13"},{"listener_id" : "14"}, {"listener_id" : "15"}, {"listener_id" : "16"}]', 1, 50.00, '2023-04-23T19:00:00.000Z', 'event_photo5.jpeg');
 
 INSERT INTO messages (sentuser_id, receiveuser_id, message, type) VALUES (1, 2, 'hi', 'text'), (2, 1, 'how are you?', 'text'), (1, 2, 'not bad thanks', 'text'), (3, 1, 'hi!', 'text'), (2, 3, 'I hate that guy', 'text');
 
 INSERT INTO listeners ("first_name", "last_name", "email", "password", "preferences", "age", "location", "bio") VALUES
-('Jamie', 'Boyadjiev', 'jboyadjiev@gmail.com', 'jbpassword', '[{ "genre" : "Indie"}, {"favourite_artist": "Arctic Monkeys"}]', 24, 'London', 'Hi, I''m Jamie'),
-('Rajani', 'Coeman', 'rcoeman@gmail.com', 'rcpassword', '[{ "genre" : "Indie"}, {"favourite_artist": "The Smiths"}]', 28, 'Manchester', 'Hi, I''m Rajani'),
-('Chinonso', 'Woods', 'cwoods@gmail.com', 'cwpassword', '[{ "genre" : "Indie"}, {"favourite_artist": "Florence + the Machine"}]', 36, 'Glasgow', 'Hi, I''m Chinonso'),
 ('Harley', 'Beltz', 'hbeltz@gmail.com', 'hbpassword', '[{ "genre" : "Rock"}, {"favourite_artist": "Led Zeppelin"}]', 31, 'Blackpool', 'Hi, I''m Harley'),
 ('Chandra', 'Lundqvist', 'clundqvist@gmail.com', 'clpassword', '[{ "genre" : "Rock"}, {"favourite_artist": "The Who"}]', 26, 'London', 'Hi, I''m Chandra'),
-('Yannig', 'Sobel', 'ysobel@gmail.com', 'yspassword', '[{ "genre" : "Rock"}, {"favourite_artist": "The Beatles"}]', 29, 'Manchester', 'Hi, I''m Yannig'),
 ('Samnang', 'Hoedemaker', 'shoedemaker@gmail.com', 'shpassword', '[{ "genre" : "Metal"}, {"favourite_artist": "Metallica"}]', 42, 'Glasgow', 'Hi, I''m Samnang'),
 ('Wu', 'Dang', 'wdang@gmail.com', 'wdpassword', '[{ "genre" : "Metal"}, {"favourite_artist": "Iron Maiden"}]', 21, 'London', 'Hi, I''m Wu'),
 ('Dwi', 'Virág', 'dvirág@gmail.com', 'dvpassword', '[{ "genre" : "Metal"}, {"favourite_artist": "Slipknot"}]', 27, 'Manchester', 'Hi, I''m Dwi');
 
+INSERT INTO listeners ("first_name", "last_name", "email", "password", "preferences", "age", "location", "bio", "friends", "picture", "events") VALUES ('Jamie', 'Boyadjiev', 'jboyadjiev@gmail.com', 'jbpassword', '[{ "genre" : "Indie"}, { "genre" : "Rock"}, {"favourite_artist": "Arctic Monkeys"}]', 24, 'London', 'Hi, I''m Jamie', '[{"listener_id" : "17", "status": "1"}]', 'photo4.webp', '[{"status": 2, "event_id": "5"}]'),
+('Rajani', 'Coeman', 'rcoeman@gmail.com', 'rcpassword', '[{ "genre" : "Indie"}, { "genre" : "Rock"}, {"favourite_artist": "The Smiths"}]', 28, 'Manchester', 'Hi, I''m Rajani', '[{"listener_id" : "17", "status": "1"}]', 'photo2.jpeg', '[{"status": 2, "event_id": "5"}]'),
+('Chinonso', 'Woods', 'cwoods@gmail.com', 'cwpassword', '[{ "genre" : "Indie"}, { "genre" : "Electronic"}, {"favourite_artist": "Florence + the Machine"}]', 36, 'Glasgow', 'Hi, I''m Chinonso', '[{"listener_id" : "17", "status": "1"}]', 'photo3.jpg', '[{"status": 1, "event_id": "5"}]'), ('Yannig', 'Sobel', 'ysobel@gmail.com', 'yspassword', '[{ "genre" : "Rock"}, { "genre" : "Electronic"}, { "genre" : "Indie"}, {"favourite_artist": "The Beatles"}]', 29, 'Manchester', 'Hi, I''m Yannig', '[{"listener_id" : "17", "status": "1"}]', 'photo1.jpg', '[{"status": 1, "event_id": "5"}]');
 
 
 
-
+-- Genres we're going to like: Rock, Indie, Electronic
+-- Location: London
+-- Favourite Artist: The Who
