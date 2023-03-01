@@ -65,7 +65,7 @@
                 <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/<%= user.playlist %>?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0"></iframe>
                 <form action="/user/listener/profile/playlist/update" method="POST">
                 <label for="playlist">Link your spotify playist:</label>
-                <input type="text" name="playlist" id="playlist" placeholder="URL">
+                <input type="text" name="playlist" id="myInput" placeholder="URL">
                 <button class="update-button" value="Update" type="submit">UPDATE</button>
               </form>
             </div>
@@ -89,8 +89,7 @@
                   <ul>
                     <% for (let i = 0; i < followers.length; i++) { %>
                       <li>
-                        <h3><%= followers[i].company_name %></h3>
-                        <a href="/user/promoter/<%= followers[i].id %>/profile">View promoter page</a>
+                        <a id="loginLink" href="/user/promoter/<%= followers[i].id %>/profile"><h3><%= followers[i].company_name %></h3></a>
                       </li>
                     <% } %>
                   </ul>
@@ -103,7 +102,7 @@
                   <ul>
                     <% friends.forEach(function (object) { %>
                     <li>
-                      <a href="/user/listener/<%= user.id %>/messages/<%= object.id %>"</a><%= object.name %></a>
+                      <a id="loginLink" href="/user/listener/<%= user.id %>/messages/<%= object.id %>"</a><%= object.name %></a>
                     </li>
                     <% }); %>
                   </ul>
