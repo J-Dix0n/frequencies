@@ -5,6 +5,7 @@
     <%- include('../partials/promoter_navbar') %>
   <% } %>
 
+<% if (type === "listener") { %>
 <form action="/events_list" method="get">
   <label for="location">Filter by Location:</label>
   <select id="location" name="location">
@@ -27,6 +28,7 @@
   </select>
   <button type="submit">Search</button>
 </form>
+<% } %>
 
 
 <ul class="card-list">
