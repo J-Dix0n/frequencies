@@ -4,36 +4,37 @@
   <%- include('../partials/promoter_navbar') %>
 <% } %>
 
-<br>
-<br>
-<br>
-<br>
-<br>
+<div class="user_page_p">
 
-<h1>Welcome <%= promoter.company_name %></h1>
-<p>Email: <%= promoter.email %></p>
-
-<img id="upload-img" width="200" height="200" src="/<%= promoter.picture %>">
+<h1 id="promoter-name" style="text-transform:uppercase"> <%= promoter.company_name %></h1>
+<div class="p-profile-pic-container">
+  <div class="p-profile-pic">
+  <img id="upload-img" width="200" height="200" src="/<%= promoter.picture %>">
 <% if (type === 'promoter' && promoter.id === user.id) { %>
 <p><a href="/user/promoter/<%= promoter.id %>/upload" id="upload" >Change profile picture</a></p>
+<p>Contact: <%= promoter.email %></p>
 <% } %>
-
 <% if (type === 'listener') { %>
   <% if (followed === 'true') { %>
-    <form method="POST" action="/user/unfollow">
+    <br><br><form method="POST" action="/user/unfollow">
       <input type="hidden" name="promoter_id" value="<%= promoter.id %>">
       <input type="hidden" name="position" value="<%= position %>">
-      <button type="submit">Unfollow</button>
+      <button class="button" style="width:200px" type="submit">Unfollow</button>
     </form>
   <% } else { %>
-    <form method="POST" action="/user/follow">
+    <br><br><form method="POST" action="/user/follow">
       <input type="hidden" name="promoter_id" value="<%= promoter.id %>">
-      <button type="submit">Follow</button>
+      <button class="button" style="width:200px" type="submit">Follow</button>
     </form>
   <% } %>
 <% } %>
 
-<h2>Upcoming Events:</h2>
+  </div>
+  </div>
+
+<div class="p-events-container">
+  <div class="p-events">
+<h2 style="text-transform:uppercase">Your Upcoming Events:</h2>
 <% if (events.length > 0) { %>
   <ul>
     <% events.forEach(event => { %>
@@ -44,11 +45,11 @@
           <p>Price: £<%= event.price %></p>
           <p>Genre: <%= event.genre %></p>
           <% if (type === 'promoter') { %>
-            <form method="POST" action="/user/promoter/event/<%=event.id%>">
-              <button type="submit">Delete</button>
-            </form>
             <form method="GET" action="/user/promoter/event/update/<%=event.id%>">
-              <button type="submit">Update</button>
+              <button  class="update-button" type="submit">Update</button>
+            </form>
+            <form method="POST" action="/user/promoter/event/<%=event.id%>">
+              <button class="update-button" type="submit">Delete</button>
             </form>
           <% } %>
         </li>
@@ -57,5 +58,6 @@
 <% } else { %>
   <p>No upcoming events.</p>
 <% } %>
-
+  </div>
+  </div>
 </div>

@@ -21,7 +21,7 @@ class App {
             }
         })
         const upload = multer({storage : storage})
-
+//--
         let app = express();
         app.set('view engine', 'ejs');
         app.use(bodyParser.urlencoded({

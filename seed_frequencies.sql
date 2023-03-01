@@ -29,7 +29,7 @@ CREATE TABLE promoters (
     email TEXT,
     password TEXT,
     company_name TEXT,
-    picture TEXT DEFAULT 'event_default.jpg',
+    picture TEXT DEFAULT 'default.jpeg',
     company_location TEXT,
     events jsonb, /* status: [1 = upcoming, 2 = ended]*/
     followers jsonb
@@ -48,7 +48,7 @@ CREATE TABLE events (
     promoter_id int,
     price int,
     date date,
-    picture TEXT DEFAULT 'default.jpeg'
+    picture TEXT DEFAULT 'event_default.jpg'
 );
 
 ALTER TABLE events ALTER COLUMN artist_list SET DEFAULT '[]';
