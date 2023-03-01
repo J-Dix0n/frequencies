@@ -29,7 +29,7 @@
 </form>
 <img src="/<%= event.picture %>" alt="" width="50" height="50">
 <% if (type === 'promoter' && user.id === event.promoter_id) { %>
-  <a href="/event/<%= event.id %>/upload" >Update event picture</a>
+  <a id="loginlink" href="/event/<%= event.id %>/upload" >Update event picture</a>
 <% } %>
   </div>
 </div>
